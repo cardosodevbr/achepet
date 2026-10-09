@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Animais | AchePet 🐾</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- CONEXÃO COM O SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+
+    <style>
+        .painel-hero {
+            background: var(--fundo-rosa);
+            padding: 40px 0;
+            text-align: center;
+        }
+        html[data-tema="escuro"] .painel-hero { background: #2d1822; }
+        
+        .painel-title {
+            color: var(--rosa-principal);
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        /* Botões de Ação dentro do Card */
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--cinza);
+        }
+        
+        html[data-tema="escuro"] .card-actions { border-top-color: #2a3b52; }
+
+        .btn-acao {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-family: var(--fonte-poppins);
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            border: none;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-editar {
+            background: var(--fundo-azul);
+            color: var(--azul-principal);
+        }
+        .btn-editar:hover { background: var(--azul-claro); }
+
+        .btn-sucesso {
+            background: #D1FAE5;
+            color: #059669;
+        }
+        .btn-sucesso:hover { background: #10B981; color: white; }
+        
+        .status-resolvido {
+            width: 100%;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #10B981;
+            padding: 8px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body data-page="meus-animais">
+    <div id="header-placeholder"></div>
+
+    <main>
+        <section class="painel-hero">
+            <div class="section-container">
+                <h1 class="painel-title">Meus Animais Cadastrados</h1>
+                <p style="color: var(--cinza-texto);">Gira os anúncios que publicou. Se o caso foi resolvido, marque como Final Feliz!</p>
+            </div>
+        </section>
+
+        <section class="pets-section">
+            <div class="section-container">
+                <div id="loadingMeusAnimais" style="text-align: center; font-weight: 600; margin: 20px 0;">
+                    A carregar os seus anúncios... 🐾
+                </div>
+
+                <div class="pets-grid" id="meusAnimaisGrid"></div>
+                
+                <div id="emptyMeusAnimais" style="text-align: center; color: var(--cinza-texto); display: none; padding: 40px 0;">
+                    Ainda não cadastrou nenhum animal.<br><br>
+                    <a href="form1.html" class="btn-auth" style="display: inline-block; padding: 10px 20px; text-decoration: none;">Cadastrar Animal</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+    
+    <script>
+        let userIdLogado = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Garante que só utilizadores logados acedem a esta página
+            const { data: { session } } = await clienteSupabase.auth.getSession();
+            if (!session) return window.location.replace('login.html');
+            
+            userIdLogado = session.user.id;
+            carregarMeusAnimais();
+        });
+
+        function formatarData(dataIso) {
+            if(!dataIso) return "Data desconhecida";
+            const partes = dataIso.split('-');
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+
+        async function carregarMeusAnimais() {
+            const grid = document.getElementById('meusAnimaisGrid');
+            const loading = document.getElementById('loadingMeusAnimais');
+            const empty = document.getElementById('emptyMeusAnimais');
+
+            grid.innerHTML = '';
+            loading.style.display = 'block';
+            empty.style.display = 'none';
+
+            try {
+                // Pede ao banco de dados apenas os animais Deste Utilizador
+                const { data: animais, error } = await clienteSupabase
+                    .from('animais')
+                    .select('*')
+                    .eq('user_id', userIdLogado)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                loading.style.display = 'none';
+
+                if (animais.length === 0) {
+                    empty.style.display = 'block';
+                    return;
+                }
+
+                animais.forEach(animal => {
+                    const fotoUrl = animal.foto_url || 'media/placeholder-pet.png';
+                    
+                    let badgeClass = '';
+                    let badgeText = '';
+                    if(animal.status === 'perdido') { badgeClass = 'lost'; badgeText = 'PERDIDO'; }
+                    else if (animal.status === 'achado_na_rua') { badgeClass = 'found'; badgeText = 'ENCONTRADO'; }
+                    else { badgeClass = 'happy'; badgeText = 'FINAL FELIZ 💖'; }
+                    
+                    // Renderiza os botões dinamicamente
+                    let acoesHTML = '';
+                    if (animal.status !== 'final_feliz') {
+                        acoesHTML = `
+                            <div class="card-actions">
+                                <!-- Envia o ID na URL para a futura página de edição -->
+                                <a href="editar-animal.html?id=${animal.id}" class="btn-acao btn-editar">✏️ Editar</a>
+                                <button onclick="marcarFinalFeliz(${animal.id})" class="btn-acao btn-sucesso">Final Feliz 💖</button>
+                            </div>
+                        `;
+                    } else {
+                        acoesHTML = `
+                            <div class="card-actions">
+                                <div class="status-resolvido">🎉 Caso Resolvido!</div>
+                            </div>
+                        `;
+                    }
+
+                    const cardHTML = `
+                        <article class="pet-card">
+                            <img src="${fotoUrl}" alt="Foto de ${animal.nome}">
+                            <span class="pet-status ${badgeClass}">${badgeText}</span>
+                            <div class="pet-info">
+                                <h3>${animal.nome}</h3>
+                                <p>📌 ${animal.cidade}</p>
+                                <p>📅 ${formatarData(animal.data_evento)}</p>
+                                ${acoesHTML}
+                            </div>
+                        </article>
+                    `;
+                    grid.innerHTML += cardHTML;
+                });
+
+            } catch (err) {
+                console.error(err);
+                loading.innerText = "❌ Ocorreu um erro ao carregar os seus anúncios.";
+            }
+        }
+
+        // Função mágica de atualização
+        async function marcarFinalFeliz(idAnimal) {
+            const confirmar = confirm("Que notícia fantástica! Tem certeza que deseja marcar este caso como resolvido (Final Feliz)?");
+            if (!confirmar) return;
+
+            try {
+                // Dispara o UPDATE no Supabase
+                const { error } = await clienteSupabase
+                    .from('animais')
+                    .update({ status: 'final_feliz' })
+                    .eq('id', idAnimal);
+
+                if (error) throw error;
+
+                alert("🎉 Fantástico! O anúncio foi movido para o mural de Finais Felizes.");
+                carregarMeusAnimais(); // Recarrega os cartões na hora
+
+            } catch (err) {
+                alert("Erro ao atualizar o status: " + err.message);
+            }
+        }
+    </script>
+</body>
+</html>

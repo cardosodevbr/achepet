@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CONEXÃO COM O SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+
+    <title>Editar Animal | AchePet 🐾</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .form-grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 600px) { .form-grid-2-col { grid-template-columns: 1fr; } }
+
+        .status-selector { display: flex; gap: 15px; margin-bottom: 20px; }
+        .status-radio { display: none; }
+        .status-label {
+            flex: 1; text-align: center; padding: 15px; border: 2px solid var(--cinza);
+            border-radius: 12px; cursor: pointer; font-family: var(--fonte-poppins);
+            font-weight: 600; color: var(--cinza-texto); transition: all 0.3s ease;
+        }
+
+        #status_perdido:checked + .status-label { border-color: var(--rosa-principal); background: var(--rosa-claro); color: var(--rosa-principal); }
+        #status_encontrado:checked + .status-label { border-color: var(--azul-principal); background: var(--azul-claro); color: var(--azul-principal); }
+        #status_final_feliz:checked + .status-label { border-color: #10B981; background: #D1FAE5; color: #059669; }
+
+        textarea { width: 100%; min-height: 100px; padding: 12px 16px; border: 2px solid var(--azul-claro); border-radius: 12px; font-family: var(--fonte-open-sans); resize: vertical; }
+        html[data-tema="escuro"] textarea { background: var(--fundo-card); color: var(--preto); border-color: #1e2c42; }
+        
+        .foto-atual-container { margin-bottom: 15px; text-align: center; }
+        .foto-atual-container img { max-width: 200px; border-radius: 12px; border: 2px solid var(--azul-claro); }

@@ -88,6 +88,39 @@ async function verificarSessao() {
         if (btnLogoutDesktop) btnLogoutDesktop.addEventListener('click', fazerLogout);
         if (btnLogoutMobile) btnLogoutMobile.addEventListener('click', fazerLogout);
 
+        // 5. ALERTA DE PERFIL INCOMPLETO (Injetado abaixo do header)
+        const hasFoto = !!metadata?.foto_url;
+        const hasCidade = !!metadata?.cidade;
+        const hasWhatsapp = !!metadata?.whatsapp;
+        const perfilCompleto = hasFoto && hasCidade && hasWhatsapp;
+
+        // Verifica se está incompleto e se o utilizador ainda não fechou o alerta nesta sessão
+        if (!perfilCompleto && !sessionStorage.getItem('alerta_perfil_oculto')) {
+            const alertBanner = document.createElement('div');
+            alertBanner.innerHTML = `
+                <div style="background-color: #FEF3C7; color: #92400E; text-align: center; padding: 12px 20px; font-family: var(--fonte-poppins); font-size: 13px; font-weight: 500; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid #FDE68A;">
+                    <span style="flex-grow: 1;">
+                        ⚠️ 
+                        <a href="perfil.html" style="color: #92400E; font-weight: 700; text-decoration: underline;">Complete os seus dados</a> 
+                        e aumente suas chances de encontrar seu pet
+                    </span>
+                    <button id="fecharAlertaPerfil" style="background: transparent; border: none; color: #92400E; font-size: 20px; cursor: pointer; font-weight: bold; padding: 0 10px; line-height: 1;">&times;</button>
+                </div>
+            `;
+            
+            // Injeta o alerta visualmente dentro do header-placeholder (logo abaixo do menu)
+            const headerPlaceholder = document.getElementById('header-placeholder');
+            if (headerPlaceholder) {
+                headerPlaceholder.appendChild(alertBanner);
+                
+                // Lógica para fechar o alerta e não mostrar mais durante esta sessão
+                document.getElementById('fecharAlertaPerfil').addEventListener('click', () => {
+                    alertBanner.style.display = 'none';
+                    sessionStorage.setItem('alerta_perfil_oculto', 'true');
+                });
+            }
+        }
+
     } else {
         console.log("🔴 Utilizador não logado (Visitante)");
         
@@ -106,38 +139,7 @@ async function verificarSessao() {
         }
     }
 
-    // 5. ALERTA DE PERFIL INCOMPLETO (Injetado abaixo do header)
-        const hasFoto = !!metadata?.foto_url;
-        const hasCidade = !!metadata?.cidade;
-        const hasWhatsapp = !!metadata?.whatsapp;
-        const perfilCompleto = hasFoto && hasCidade && hasWhatsapp;
-
-        // Verifica se está incompleto e se o utilizador ainda não fechou o alerta nesta sessão
-        if (!perfilCompleto && !sessionStorage.getItem('alerta_perfil_oculto')) {
-            const alertBanner = document.createElement('div');
-            alertBanner.innerHTML = `
-                <div style="background-color: #FEF3C7; color: #92400E; text-align: center; padding: 12px 20px; font-family: var(--fonte-poppins); font-size: 13px; font-weight: 500; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid #FDE68A;">
-                    <span style="flex-grow: 1;">
-                        ⚠️ O seu perfil está incompleto! 
-                        <a href="perfil.html" style="color: #92400E; font-weight: 700; text-decoration: underline;">Complete os seus dados</a> 
-                        (foto, cidade e WhatsApp) para facilitar os contactos.
-                    </span>
-                    <button id="fecharAlertaPerfil" style="background: transparent; border: none; color: #92400E; font-size: 20px; cursor: pointer; font-weight: bold; padding: 0 10px; line-height: 1;">&times;</button>
-                </div>
-            `;
-            
-            // Injeta o alerta visualmente dentro do header-placeholder (logo abaixo do menu)
-            const headerPlaceholder = document.getElementById('header-placeholder');
-            if (headerPlaceholder) {
-                headerPlaceholder.appendChild(alertBanner);
-                
-                // Lógica para fechar o alerta e não mostrar mais durante esta sessão
-                document.getElementById('fecharAlertaPerfil').addEventListener('click', () => {
-                    alertBanner.style.display = 'none';
-                    sessionStorage.setItem('alerta_perfil_oculto', 'true');
-                });
-            }
-        }
+    
 }
 
 // 3. Lógica do Header (Modo Escuro e Hambúrguer)
