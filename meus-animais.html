@@ -169,8 +169,8 @@
                         acoesHTML = `
                             <div class="card-actions">
                                 <!-- Envia o ID na URL para a futura página de edição -->
-                                <a href="editar-animal.html?id=${animal.id}" class="btn-acao btn-editar">✏️ Editar</a>
-                                <button onclick="marcarFinalFeliz(${animal.id})" class="btn-acao btn-sucesso">Final Feliz 💖</button>
+                                <a href="editar-animal.html?id=${animal.id_animal}" class="btn-acao btn-editar">✏️ Editar</a>
+                                <button onclick="marcarFinalFeliz(${animal.id_animal})" class="btn-acao btn-sucesso">Final Feliz 💖</button>
                             </div>
                         `;
                     } else {
@@ -212,7 +212,7 @@
                 const { error } = await clienteSupabase
                     .from('animais')
                     .update({ status: 'final_feliz' })
-                    .eq('id', idAnimal);
+                    .eq('id_animal', idAnimal);
 
                 if (error) throw error;
 
