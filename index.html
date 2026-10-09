@@ -76,7 +76,7 @@
             <div class="section-container">
                 <div class="section-title lost-title">
                     <h2>Animais Perdidos</h2>
-                    <p>Últimos pets anunciados</p>
+                    <p>Últimos pets perdidos</p>
                 </div>
 
                 <!-- Aviso de Carregamento -->
@@ -101,61 +101,58 @@
             </div>
         </section>
 
-        <!-- ANIMAIS ENCONTRADOS 
-        <section class="pets-section found-section">
+        
+        <!-- ANIMAIS ENCONTRADOS (Carregado dinamicamente via JS/Supabase) -->
+        <section class="pets-section found-section" id="animais-encontrados">
             <div class="section-container">
                 <div class="section-title found-title">
                     <h2>Animais Encontrados</h2>
-                    <p>pets anunciados em são paulo</p>
+                    <p>Últimos pets achados nas ruas</p>
                 </div>
 
-                <div class="pets-grid">
-                    <article class="pet-card">
-                        <img src="media/animais-encontrados/outros/coelho-1.jpg" alt="Coelho Nick branco e felpudo">
-                        <span class="pet-status found">ENCONTRADO</span>
-                        <div class="pet-info">
-                            <h3>Nick</h3>
-                            <p>📌 São Paulo, SP</p>
-                            <p>📅 02/08/2026</p>
-                        </div>
-                    </article>
+                <!-- Aviso de Carregamento -->
+                <div id="loadingEncontrados" style="text-align: center; color: var(--azul-principal); font-weight: 600; margin-bottom: 20px;">
+                    A carregar os anúncios mais recentes... 🐾
+                </div>
 
-                    <article class="pet-card">
-                        <img src="media/animais-encontrados/gato/gato-6.png" alt="Gato Amora rajado">
-                        <span class="pet-status found">ENCONTRADO</span>
-                        <div class="pet-info">
-                            <h3>Amora</h3>
-                            <p>📌 São Paulo, SP</p>
-                            <p>📅 07/08/2026</p>
-                        </div>
-                    </article>
+                <div class="pets-grid" id="ultimosEncontradosGrid"></div>
 
-                    <article class="pet-card">
-                        <img src="media/animais-encontrados/cachorro/cachorro-8.jpg" alt="Cachorro Nina">
-                        <span class="pet-status found">ENCONTRADO</span>
-                        <div class="pet-info">
-                            <h3>Nina</h3>
-                            <p>📌 São Paulo, SP</p>
-                            <p>📅 30/08/2026</p>
-                        </div>
-                    </article>
-
-                    <article class="pet-card">
-                        <img src="media/animais-encontrados/cachorro/cachorro-9.jpg" alt="Cachorro Cacau">
-                        <span class="pet-status found">ENCONTRADO</span>
-                        <div class="pet-info">
-                            <h3>Cacau</h3>
-                            <p>📌 São Paulo, SP</p>
-                            <p>📅 04/05/2026</p>
-                        </div>
-                    </article>
+                <!-- Mensagem Vazia -->
+                <div id="emptyEncontrados" style="text-align: center; color: var(--cinza-texto); display: none; padding: 20px 0;">
+                    Não há registos recentes de animais encontrados.
                 </div>
 
                 <div class="ver-mais-wrapper">
-                    <a href="mural-encontrados.html" class="btn-ver-mais btn-found-outline">VER MAIS</a>
+                    <a href="mural.html" class="btn-ver-mais btn-found-outline">VER MAIS</a>
                 </div>
             </div>
-        </section> -->
+        </section>
+
+        <!-- FINAIS FELIZES (Carregado dinamicamente via JS/Supabase) -->
+        <section class="pets-section happy-section" id="finais-felizes">
+            <div class="section-container">
+                <div class="section-title happy-title">
+                    <h2>Finais Felizes 💖</h2>
+                    <p>Pets que voltaram para as suas famílias graças à comunidade</p>
+                </div>
+
+                <!-- Aviso de Carregamento -->
+                <div id="loadingFelizes" style="text-align: center; color: #059669; font-weight: 600; margin-bottom: 20px;">
+                    A carregar histórias felizes... 🐾
+                </div>
+
+                <div class="pets-grid" id="ultimosFelizesGrid"></div>
+
+                <!-- Mensagem Vazia -->
+                <div id="emptyFelizes" style="text-align: center; color: var(--cinza-texto); display: none; padding: 20px 0;">
+                    Ainda não temos finais felizes recentes, mas em breve teremos!
+                </div>
+
+                <div class="ver-mais-wrapper">
+                    <a href="mural.html" class="btn-ver-mais btn-happy-outline">VER MAIS</a>
+                </div>
+            </div>
+        </section>
 
         <!-- OBJETIVOS 
         <section class="objectives-section" id="quem-somos">
