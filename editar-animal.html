@@ -57,7 +57,7 @@
                     A carregar dados do animal... 🐾
                 </div>
 
-                <!-- Formulário com exibição forçada para teste -->
+                <!-- Formulário -->
                 <form id="editarForm" class="auth-form" onsubmit="event.preventDefault(); atualizarAnimal();">
                     
                     <div class="form-group">
@@ -132,16 +132,13 @@
         let fotoUrlAntiga = null;
 
         document.addEventListener('DOMContentLoaded', async () => {
-            console.log("Iniciando página de edição...");
             const { data: { session } } = await clienteSupabase.auth.getSession();
             if (!session) {
-                console.warn("Utilizador não autenticado. A redirecionar...");
                 return window.location.replace('login.html');
             }
 
             const urlParams = new URLSearchParams(window.location.search);
             animalIdUrl = urlParams.get('id');
-            console.log("ID capturado na URL:", animalIdUrl);
 
             if (!animalIdUrl) {
                 alert("Erro: ID do animal não fornecido.");
@@ -154,15 +151,16 @@
 
         async function carregarDadosDoAnimal(userId) {
             try {
-                console.log("A consultar Supabase para o id_animal:", animalIdUrl);
                 const { data: animal, error } = await clienteSupabase
                     .from('animais')
                     .select('*')
-                    .eq('id_animal', animalIdUrl)
-                    .single();
+                    .eq('id_animal', String(animalIdUrl).trim())
+                    .maybeSingle();
 
                 if (error) throw error;
-                console.log("Dados recebidos do Supabase:", animal);
+                if (!animal) {
+                    throw new Error("Animal não encontrado na base de dados.");
+                }
 
                 // Preencher campos
                 document.getElementById('nome_pet').value = animal.nome || '';
@@ -171,4 +169,90 @@
                 document.getElementById('data_pet').value = animal.data_evento || '';
                 document.getElementById('descricao_pet').value = animal.descricao || '';
                 
-                if (animal.status === 'perdido') document
+                if (animal.status === 'perdido') document.getElementById('status_perdido').checked = true;
+                if (animal.status === 'achado_na_rua') document.getElementById('status_encontrado').checked = true;
+                if (animal.status === 'final_feliz') document.getElementById('status_final_feliz').checked = true;
+
+                fotoUrlAntiga = animal.foto_url;
+                if (fotoUrlAntiga) {
+                    document.getElementById('imgAtual').src = fotoUrlAntiga;
+                } else {
+                    document.getElementById('fotoAtualContainer').style.display = 'none';
+                }
+
+                // Oculta o loading
+                const loadingEl = document.getElementById('loadingEditar');
+                if (loadingEl) loadingEl.style.display = 'none';
+
+            } catch (err) {
+                console.error("Erro detalhado no carregamento:", err);
+                alert("Erro ao carregar os dados: " + err.message);
+                window.location.href = "meus-animais.html";
+            }
+        }
+
+        async function atualizarAnimal() {
+            const btnSalvar = document.getElementById('btnSalvarEdicao');
+            btnSalvar.innerText = "A GUARDAR...";
+            btnSalvar.disabled = true;
+
+            try {
+                const { data: { session } } = await clienteSupabase.auth.getSession();
+                
+                const status = document.querySelector('input[name="status_pet"]:checked').value;
+                const nome = document.getElementById('nome_pet').value.trim();
+                const especie = document.getElementById('especie_pet').value;
+                const cidade = document.getElementById('cidade_pet').value.trim();
+                const dataOcorrido = document.getElementById('data_pet').value;
+                const descricao = document.getElementById('descricao_pet').value.trim();
+                const fotoInput = document.getElementById('foto_pet');
+
+                let fotoUrlFinal = fotoUrlAntiga;
+
+                if (fotoInput.files.length > 0) {
+                    const arquivoFoto = fotoInput.files[0];
+                    const extensao = arquivoFoto.name.split('.').pop();
+                    const nomeArquivo = `${Date.now()}_${Math.floor(Math.random() * 1000)}.${extensao}`;
+                    const caminhoStorage = `${session.user.id}/${nomeArquivo}`;
+
+                    const { error: uploadError } = await clienteSupabase.storage
+                        .from('fotos_pets')
+                        .upload(caminhoStorage, arquivoFoto);
+
+                    if (uploadError) throw new Error("Falha ao fazer upload da nova imagem.");
+
+                    const { data: publicUrlData } = clienteSupabase.storage
+                        .from('fotos_pets')
+                        .getPublicUrl(caminhoStorage);
+
+                    fotoUrlFinal = publicUrlData.publicUrl;
+                }
+
+                const { error: updateError } = await clienteSupabase
+                    .from('animais')
+                    .update({
+                        status: status,
+                        nome: nome,
+                        especie: especie,
+                        cidade: cidade,
+                        data_evento: dataOcorrido,
+                        descricao: descricao,
+                        foto_url: fotoUrlFinal
+                    })
+                    .eq('id_animal', String(animalIdUrl).trim());
+
+                if (updateError) throw updateError;
+
+                alert("✅ Anúncio atualizado com sucesso!");
+                window.location.href = "meus-animais.html";
+
+            } catch (error) {
+                console.error("Erro na atualização:", error);
+                alert("❌ Ocorreu um erro: " + error.message);
+                btnSalvar.innerText = "SALVAR ALTERAÇÕES";
+                btnSalvar.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
