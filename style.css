@@ -829,11 +829,33 @@ html[data-tema="escuro"] .form-group input {
         order: -1;
     }
 }
+
 /* =========================================================
-   11. PERFIL E ESTADOS DE AUTENTICAÇÃO (UI/UX Melhorada)
+   11. GESTÃO DE ESTADO DE AUTENTICAÇÃO (CSS PURO)
    ========================================================= */
 
-/* O Avatar (Usado no Desktop e Mobile) */
+/* PADRÃO (VISITANTE): Esconde os perfis e logouts */
+.mobile-profile-header,
+.user-profile-dropdown,
+.btn-logout-mobile {
+    display: none;
+}
+
+/* QUANDO LOGADO (.is-logged-in no header): Esconde botão Login e Divisor */
+.site-header.is-logged-in .btn-login-nav,
+.site-header.is-logged-in .header-divider {
+    display: none;
+}
+
+/* QUANDO LOGADO: Mostra o Dropdown de Desktop (Apenas em ecrãs grandes) */
+.site-header.is-logged-in .user-profile-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+
+/* --- O AVATAR --- */
 .avatar-circle {
     width: 38px;
     height: 38px;
@@ -849,7 +871,7 @@ html[data-tema="escuro"] .form-group input {
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-right: 15px; /* Espaço entre o avatar e o botão Cadastrar */
+    margin-right: 15px; 
 }
 
 html[data-tema="escuro"] .avatar-circle {
@@ -864,21 +886,16 @@ html[data-tema="escuro"] .avatar-circle {
     color: var(--azul-escuro);
     font-family: var(--fonte-poppins);
 }
+
 html[data-tema="escuro"] .user-greeting { color: #d5dfec; }
 
-/* Dropdown de Perfil (Desktop) */
-.user-profile-dropdown {
-    position: relative;
-    /* Note que o Javascript mudará o estilo inline para display: flex quando logado */
-    align-items: center;
-}
 
-/* O MENU SUSPENSO FICA ESCONDIDO ATÉ PASSAR O RATO */
+/* --- DROPDOWN DO DESKTOP (Hover) --- */
 .profile-dropdown-menu {
     display: none; 
     position: absolute;
-    top: 110%; /* Fica logo abaixo do avatar */
-    right: 0;  /* Alinhado à direita */
+    top: 110%; 
+    right: 0; 
     background: var(--fundo-card);
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.12);
@@ -889,7 +906,7 @@ html[data-tema="escuro"] .user-greeting { color: #d5dfec; }
     gap: 12px;
 }
 
-/* MOSTRA O MENU QUANDO O RATO PASSA NO AVATAR */
+/* A Mágica do Hover */
 .user-profile-dropdown:hover .profile-dropdown-menu {
     display: flex;
 }
@@ -916,6 +933,86 @@ html[data-tema="escuro"] .user-greeting { color: #d5dfec; }
 html[data-tema="escuro"] .profile-dropdown-menu { background: #1e2c42; }
 html[data-tema="escuro"] .profile-divider { border-color: #2a3b52; }
 html[data-tema="escuro"] .btn-logout-clean { color: #ff4d6d; }
+
+
+/* =========================================================
+   08. REORDENAÇÃO DO MENU MOBILE (FLEX ORDER)
+   ========================================================= */
+@media (max-width: 900px) {
+    
+    /* Regras de estado no Mobile: Se estiver logado... */
+    .site-header.is-logged-in .user-profile-dropdown {
+        display: none !important; /* Esconde o dropdown de desktop no mobile mesmo se logado */
+    }
+    
+    .site-header.is-logged-in .mobile-profile-header {
+        display: flex; /* Exibe o perfil do topo */
+    }
+    
+    .site-header.is-logged-in .btn-logout-mobile {
+        display: block; /* Exibe o link de sair no fundo */
+    }
+
+    .nav-actions-group {
+        display: flex;
+        flex-direction: column;
+        padding: 30px 20px;
+    }
+
+    .header-actions {
+        display: contents; 
+    }
+
+    /* 1. PERFIL NO TOPO */
+    .mobile-profile-header {
+        order: 1;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eeeeee;
+    }
+    
+    html[data-tema="escuro"] .mobile-profile-header { border-color: #2a3b52; }
+
+    /* 2. NAVEGAÇÃO */
+    .main-nav {
+        order: 2;
+        margin-bottom: 30px;
+    }
+
+    /* 3. AÇÃO PRINCIPAL (CADASTRAR / LOGIN) */
+    .btn-cadastrar-nav, .btn-login-nav {
+        order: 3;
+        width: 100%;
+        margin-bottom: 25px;
+    }
+
+    /* 4. CONFIGURAÇÃO (MODO ESCURO) */
+    .theme-toggle-wrapper {
+        order: 4;
+        width: 100%;
+    }
+
+    /* 5. LOGOUT (Texto simples no fim do menu) */
+    .btn-logout-mobile {
+        order: 5;
+        background: transparent;
+        border: none;
+        color: #d90429;
+        font-weight: 600;
+        font-family: var(--fonte-poppins);
+        font-size: 14px;
+        margin-top: 25px;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        cursor: pointer;
+    }
+    
+    html[data-tema="escuro"] .btn-logout-mobile { color: #ff4d6d; }
+}
 
 /* =========================================================
    08. REORDENAÇÃO DO MENU MOBILE (FLEX ORDER)

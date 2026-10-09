@@ -27,52 +27,47 @@ async function verificarSessao() {
 
     const { data: { session } } = await clienteSupabase.auth.getSession();
 
-    // Elementos Compartilhados
-    const loginBtn = document.getElementById('navLoginBtn');
+    // Elementos de Texto e Links
     const cadastrarBtn = document.getElementById('navCadastrarBtn');
-    const headerDivider = document.getElementById('headerDivider');
-    
-    // Elementos Desktop
-    const userProfile = document.getElementById('userProfile');
     const desktopAvatar = document.getElementById('desktopAvatar');
     const userNameDisplay = document.getElementById('userNameDisplay');
-    const btnLogoutDesktop = document.getElementById('btnLogoutDesktop');
-    
-    // Elementos Mobile
-    const mobileProfileHeader = document.getElementById('mobileProfileHeader');
     const mobileAvatar = document.getElementById('mobileAvatar');
     const mobileGreeting = document.getElementById('mobileGreeting');
+    
+    // Botões de Logout
+    const btnLogoutDesktop = document.getElementById('btnLogoutDesktop');
     const btnLogoutMobile = document.getElementById('btnLogoutMobile');
+    
+    // O Header principal que vai receber a classe de estado
+    const siteHeader = document.querySelector('.site-header');
 
     if (session) {
         console.log("🟢 Utilizador logado:", session.user.email);
+        
+        // Adiciona a classe de estado logado ao header
+        if (siteHeader) siteHeader.classList.add('is-logged-in');
         
         // Pega o nome e a primeira letra para o Avatar
         const nomeCompleto = session.user.user_metadata?.display_name || session.user.email.split('@')[0];
         const primeiroNome = nomeCompleto.split(' ')[0];
         const inicial = primeiroNome.charAt(0).toUpperCase();
 
-        // 1. Atualiza UI do Desktop
-        if (loginBtn) loginBtn.style.display = 'none';
-        if (headerDivider) headerDivider.style.display = 'none'; // Some o divisor pois o Avatar é leve
-        if (userProfile) userProfile.style.display = 'flex';
+        // Preenche os dados visuais (Desktop)
         if (desktopAvatar) desktopAvatar.innerText = inicial;
         if (userNameDisplay) userNameDisplay.innerText = `Olá, ${primeiroNome}`;
 
-        // 2. Atualiza UI do Mobile
-        if (mobileProfileHeader) mobileProfileHeader.style.display = 'flex';
+        // Preenche os dados visuais (Mobile)
         if (mobileAvatar) mobileAvatar.innerText = inicial;
         if (mobileGreeting) mobileGreeting.innerText = `Olá, ${primeiroNome}`;
-        if (btnLogoutMobile) btnLogoutMobile.style.display = 'block';
 
-        // 3. Libera o Botão de Cadastrar
+        // Libera o Botão de Cadastrar
         if (cadastrarBtn) {
             cadastrarBtn.classList.remove('disabled');
             cadastrarBtn.href = "form1.html";
             cadastrarBtn.style.pointerEvents = 'auto'; 
         }
 
-        // 4. Lógica de Logout (Atrela aos dois botões)
+        // Lógica de Logout
         const fazerLogout = async () => {
             await clienteSupabase.auth.signOut();
             window.location.reload();
@@ -83,16 +78,10 @@ async function verificarSessao() {
     } else {
         console.log("🔴 Utilizador não logado (Visitante)");
         
-        // 1. Oculta Perfis e Logouts
-        if (userProfile) userProfile.style.display = 'none';
-        if (mobileProfileHeader) mobileProfileHeader.style.display = 'none';
-        if (btnLogoutMobile) btnLogoutMobile.style.display = 'none';
+        // Remove a classe de estado logado do header
+        if (siteHeader) siteHeader.classList.remove('is-logged-in');
         
-        // 2. Exibe Login e Divisor
-        if (loginBtn) loginBtn.style.display = 'inline-flex';
-        if (headerDivider) headerDivider.style.display = 'block';
-        
-        // 3. Desabilita Cadastrar
+        // Desabilita Cadastrar
         if (cadastrarBtn) {
             cadastrarBtn.classList.add('disabled');
             cadastrarBtn.href = "#"; 
