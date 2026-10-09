@@ -238,7 +238,7 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--fonte-poppins); }
 .cadastro-pink-section { display: none; }
 .login-container { 
     max-width: 900px; 
-    min-height: 550px; /* Força uma altura mínima equivalente à do cadastro */
+    min-height: 650px; /* Força uma altura mínima equivalente à do cadastro */
     padding: 0; 
     overflow: hidden; 
     background: var(--fundo-card); 
