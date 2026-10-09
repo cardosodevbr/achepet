@@ -87,9 +87,9 @@
                     </div>
                     
                     <button type="submit" class="btn-auth" id="btnSalvarPerfil">SALVAR ALTERAÇÕES</button>
-                    <!-- vamos evitar né...
+                    <!--
                      <button type="button" class="btn-auth btn-inativar" onclick="inativarConta()">INATIVAR CONTA</button>
-                -->
+                    -->
                 </form>
 
             </div>
@@ -125,7 +125,14 @@
             }
         });
 
-        // 2. Salvar Alterações
+        // 2. Máscara automática para o campo de WhatsApp
+        document.getElementById('whatsapp_perfil').addEventListener('input', function (e) {
+            let valor = e.target.value.replace(/\D/g, ''); // Remove tudo o que não é número
+            let formatado = valor.match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
+            e.target.value = !formatado[2] ? formatado[1] : '(' + formatado[1] + ') ' + formatado[2] + (formatado[3] ? '-' + formatado[3] : '');
+        });
+
+        // 3. Salvar Alterações
         async function salvarPerfil() {
             const btnSalvar = document.getElementById('btnSalvarPerfil');
             btnSalvar.innerText = "A GUARDAR...";
@@ -136,6 +143,14 @@
                 const cidade = document.getElementById('cidade_perfil').value.trim();
                 const whatsapp = document.getElementById('whatsapp_perfil').value.trim();
                 const fotoInput = document.getElementById('foto_perfil');
+
+                // VALIDAÇÃO DO WHATSAPP (Apenas números)
+                const whatsappNumeros = whatsapp.replace(/\D/g, '');
+                
+                // Verifica se o campo foi preenchido e se tem o tamanho correto (DDD 2 dígitos + 8 ou 9 dígitos)
+                if (whatsappNumeros !== '' && (whatsappNumeros.length < 10 || whatsappNumeros.length > 11)) {
+                    throw new Error("Formato de WhatsApp inválido. Inclua o DDD (Ex: 11999999999).");
+                }
 
                 let fotoUrlFinal = usuarioAtual.user_metadata?.foto_url;
 
@@ -183,7 +198,7 @@
             }
         }
 
-        // 3. Inativar Conta
+        // 4. Inativar Conta
         async function inativarConta() {
             const confirmacao = confirm("⚠️ Tem certeza que deseja inativar a sua conta?\nTodos os seus anúncios de animais deixarão de aparecer no mural.");
             if (!confirmacao) return;
