@@ -138,5 +138,72 @@ function inicializarScriptsDoHeader() {
 document.addEventListener('DOMContentLoaded', () => {
     carregarComponentes().then(() => {
         verificarSessao();
+        carregarUltimosPerdidos(); // <- Adicionámos a chamada aqui!
     });
 });
+
+// =========================================================
+// 5. CARREGAMENTO DINÂMICO PARA A PÁGINA INICIAL (INDEX)
+// =========================================================
+
+// Função utilitária para datas (caso seja chamada antes de outras)
+function formatarDataSimples(dataIso) {
+    if(!dataIso) return "Data desconhecida";
+    const partes = dataIso.split('-');
+    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+}
+
+async function carregarUltimosPerdidos() {
+    const grid = document.getElementById('ultimosPerdidosGrid');
+    const loading = document.getElementById('loadingPerdidos');
+    const emptyMsg = document.getElementById('emptyPerdidos');
+    
+    // Se esta div não existir na página atual (ex: utilizador está no login.html), aborta a função
+    if (!grid) return;
+
+    try {
+        // Busca os últimos 6 animais perdidos e que estejam ativos
+        const { data: animais, error } = await clienteSupabase
+            .from('animais')
+            .select('*')
+            .eq('status', 'perdido')
+            .eq('ativo', true)
+            .order('created_at', { ascending: false })
+            .limit(6); // Traz apenas os 6 últimos
+
+        if (error) throw error;
+
+        // Esconde o "A carregar..."
+        if (loading) loading.style.display = 'none';
+
+        if (animais.length === 0) {
+            if (emptyMsg) emptyMsg.style.display = 'block';
+            return;
+        }
+
+        // Limpa o grid antes de injetar
+        grid.innerHTML = '';
+
+        // Monta o HTML para cada cartão recebido do banco de dados
+        animais.forEach(animal => {
+            const fotoUrl = animal.foto_url || 'media/placeholder-pet.png';
+            
+            const cardHTML = `
+                <article class="pet-card">
+                    <img src="${fotoUrl}" alt="Foto de ${animal.nome}">
+                    <span class="pet-status lost">PERDIDO</span>
+                    <div class="pet-info">
+                        <h3>${animal.nome}</h3>
+                        <p>📌 ${animal.cidade}</p>
+                        <p>📅 ${formatarDataSimples(animal.data_evento)}</p>
+                    </div>
+                </article>
+            `;
+            grid.innerHTML += cardHTML;
+        });
+
+    } catch (err) {
+        console.error("Erro ao carregar os últimos animais perdidos:", err);
+        if (loading) loading.innerText = "❌ Ocorreu um erro ao carregar os anúncios.";
+    }
+}
