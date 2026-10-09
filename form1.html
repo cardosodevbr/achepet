@@ -114,6 +114,54 @@
             color: var(--preto);
             border-color: #1e2c42;
         }
+
+        /*preview grande da imagem anexada */
+        /* Estilos do Preview da Imagem */
+        .preview-container {
+            width: 100%;
+            height: 250px;
+            border: 2px dashed var(--azul-claro);
+            border-radius: 12px;
+            margin-top: 10px;
+            display: none; /* Escondido por defeito */
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #f8fafc;
+            position: relative;
+        }
+        
+        .preview-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Mantém a proporção da imagem sem a cortar */
+            z-index: 1;
+        }
+
+        .btn-remover-foto {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(233, 22, 107, 0.9);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 2;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        html[data-tema="escuro"] .preview-container {
+            background: #1e2c42;
+            border-color: #475569;
+        }
+
     </style>
 </head>
 
@@ -193,12 +241,13 @@
                     <div class="form-group">
                         <label for="foto_pet">Fotografia (Obrigatório)</label>
                         <input type="file" id="foto_pet" accept="image/*" style="padding-top: 10px; border: none; background: transparent;">
+                        
+                        <!-- NOVO: Contentor do Preview -->
+                        <div class="preview-container" id="previewBox">
+                            <button type="button" class="btn-remover-foto" id="btnRemoverFoto" title="Remover foto">X</button>
+                            <img id="imagemPreview" src="" alt="Preview da foto">
+                        </div>
                     </div>
-                    
-                    <button type="submit" class="btn-auth" id="btnSalvarAnimal" style="margin-top: 20px;">PUBLICAR NO MURAL</button>
-                </form>
-
-            </div>
         </section>
     </main>
 
@@ -328,6 +377,40 @@
                 btnSalvar.innerText = "PUBLICAR NO MURAL";
                 btnSalvar.disabled = false;
             }
+        }
+
+        // --- LÓGICA DE PREVIEW DA FOTOGRAFIA ---
+        const inputFoto = document.getElementById('foto_pet');
+        const previewBox = document.getElementById('previewBox');
+        const imagemPreview = document.getElementById('imagemPreview');
+        const btnRemoverFoto = document.getElementById('btnRemoverFoto');
+
+        // Quando o utilizador escolhe um ficheiro
+        inputFoto.addEventListener('change', function(event) {
+            const ficheiro = event.target.files[0];
+            
+            if (ficheiro) {
+                // Usa o FileReader para converter a imagem num URL local temporário
+                const leitor = new FileReader();
+                
+                leitor.onload = function(e) {
+                    imagemPreview.src = e.target.result;
+                    previewBox.style.display = 'flex'; // Mostra a caixa
+                }
+                
+                leitor.readAsDataURL(ficheiro);
+            } else {
+                limparPreview();
+            }
+        });
+
+        // Quando o utilizador clica no 'X' para remover a imagem
+        btnRemoverFoto.addEventListener('click', limparPreview);
+
+        function limparPreview() {
+            inputFoto.value = ''; // Limpa o input do ficheiro
+            imagemPreview.src = '';
+            previewBox.style.display = 'none'; // Esconde a caixa
         }
     </script>
 
