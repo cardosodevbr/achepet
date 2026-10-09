@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FONTES OTIMIZADAS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <title>LOGIN | AchePet 🐾</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- CONEXÃO COM O BANCO DE DADOS (SUPABASE) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+
+</head>
+
+<body data-page="login">
+
+    <!-- COMPONENTES DINÂMICOS -->
+    <div id="header-placeholder"></div>
+
+    <!-- ÁREA DO LOGIN -->
+    <main class="login-main">
+        <section class="cadastro-section">
+            <div class="cadastro-container login-container">
+                
+                <div class="login-grid">
+                    
+                    <!-- LADO ESQUERDO: Formulário -->
+                    <div class="login-form-area">
+                        <h1>Bem-vindo de volta! 🐾</h1>
+                        <p>Aceda à sua conta para ajudar a encontrar e cadastrar pets.</p>
+                        
+                        <!-- UX: Formulário semântico -->
+                        <form id="loginForm" class="auth-form" onsubmit="event.preventDefault(); fazerLogin();">
+                            <div class="form-group">
+                                <label for="loginEmail">E-mail</label>
+                                <input type="email" id="loginEmail" placeholder="Digite o seu e-mail" autocomplete="email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="loginSenha">Senha</label>
+                                <input type="password" id="loginSenha" placeholder="Digite a sua senha" autocomplete="current-password" required>
+                            </div>
+                            
+                            <button type="submit" class="btn-auth">ENTRAR</button>
+                        </form>
+                        
+                        <!-- Links de apoio organizados -->
+                        <div class="auth-links">
+                            <a href="esqueceu-senha.html">Esqueci a minha senha</a>
+                            <span>|</span>
+                            <a href="cadastro.html">Criar nova conta</a>
+                        </div>
+                    </div>
+
+                    <!-- LADO DIREITO: Imagem -->
+                    <div class="login-image-area">
+                        <img src="media/papagaio.jpeg" alt="Mascote Papagaio do AchePet">
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- COMPONENTES DINÂMICOS -->
+    <div id="footer-placeholder"></div>
+
+    <!-- LIGAÇÃO AO JAVASCRIPT PRINCIPAL -->
+    <script src="script.js"></script>
+
+    <script>
+        async function fazerLogin() {
+            // 1. Captura os valores
+            const email = document.getElementById('loginEmail').value.trim();
+            const senha = document.getElementById('loginSenha').value;
+            const btnLogin = document.querySelector('#loginForm .btn-auth');
+
+            // 2. Feedback visual
+            btnLogin.innerText = "A entrar...";
+            btnLogin.disabled = true;
+
+            // 3. Comunicação com o Supabase
+            const { data, error } = await clienteSupabase.auth.signInWithPassword({
+                email: email,
+                password: senha,
+            });
+
+            // 4. Restaura o botão
+            btnLogin.innerText = "ENTRAR";
+            btnLogin.disabled = false;
+
+            // 5. Validação e Redirecionamento
+            if (error) {
+                alert("❌ Credenciais inválidas. Verifique o seu e-mail e senha.");
+                console.error(error);
+            } else {
+                // Login com sucesso! Vai direto para a home
+                window.location.replace('index.html');
+            }
+        }
+    </script>
+
+</body>
+</html>

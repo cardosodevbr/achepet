@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FONTES SIMPLIFICADAS PARA PERFORMANCE E CONSISTÊNCIA VISUAL -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <title>Ache Pet 🐾</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- CONEXÃO COM O BANCO DE DADOS (SUPABASE) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    
+</head>
+
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main>
+        <!-- HERO -->
+        <section class="hero" id="mural">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1>
+                        Encontre seu <span class="logo-pet">pet.</span>
+                        <img src="media/coracao-rosa.png" id="coracao" alt="Coração rosa decorativo">
+                    </h1>
+
+                    <p>
+                        O AchePet conecta pessoas que perderam seus animais com quem pode ajudar a encontrá-los.
+                    </p>
+
+                    <!-- UX CORRIGIDA: Ações separadas da barra de busca -->
+                    <div class="hero-actions">
+                        <a href="form1.html#perdi" class="btn-action btn-lost" id="btnPerdi">PERDI UM PET</a>
+                        <a href="form1.html#encontrei" class="btn-action btn-found" id="btnEncontrei">ENCONTREI UM PET</a>
+                    </div>
+
+                    <div class="search-box">
+                        <div class="search-input">
+                            <span class="search-icon" aria-hidden="true">⌖</span>
+                            <input type="text" id="cidadeBusca" placeholder="Busque por cidade (Ex: São Paulo)" autocomplete="off">
+                            <button class="btn-search">BUSCAR</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hero-image-wrapper">
+                    <img src="media/telainicial-animais-remove.png" id="cachorro" alt="Cachorro sorridente olhando para o ecrã">
+                </div>
+            </div>
+        </section>
+
+        <!-- ANIMAIS PERDIDOS -->
+        <section class="pets-section lost-section" id="animais-perdidos">
+            <div class="section-container">
+                <div class="section-title lost-title">
+                    <h2>Animais Perdidos</h2>
+                    <p>pets anunciados em são paulo</p>
+                </div>
+
+                <!-- GRID FLUIDO APLICADO VIA CSS -->
+                <div class="pets-grid">
+                    <article class="pet-card">
+                        <img src="media/animais-perdidos/cachorro/cachorro-1.jpg" alt="Cachorro Isac, de porte médio e pelagem clara">
+                        <span class="pet-status lost">PERDIDO</span>
+                        <div class="pet-info">
+                            <h3>Isac</h3>
+                            <p>📌 São Paulo, SP</p>
+                            <p>📅 08/09/2026</p>
+                        </div>
+                    </article>
+
+                    <article class="pet-card">
+                        <img src="media/animais-perdidos/cachorro/cachorro-2.jpg" alt="Cachorro Bela">
+                        <span class="pet-status lost">PERDIDO</span>
+                        <div class="pet-info">
+                            <h3>Bela</h3>
+                            <p>📌 São Paulo, SP</p>
+                            <p>📅 24/01/2025</p>
+                        </div>
+                    </article>
+
+                    <article class="pet-card">
+                        <img src="media/animais-perdidos/cachorro/cachorro-3.jpg" alt="Cachorro Thor">
+                        <span class="pet-status lost">PERDIDO</span>
+                        <div class="pet-info">
+                            <h3>Thor</h3>
+                            <p>📌 São Paulo, SP</p>
+                            <p>📅 19/09/2026</p>
+                        </div>
+                    </article>
+
+                    <article class="pet-card">
+                        <img src="media/animais-perdidos/cachorro/cachorro-4.jpg" alt="Cachorro Pipoca">
+                        <span class="pet-status lost">PERDIDO</span>
+                        <div class="pet-info">
+                            <h3>Pipoca</h3>
+                            <p>📌 São Paulo, SP</p>
+                            <p>📅 03/10/2025</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="ver-mais-wrapper">
+                    <a href="mural-procurados.html" class="btn-ver-mais btn-lost-outline">VER MAIS</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ANIMAIS ENCONTRADOS -->
+        <section class="pets-section found-section">
+            <div class="section-container">
+                <div class="section-title found-title">
+                    <h2>Animais Encontrados</h2>
+                    <p>pets anunciados em são paulo</p>
+                </div>
+
+                <div class="pets-grid">
+                    <article class="pet-card">
+                        <img src="media/animais-encontrados/outros/coelho-1.jpg" alt="Coelho Nick branco e felpudo">
+                        <span class="pet-status found">ENCONTRADO</span>
+                        <div class="pet-info">
+                            <h3>Nick</h3>
+                            <p>📌 São Paulo, SP</p>
+                            <p>📅 02/08/2026</p>
+                        </div>
+                    </article>
+
+                    <article class="pet-card">
+                        <img src="media/animais-encontrados/gato/gato-6.png" alt="Gato Amora rajado">
+                        <span class="pet-status found">ENCONTRADO</span>
+                        <div class="pet-info">
+                            <h3>Amora</h3>
+                            <p>📌 São Paulo, SP</p>
+                            <p>📅 07/08/2026</p>
+                        </div>
+                    </article>
+
+                    <article class="pet-card">
+                        <img src="media/animais-encontrados/cachorro/cachorro-8.jpg" alt="Cachorro Nina">
+                        <span class="pet-status found">ENCONTRADO</span>
+                        <div class="pet-info">
+                            <h3>Nina</h3>
+                            <p>📌 São Paulo, SP</p>
+                            <p>📅 30/08/2026</p>
+                        </div>
+                    </article>
+
+                    <article class="pet-card">
+                        <img src="media/animais-encontrados/cachorro/cachorro-9.jpg" alt="Cachorro Cacau">
+                        <span class="pet-status found">ENCONTRADO</span>
+                        <div class="pet-info">
+                            <h3>Cacau</h3>
+                            <p>📌 São Paulo, SP</p>
+                            <p>📅 04/05/2026</p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="ver-mais-wrapper">
+                    <a href="mural-encontrados.html" class="btn-ver-mais btn-found-outline">VER MAIS</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- OBJETIVOS -->
+        <section class="objectives-section" id="quem-somos">
+            <div class="section-container">
+                
+                <!-- CORREÇÃO: Estrutura padronizada de título -->
+                <div class="section-title objectives-title">
+                    <h2>Nossos Objetivos</h2>
+                </div>
+
+                <div class="objectives-grid">
+                    <article class="objective-card">
+                        <img src="media/objetivos/familia-1.jpg" alt="Mãe e filha felizes a abraçar um cachorro dourado">
+                        <div class="objective-content">
+                            <h3>Objetivo 1</h3>
+                            <p>Ajudar animais perdidos a encontrarem os seus tutores, facilitando a comunicação entre pessoas e comunidades.</p>
+                        </div>
+                    </article>
+
+                    <article class="objective-card">
+                        <img src="media/objetivos/familia-2.jpg" alt="Família a brincar com um cachorro no parque">
+                        <div class="objective-content">
+                            <h3>Objetivo 2</h3>
+                            <p>Criar uma rede de apoio para aumentar as probabilidades de localização e reencontro dos animais.</p>
+                        </div>
+                    </article>
+
+                    <article class="objective-card">
+                        <img src="media/objetivos/familia-3.jpg" alt="Criança a acariciar um gatinho resgatado">
+                        <div class="objective-content">
+                            <h3>Objetivo 3</h3>
+                            <p>Incentivar a colaboração entre moradores e promover uma comunidade mais atenta ao bem-estar dos pets.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

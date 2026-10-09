@@ -1,0 +1,988 @@
+/* =========================================================
+   ACHEPET | STYLE.CSS REFATORADO COMPLETO
+   ========================================================= */
+
+/* ===== 01. VARIÁVEIS E RESET ===== */
+:root {
+    /* CORES PRINCIPAIS */
+    --azul-principal: #1489D8;
+    --azul-escuro: #0873BE;
+    --azul-claro: #DFF2FD;
+    --rosa-principal: #E9166B;
+    --rosa-claro: #FDE4EF;
+    
+    /* NEUTROS */
+    --branco: #FFFFFF;
+    --preto: #000000;
+    --cinza: #F2F2F2;
+    --cinza-texto: #333333;
+
+    /* FONTES (Reduzidas para performance e consistência) */
+    --fonte-poppins: 'Poppins', sans-serif;
+    --fonte-open-sans: 'Open Sans', sans-serif;
+
+    /* FUNDOS E BOTÕES */
+    --fundo-header: var(--branco);
+    --fundo-azul: var(--azul-claro);
+    --fundo-rosa: var(--rosa-claro);
+    --fundo-card: var(--branco);
+    --botao-hover-rosa: #C9125D;
+}
+
+/* VARIÁVEIS DO MODO ESCURO */
+html[data-tema="escuro"] {
+    --branco: #172233;
+    --preto: #e9eff7;
+    --cinza: #223046;
+    --cinza-texto: #c4cfde;
+    --fundo-header: #0f1722;
+    --fundo-azul: #101d2e;
+    --fundo-rosa: #1c1424;
+    --fundo-card: #1e2c42;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--branco);
+    color: var(--preto);
+    font-family: var(--fonte-open-sans);
+    line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--fonte-poppins);
+}
+
+
+
+/* ===== 02. HEADER E NAVEGAÇÃO ===== */
+.site-header {
+    width: 100%;
+    height: 75px;
+    background: var(--fundo-header);
+    border-bottom: 1px solid #eeeeee;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.header-container {
+    width: 92%;
+    max-width: 1200px;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* LOGO */
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+.logo img {
+    width: 70px;
+    height: 60px;
+    object-fit: contain;
+}
+.logo span {
+    font-size: 24px;
+    font-weight: 700;
+    font-family: var(--fonte-poppins);
+}
+.logo-ache { color: var(--azul-principal); }
+.logo-pet { color: var(--rosa-principal); }
+
+/* AGRUPAMENTO DE NAVEGAÇÃO E AÇÕES (Para o Mobile) */
+.nav-actions-group {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 40px;
+}
+
+/* LINKS CENTRAIS */
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+.main-nav a {
+    color: var(--preto);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--fonte-poppins);
+    transition: color 0.2s ease;
+}
+.main-nav a:hover, .main-nav a.active {
+    color: var(--azul-principal);
+}
+
+/* DROPDOWN DO MURAL */
+.nav-dropdown { position: relative; }
+.nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--fundo-card);
+    min-width: 200px;
+    padding: 10px 0;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 1000;
+}
+.nav-dropdown:hover .nav-dropdown-menu { display: block; }
+.nav-dropdown-menu a {
+    display: block;
+    padding: 12px 20px;
+    font-size: 13px;
+}
+.nav-dropdown-menu .menu-procurados:hover { background: var(--rosa-claro); color: var(--rosa-principal); }
+.nav-dropdown-menu .menu-encontrados:hover { background: var(--azul-claro); color: var(--azul-principal); }
+
+/* BOTÕES DE AÇÃO E TEMA (DIREITA) */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Linha divisória entre o switch e os botões */
+.header-divider {
+    width: 1px;
+    height: 24px;
+    background: #e0e0e0;
+    margin: 0 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-login-nav {
+    height: 40px; 
+    display: inline-flex; 
+    align-items: center;
+    padding: 0 20px; 
+    color: var(--azul-principal);
+    border: 2px solid var(--azul-principal);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    font-family: var(--fonte-poppins);
+    transition: 0.3s ease;
+}
+.btn-login-nav:hover {
+    background: var(--azul-principal);
+    color: var(--branco);
+}
+
+.btn-cadastrar-nav {
+    height: 40px; 
+    display: inline-flex; 
+    align-items: center;
+    padding: 0 20px; 
+    background: var(--rosa-principal);
+    color: #FFFFFF;
+    border: 2px solid var(--rosa-principal);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    font-family: var(--fonte-poppins);
+    transition: 0.3s ease;
+}
+.btn-cadastrar-nav:hover {
+    background: var(--botao-hover-rosa);
+    border-color: var(--botao-hover-rosa);
+}
+
+/* =========================================================
+   SWITCH MODO ESCURO (ULTRA MINIMALISTA)
+   ========================================================= */
+.theme-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.theme-toggle-label {
+    display: none; /* Escondido no desktop */
+    font-family: var(--fonte-poppins);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--azul-escuro);
+}
+
+.theme-toggle {
+    width: 44px;  
+    height: 24px; 
+    border-radius: 24px;
+    background: transparent; 
+    border: 1px solid #CBD5E1; 
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 3px; 
+    transition: border-color 0.4s ease;
+    overflow: hidden;
+}
+
+.theme-toggle .toggle-circle {
+    width: 16px; 
+    height: 16px; 
+    border-radius: 50%;
+    background: #94A3B8; 
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+                background 0.3s ease,
+                box-shadow 0.4s ease;
+}
+
+.theme-toggle.active {
+    background: transparent; 
+    border-color: #475569; 
+}
+
+.theme-toggle.active .toggle-circle {
+    transform: translateX(20px);
+    background: transparent; 
+    box-shadow: inset -5px -3px 0 0 #e9eff7;
+}
+
+
+/* ===== 03. HERO (PÁGINA INICIAL) ===== */
+.hero {
+    min-height: 550px;
+    padding-top: 60px; /* Sem padding-bottom para a imagem encostar na base */
+    background: url(media/hero-mural-encontrados.png) center bottom/cover no-repeat;
+    display: flex;
+}
+
+.hero-container {
+    width: 92%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-between;
+    align-items: stretch; /* Estica as colunas verticalmente */
+    gap: 40px;
+    position: relative;
+}
+
+.hero-content {
+    width: 100%;
+    max-width: 550px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 60px; /* O respiro volta aqui para o texto não colar na base */
+    gap: 20px;
+    z-index: 2;
+}
+
+.hero h1 {
+    font-size: 48px;
+    color: var(--azul-escuro);
+    font-weight: 700;
+    line-height: 1.2;
+}
+.hero h1 img {
+    width: 45px;
+    vertical-align: middle;
+}
+.hero p {
+    font-size: 16px;
+    color: var(--cinza-texto);
+    max-width: 480px;
+}
+
+.hero-image-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end; /* Empurra os animais exatamente para a base da secção */
+}
+
+#cachorro {
+    width: 100%;
+    max-width: 450px;
+    object-fit: contain;
+    display: block; 
+}
+
+/* Ações do Hero */
+.hero-actions {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    margin-top: 10px;
+}
+.btn-action {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    border-radius: 25px;
+    font-family: var(--fonte-poppins);
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.btn-action:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+.btn-lost {
+    background: var(--fundo-card);
+    color: var(--azul-principal);
+    border: 2px solid var(--azul-principal);
+}
+.btn-found {
+    background: var(--rosa-principal);
+    color: #FFFFFF;
+}
+
+/* Busca do Hero */
+.search-box {
+    width: 100%;
+    margin-top: 20px;
+    background: var(--azul-principal);
+    padding: 15px;
+    border-radius: 12px;
+}
+.search-input {
+    display: flex;
+    align-items: center;
+    background: var(--branco);
+    border-radius: 20px;
+    padding: 5px 15px;
+    gap: 10px;
+}
+.search-input input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 10px 0;
+    background: transparent;
+    color: var(--preto);
+    font-family: var(--fonte-open-sans);
+    font-size: 14px;
+}
+.btn-search {
+    background: var(--azul-escuro);
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-family: var(--fonte-poppins);
+    font-weight: 600;
+}
+
+
+/* ===== 04. MURAIS DE ANIMAIS (GRID AUTOMÁTICO) ===== */
+.pets-section {
+    padding: 70px 0;
+}
+.lost-section { background: var(--fundo-rosa); }
+.found-section { background: var(--fundo-azul); }
+
+.section-container {
+    width: 92%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.section-title {
+    margin-bottom: 30px;
+    text-align: center;
+}
+.section-title h2 { font-size: 28px; }
+.lost-title h2, .lost-title p { color: var(--rosa-principal); }
+.found-title h2, .found-title p { color: var(--azul-principal); }
+
+/* Grid fluido e responsivo automático */
+.pets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px;
+}
+
+.pet-card {
+    background: var(--fundo-card);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+.pet-card:hover {
+    transform: translateY(-5px);
+}
+.pet-card > img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+.pet-status {
+    display: block;
+    width: calc(100% - 30px);
+    margin: 12px auto;
+    padding: 6px 0;
+    text-align: center;
+    border-radius: 20px;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-family: var(--fonte-poppins);
+    font-weight: 600;
+}
+.pet-status.lost { background: var(--rosa-principal); }
+.pet-status.found { background: var(--azul-principal); }
+
+.pet-info {
+    padding: 0 15px 20px;
+}
+.pet-info h3 { font-size: 18px; margin-bottom: 8px; color: var(--preto); }
+.pet-info p { font-size: 13px; color: var(--cinza-texto); margin-bottom: 4px; }
+
+.ver-mais-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+.btn-ver-mais {
+    padding: 12px 40px;
+    border-radius: 25px;
+    font-family: var(--fonte-poppins);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.btn-lost-outline { color: var(--rosa-principal); border: 2px solid var(--rosa-principal); }
+.btn-lost-outline:hover { background: var(--rosa-principal); color: #FFFFFF; }
+.btn-found-outline { color: var(--azul-principal); border: 2px solid var(--azul-principal); }
+.btn-found-outline:hover { background: var(--azul-principal); color: #FFFFFF; }
+
+
+/* ===== 05. OBJETIVOS ===== */
+.objectives-section {
+    padding: 70px 0;
+    background: var(--fundo-card);
+}
+.objectives-title h2 { 
+    color: var(--azul-escuro); 
+}
+
+.objectives-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+.objective-card {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    height: 300px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.objective-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.objective-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: rgba(233, 22, 107, 0.9);
+    color: #FFFFFF;
+}
+.objective-content h3 { font-size: 18px; margin-bottom: 5px; }
+.objective-content p { font-size: 13px; line-height: 1.5; }
+
+
+/* ===== 06. FORMULÁRIOS FLEXÍVEIS ===== */
+.cadastro-container,
+.formulario-selecao,
+.formulario-fotos {
+    width: 100%;
+    max-width: 850px;
+    min-height: 400px;
+    height: auto;
+    margin: 40px auto;
+    padding: 30px;
+    background: var(--fundo-card);
+    border: 2px solid var(--azul-escuro);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+.formulario-enunciado {
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+
+/* ===== 07. FOOTER ===== */
+.site-footer {
+    background: var(--fundo-azul);
+    padding-top: 40px;
+}
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 30px;
+}
+.footer-logo {
+    width: 250px;
+    object-fit: contain;
+}
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+.footer-links a {
+    color: var(--azul-escuro);
+    text-decoration: none;
+    font-family: var(--fonte-poppins);
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.footer-links a img { height: 20px; }
+
+.footer-bottom {
+    background: var(--azul-principal);
+    color: #FFFFFF;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    font-family: var(--fonte-poppins);
+    font-size: 14px;
+}
+
+/* =========================================================
+   09. AJUSTES ESPECÍFICOS DO MODO ESCURO
+   ========================================================= */
+
+/* Header e Menu Hambúrguer */
+html[data-tema="escuro"] .site-header {
+    border-bottom-color: #1e2c42; 
+}
+html[data-tema="escuro"] .header-divider {
+    background: #2a3b52;
+}
+html[data-tema="escuro"] .theme-toggle-label {
+    color: #6cc0f5;
+}
+
+@media (max-width: 900px) {
+    html[data-tema="escuro"] .nav-actions-group {
+        background: var(--fundo-header);
+        box-shadow: 0 15px 20px rgba(0,0,0,0.4);
+    }
+    html[data-tema="escuro"] .mobile-menu-btn span {
+        background-color: #6cc0f5;
+    }
+    html[data-tema="escuro"] .theme-toggle-wrapper {
+        background: #1e2c42;
+    }
+}
+
+/* Hero */
+html[data-tema="escuro"] .hero {
+    background: linear-gradient(rgba(14, 22, 33, 0.85), rgba(14, 22, 33, 0.85)), url(media/hero-mural-encontrados.png) center bottom/cover no-repeat;
+}
+html[data-tema="escuro"] .hero h1 {
+    color: #6cc0f5; 
+}
+html[data-tema="escuro"] .btn-lost {
+    background: var(--fundo-card);
+    color: #6cc0f5;
+    border-color: #6cc0f5;
+}
+html[data-tema="escuro"] .btn-lost:hover {
+    background: #6cc0f5;
+    color: #172233; 
+}
+
+/* Busca */
+html[data-tema="escuro"] .search-box {
+    background: #1e2c42;
+}
+html[data-tema="escuro"] .search-input {
+    background: #0f1722;
+}
+html[data-tema="escuro"] .btn-search {
+    background: #3d93cf;
+}
+
+/* =========================================================
+   10. TELA DE LOGIN E AUTENTICAÇÃO
+   ========================================================= */
+
+.login-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 75px); /* Preenche o ecrã descontando o header */
+    background: linear-gradient(135deg, var(--fundo-azul), var(--branco));
+}
+
+html[data-tema="escuro"] .login-main {
+    background: linear-gradient(135deg, #101d2e, #0e1621);
+}
+
+/* Oculta a faixa rosa desnecessária que estava na versão antiga */
+.cadastro-pink-section {
+    display: none;
+}
+
+.login-container {
+    max-width: 900px;
+    padding: 0; /* Removemos o padding para a imagem colar nas bordas do cartão */
+    overflow: hidden;
+}
+
+.login-grid {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* --- ÁREA DO FORMULÁRIO --- */
+.login-form-area {
+    flex: 1;
+    min-width: 320px;
+    padding: 50px 45px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-form-area h1 {
+    font-size: 26px;
+    color: var(--azul-escuro);
+    margin-bottom: 5px;
+    line-height: 1.2;
+}
+
+html[data-tema="escuro"] .login-form-area h1 {
+    color: #6cc0f5;
+}
+
+.login-form-area p {
+    font-size: 14px;
+    color: var(--cinza-texto);
+    margin-bottom: 30px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--azul-escuro);
+    margin-left: 5px;
+}
+
+html[data-tema="escuro"] .form-group label {
+    color: #d5dfec;
+}
+
+.form-group input {
+    height: 46px;
+    padding: 0 16px;
+    border: 2px solid var(--azul-claro);
+    border-radius: 12px;
+    background: var(--fundo-card);
+    color: var(--preto);
+    font-family: var(--fonte-open-sans);
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+html[data-tema="escuro"] .form-group input {
+    border-color: #1e2c42;
+}
+
+.form-group input:focus {
+    border-color: var(--rosa-principal);
+    box-shadow: 0 0 0 3px rgba(233, 22, 107, 0.15);
+    outline: none;
+}
+
+.btn-auth {
+    width: 100%;
+    height: 48px;
+    background: var(--rosa-principal);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: var(--fonte-poppins);
+    cursor: pointer;
+    margin-top: 10px;
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.btn-auth:hover {
+    background: var(--botao-hover-rosa);
+    transform: translateY(-2px);
+}
+
+.auth-links {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    font-size: 13px;
+}
+
+.auth-links a {
+    color: var(--azul-principal);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.auth-links a:hover {
+    color: var(--rosa-principal);
+}
+
+.auth-links span {
+    color: #cbd5e1;
+}
+
+/* --- ÁREA DA IMAGEM --- */
+.login-image-area {
+    flex: 1;
+    min-width: 320px;
+    background: var(--azul-claro);
+    display: flex;
+}
+
+.login-image-area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- RESPONSIVO --- */
+@media (max-width: 768px) {
+    .login-main {
+        padding: 30px 15px;
+        align-items: flex-start;
+    }
+    
+    /* No telemóvel, a imagem passa para cima para dar contexto, ou pode ser oculta */
+    .login-image-area {
+        height: 200px; /* Define uma altura fixa para a imagem no topo */
+    }
+    
+    .login-form-area {
+        padding: 35px 25px;
+    }
+    
+    /* Inverte a ordem: imagem em cima, formulário em baixo no mobile */
+    .login-image-area {
+        order: -1;
+    }
+}
+/* =========================================================
+   11. PERFIL E ESTADOS DE AUTENTICAÇÃO (UI/UX Melhorada)
+   ========================================================= */
+
+/* O Avatar (Usado no Desktop e Mobile) */
+.avatar-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--azul-claro);
+    color: var(--azul-principal);
+    border: 2px solid var(--azul-principal);
+    font-weight: 700;
+    font-family: var(--fonte-poppins);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 15px; /* Espaço entre o avatar e o botão Cadastrar */
+}
+
+html[data-tema="escuro"] .avatar-circle {
+    background: #101d2e;
+    color: #6cc0f5;
+    border-color: #3d93cf;
+}
+
+.user-greeting {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--azul-escuro);
+    font-family: var(--fonte-poppins);
+}
+html[data-tema="escuro"] .user-greeting { color: #d5dfec; }
+
+/* Dropdown de Perfil (Desktop) */
+.user-profile-dropdown {
+    position: relative;
+    /* Note que o Javascript mudará o estilo inline para display: flex quando logado */
+    align-items: center;
+}
+
+/* O MENU SUSPENSO FICA ESCONDIDO ATÉ PASSAR O RATO */
+.profile-dropdown-menu {
+    display: none; 
+    position: absolute;
+    top: 110%; /* Fica logo abaixo do avatar */
+    right: 0;  /* Alinhado à direita */
+    background: var(--fundo-card);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    padding: 15px 20px;
+    min-width: 180px;
+    z-index: 1000;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* MOSTRA O MENU QUANDO O RATO PASSA NO AVATAR */
+.user-profile-dropdown:hover .profile-dropdown-menu {
+    display: flex;
+}
+
+.profile-divider {
+    border: none;
+    border-top: 1px solid #eeeeee;
+    width: 100%;
+}
+
+.btn-logout-clean {
+    background: transparent;
+    border: none;
+    color: #d90429;
+    font-weight: 600;
+    font-size: 13px;
+    font-family: var(--fonte-poppins);
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.2s ease;
+}
+.btn-logout-clean:hover { color: #ff4d6d; }
+
+html[data-tema="escuro"] .profile-dropdown-menu { background: #1e2c42; }
+html[data-tema="escuro"] .profile-divider { border-color: #2a3b52; }
+html[data-tema="escuro"] .btn-logout-clean { color: #ff4d6d; }
+
+/* =========================================================
+   08. REORDENAÇÃO DO MENU MOBILE (FLEX ORDER)
+   ========================================================= */
+@media (max-width: 900px) {
+    /* Esconde o Dropdown de desktop */
+    .user-profile-dropdown { display: none !important; }
+
+    .nav-actions-group {
+        display: flex;
+        flex-direction: column;
+        padding: 30px 20px;
+    }
+
+    /* display: contents permite que os filhos de .header-actions sejam 
+       reordenados junto com os links do menu principal usando order */
+    .header-actions {
+        display: contents; 
+    }
+
+    /* 1. PERFIL NO TOPO */
+    .mobile-profile-header {
+        order: 1;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #eeeeee;
+    }
+    
+    html[data-tema="escuro"] .mobile-profile-header { border-color: #2a3b52; }
+
+    /* 2. NAVEGAÇÃO */
+    .main-nav {
+        order: 2;
+        margin-bottom: 30px;
+    }
+
+    /* 3. AÇÃO PRINCIPAL (CADASTRAR / LOGIN) */
+    .btn-cadastrar-nav, .btn-login-nav {
+        order: 3;
+        width: 100%;
+        margin-bottom: 25px;
+    }
+
+    /* 4. CONFIGURAÇÃO (MODO ESCURO) */
+    .theme-toggle-wrapper {
+        order: 4;
+        width: 100%;
+    }
+
+    /* 5. LOGOUT (Texto simples no fim do menu) */
+    .btn-logout-mobile {
+        order: 5;
+        background: transparent;
+        border: none;
+        color: #d90429;
+        font-weight: 600;
+        font-family: var(--fonte-poppins);
+        font-size: 14px;
+        margin-top: 25px;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        cursor: pointer;
+    }
+    
+    html[data-tema="escuro"] .btn-logout-mobile { color: #ff4d6d; }
+}

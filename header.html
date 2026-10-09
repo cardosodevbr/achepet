@@ -1,0 +1,79 @@
+<header class="site-header">
+    <div class="header-container">
+        
+        <!-- LOGO -->
+        <a href="index.html" class="logo">
+            <img src="media/logo-imagem.png" alt="Logotipo AchePet com patinha">
+            <span>
+                <span class="logo-ache">Ache</span><span class="logo-pet">Pet</span>
+            </span>
+        </a>
+
+        <!-- BOTÃO HAMBÚRGUER -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <!-- AGRUPAMENTO (Navegação + Ações) -->
+        <div class="nav-actions-group" id="navActionsGroup">
+            
+            <!-- PERFIL MOBILE (Começa oculto - ativado via JS) -->
+            <div class="mobile-profile-header" id="mobileProfileHeader" style="display: none;">
+                <div class="avatar-circle" id="mobileAvatar">U</div>
+                <span class="user-greeting" id="mobileGreeting">Olá, Usuário</span>
+            </div>
+
+            <!-- NAVEGAÇÃO -->
+            <nav class="main-nav">
+                <a href="index.html" class="active">INÍCIO</a>
+                
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-link">MURAL ▾</a>
+                    <div class="nav-dropdown-menu">
+                        <a href="mural-procurados.html" class="menu-procurados">Animais Procurados</a>
+                        <a href="mural-encontrados.html" class="menu-encontrados">Animais Encontrados</a>
+                    </div>
+                </div>
+                
+                <a href="quem-somos.html">QUEM SOMOS</a>
+            </nav>
+
+            <!-- AÇÕES DIREITAS -->
+            <div class="header-actions">
+                
+                <!-- SWITCH DE TEMA -->
+                <div class="theme-toggle-wrapper">
+                    <span class="theme-toggle-label">Modo Escuro</span>
+                    <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo escuro">
+                        <span class="toggle-circle"></span>
+                    </button>
+                </div>
+                
+                <div class="header-divider" id="headerDivider"></div>
+
+                <!-- LOGIN (Visitantes) -->
+                <a href="login.html" class="btn-login-nav" id="navLoginBtn">LOGIN</a>
+
+                <!-- PERFIL DROPDOWN DESKTOP (Começa oculto - ativado via JS) -->
+                <div class="user-profile-dropdown" id="userProfile" style="display: none;">
+                    <div class="avatar-circle avatar-desktop" id="desktopAvatar">U</div>
+                    
+                    <div class="profile-dropdown-menu">
+                        <span class="user-greeting" id="userNameDisplay">Olá, Usuário</span>
+                        <hr class="profile-divider">
+                        <button id="btnLogoutDesktop" class="btn-logout-clean">Sair da conta</button>
+                    </div>
+                </div>
+
+                <!-- AÇÃO PRINCIPAL -->
+                <a href="form1.html" class="btn-cadastrar-nav" id="navCadastrarBtn">CADASTRAR ANIMAL</a>
+
+                <!-- SAIR MOBILE (Começa oculto - ativado via JS) -->
+                <button id="btnLogoutMobile" class="btn-logout-mobile" style="display: none;">Sair da conta</button>
+                
+            </div>
+        </div>
+    </div>
+</header>
