@@ -183,12 +183,109 @@ function inicializarScriptsDoHeader() {
 }
 
 // 4. Inicia o processo quando a página termina de carregar
+// 4. Inicia o processo quando a página termina de carregar
 document.addEventListener('DOMContentLoaded', () => {
     carregarComponentes().then(() => {
         verificarSessao();
-        carregarUltimosPerdidos(); // <- Adicionámos a chamada aqui!
+        carregarUltimosPerdidos(); 
+        carregarUltimosEncontrados(); // <- Nova chamada adicionada
+        carregarUltimosFelizes();     // <- Nova chamada adicionada
     });
 });
+
+async function carregarUltimosEncontrados() {
+    const grid = document.getElementById('ultimosEncontradosGrid');
+    const loading = document.getElementById('loadingEncontrados');
+    const emptyMsg = document.getElementById('emptyEncontrados');
+    
+    if (!grid) return;
+
+    try {
+        const { data: animais, error } = await clienteSupabase
+            .from('animais')
+            .select('*')
+            .eq('status', 'achado_na_rua') // Filtra os encontrados
+            .eq('ativo', true)
+            .order('created_at', { ascending: false })
+            .limit(8);
+
+        if (error) throw error;
+        if (loading) loading.style.display = 'none';
+
+        if (animais.length === 0) {
+            if (emptyMsg) emptyMsg.style.display = 'block';
+            return;
+        }
+
+        grid.innerHTML = '';
+        animais.forEach(animal => {
+            const fotoUrl = animal.foto_url || 'media/placeholder-pet.png';
+            const cardHTML = `
+                <article class="pet-card">
+                    <img src="${fotoUrl}" alt="Foto de ${animal.nome}">
+                    <span class="pet-status found">ENCONTRADO</span>
+                    <div class="pet-info">
+                        <h3>${animal.nome}</h3>
+                        <p>📌 ${animal.cidade}</p>
+                        <p>📅 ${formatarDataSimples(animal.data_evento)}</p>
+                    </div>
+                </article>
+            `;
+            grid.innerHTML += cardHTML;
+        });
+
+    } catch (err) {
+        console.error("Erro ao carregar encontrados:", err);
+        if (loading) loading.innerText = "❌ Ocorreu um erro ao carregar os anúncios.";
+    }
+}
+
+async function carregarUltimosFelizes() {
+    const grid = document.getElementById('ultimosFelizesGrid');
+    const loading = document.getElementById('loadingFelizes');
+    const emptyMsg = document.getElementById('emptyFelizes');
+    
+    if (!grid) return;
+
+    try {
+        const { data: animais, error } = await clienteSupabase
+            .from('animais')
+            .select('*')
+            .eq('status', 'final_feliz') // Filtra os finais felizes
+            .eq('ativo', true)
+            .order('created_at', { ascending: false })
+            .limit(8);
+
+        if (error) throw error;
+        if (loading) loading.style.display = 'none';
+
+        if (animais.length === 0) {
+            if (emptyMsg) emptyMsg.style.display = 'block';
+            return;
+        }
+
+        grid.innerHTML = '';
+        animais.forEach(animal => {
+            const fotoUrl = animal.foto_url || 'media/placeholder-pet.png';
+            const cardHTML = `
+                <article class="pet-card">
+                    <img src="${fotoUrl}" alt="Foto de ${animal.nome}">
+                    <span class="pet-status happy">FINAL FELIZ 💖</span>
+                    <div class="pet-info">
+                        <h3>${animal.nome}</h3>
+                        <p>📌 ${animal.cidade}</p>
+                        <p>📅 ${formatarDataSimples(animal.data_evento)}</p>
+                    </div>
+                </article>
+            `;
+            grid.innerHTML += cardHTML;
+        });
+
+    } catch (err) {
+        console.error("Erro ao carregar finais felizes:", err);
+        if (loading) loading.innerText = "❌ Ocorreu um erro ao carregar as histórias.";
+    }
+}
 
 // =========================================================
 // 5. CARREGAMENTO DINÂMICO PARA A PÁGINA INICIAL (INDEX)

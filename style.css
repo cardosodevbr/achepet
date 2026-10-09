@@ -442,3 +442,34 @@ html[data-tema="escuro"] .pet-status.happy {
 html[data-tema="escuro"] .pet-card > img {
     background-color: #1e2c42;
 }
+/* animais encontrados na home */
+
+/* ===== ESTILOS PARA A SECÇÃO DE FINAIS FELIZES NO INDEX ===== */
+.happy-section { background: #ECFDF5; }
+.happy-title h2, .happy-title p { color: #059669; }
+
+.btn-happy-outline { 
+    color: #059669; 
+    border: 2px solid #059669; 
+}
+.btn-happy-outline:hover { 
+    background: #059669; 
+    color: #FFFFFF; 
+}
+
+/* Modo Escuro para Finais Felizes */
+html[data-tema="escuro"] .happy-section { 
+    background: rgba(16, 185, 129, 0.05); 
+}
+html[data-tema="escuro"] .happy-title h2, 
+html[data-tema="escuro"] .happy-title p { 
+    color: #34D399; 
+}
+html[data-tema="escuro"] .btn-happy-outline { 
+    color: #34D399; 
+    border-color: #34D399; 
+}
+html[data-tema="escuro"] .btn-happy-outline:hover { 
+    background: #34D399; 
+    color: #1e2c42; 
+}
