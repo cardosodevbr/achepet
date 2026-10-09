@@ -1,27 +1,20 @@
 /* =========================================================
-   ACHEPET | STYLE.CSS REFATORADO COMPLETO
+   ACHEPET | STYLE.CSS v1.2
    ========================================================= */
 
 /* ===== 01. VARIÁVEIS E RESET ===== */
 :root {
-    /* CORES PRINCIPAIS */
     --azul-principal: #1489D8;
     --azul-escuro: #0873BE;
     --azul-claro: #DFF2FD;
     --rosa-principal: #E9166B;
     --rosa-claro: #FDE4EF;
-    
-    /* NEUTROS */
     --branco: #FFFFFF;
     --preto: #000000;
     --cinza: #F2F2F2;
     --cinza-texto: #333333;
-
-    /* FONTES (Reduzidas para performance e consistência) */
     --fonte-poppins: 'Poppins', sans-serif;
     --fonte-open-sans: 'Open Sans', sans-serif;
-
-    /* FUNDOS E BOTÕES */
     --fundo-header: var(--branco);
     --fundo-azul: var(--azul-claro);
     --fundo-rosa: var(--rosa-claro);
@@ -29,7 +22,6 @@
     --botao-hover-rosa: #C9125D;
 }
 
-/* VARIÁVEIS DO MODO ESCURO */
 html[data-tema="escuro"] {
     --branco: #172233;
     --preto: #e9eff7;
@@ -41,16 +33,8 @@ html[data-tema="escuro"] {
     --fundo-card: #1e2c42;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
     min-height: 100vh;
     background: var(--branco);
@@ -59,12 +43,7 @@ body {
     line-height: 1.6;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: var(--fonte-poppins);
-}
-
-
+h1, h2, h3, h4, h5, h6 { font-family: var(--fonte-poppins); }
 
 /* ===== 02. HEADER E NAVEGAÇÃO ===== */
 .site-header {
@@ -78,7 +57,6 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
-
 .header-container {
     width: 92%;
     max-width: 1200px;
@@ -88,998 +66,274 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: space-between;
 }
-
-/* LOGO */
-.logo {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-}
-.logo img {
-    width: 70px;
-    height: 60px;
-    object-fit: contain;
-}
-.logo span {
-    font-size: 24px;
-    font-weight: 700;
-    font-family: var(--fonte-poppins);
-}
+.logo { display: flex; align-items: center; text-decoration: none; }
+.logo img { width: 70px; height: 60px; object-fit: contain; }
+.logo span { font-size: 24px; font-weight: 700; font-family: var(--fonte-poppins); }
 .logo-ache { color: var(--azul-principal); }
 .logo-pet { color: var(--rosa-principal); }
 
-/* AGRUPAMENTO DE NAVEGAÇÃO E AÇÕES (Para o Mobile) */
 .nav-actions-group {
-    display: flex;
-    flex: 1;
-    align-items: center;
-    justify-content: space-between;
-    margin-left: 40px;
+    display: flex; flex: 1; align-items: center; justify-content: space-between; margin-left: 40px;
 }
-
-/* LINKS CENTRAIS */
-.main-nav {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-}
+.main-nav { display: flex; align-items: center; gap: 30px; }
 .main-nav a {
-    color: var(--preto);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: var(--fonte-poppins);
-    transition: color 0.2s ease;
+    color: var(--preto); text-decoration: none; font-size: 14px; font-weight: 600;
+    font-family: var(--fonte-poppins); transition: color 0.2s ease;
 }
-.main-nav a:hover, .main-nav a.active {
-    color: var(--azul-principal);
-}
+.main-nav a:hover, .main-nav a.active { color: var(--azul-principal); }
 
-/* DROPDOWN DO MURAL */
 .nav-dropdown { position: relative; }
 .nav-dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: var(--fundo-card);
-    min-width: 200px;
-    padding: 10px 0;
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    z-index: 1000;
+    display: none; position: absolute; top: 100%; left: 0; background: var(--fundo-card);
+    min-width: 200px; padding: 10px 0; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 1000;
 }
 .nav-dropdown:hover .nav-dropdown-menu { display: block; }
-.nav-dropdown-menu a {
-    display: block;
-    padding: 12px 20px;
-    font-size: 13px;
-}
+.nav-dropdown-menu a { display: block; padding: 12px 20px; font-size: 13px; }
 .nav-dropdown-menu .menu-procurados:hover { background: var(--rosa-claro); color: var(--rosa-principal); }
 .nav-dropdown-menu .menu-encontrados:hover { background: var(--azul-claro); color: var(--azul-principal); }
 
-/* BOTÕES DE AÇÃO E TEMA (DIREITA) */
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-/* Linha divisória entre o switch e os botões */
-.header-divider {
-    width: 1px;
-    height: 24px;
-    background: #e0e0e0;
-    margin: 0 5px;
-    transition: background-color 0.3s ease;
-}
+.header-actions { display: flex; align-items: center; gap: 15px; }
+.header-divider { width: 1px; height: 24px; background: #e0e0e0; margin: 0 5px; transition: 0.3s ease; }
 
 .btn-login-nav {
-    height: 40px; 
-    display: inline-flex; 
-    align-items: center;
-    padding: 0 20px; 
-    color: var(--azul-principal);
-    border: 2px solid var(--azul-principal);
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    font-family: var(--fonte-poppins);
-    transition: 0.3s ease;
+    height: 40px; display: inline-flex; align-items: center; padding: 0 20px; color: var(--azul-principal);
+    border: 2px solid var(--azul-principal); border-radius: 20px; font-size: 13px; font-weight: 600;
+    text-decoration: none; font-family: var(--fonte-poppins); transition: 0.3s ease;
 }
-.btn-login-nav:hover {
-    background: var(--azul-principal);
-    color: var(--branco);
-}
+.btn-login-nav:hover { background: var(--azul-principal); color: var(--branco); }
 
 .btn-cadastrar-nav {
-    height: 40px; 
-    display: inline-flex; 
-    align-items: center;
-    padding: 0 20px; 
-    background: var(--rosa-principal);
-    color: #FFFFFF;
-    border: 2px solid var(--rosa-principal);
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    font-family: var(--fonte-poppins);
-    transition: 0.3s ease;
+    height: 40px; display: inline-flex; align-items: center; padding: 0 20px; background: var(--rosa-principal);
+    color: #FFFFFF; border: 2px solid var(--rosa-principal); border-radius: 20px; font-size: 13px;
+    font-weight: 600; text-decoration: none; font-family: var(--fonte-poppins); transition: 0.3s ease;
 }
-.btn-cadastrar-nav:hover {
-    background: var(--botao-hover-rosa);
-    border-color: var(--botao-hover-rosa);
+.btn-cadastrar-nav:hover { background: var(--botao-hover-rosa); border-color: var(--botao-hover-rosa); }
+.btn-cadastrar-nav.disabled {
+    background: #e2e8f0; border-color: #e2e8f0; color: #94a3b8; cursor: not-allowed; pointer-events: none; 
 }
 
-/* =========================================================
-   SWITCH MODO ESCURO (ULTRA MINIMALISTA)
-   ========================================================= */
-.theme-toggle-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.theme-toggle-label {
-    display: none; /* Escondido no desktop */
-    font-family: var(--fonte-poppins);
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--azul-escuro);
-}
-
+/* ===== 03. SWITCH MODO ESCURO ===== */
+.theme-toggle-wrapper { display: flex; align-items: center; gap: 12px; }
+.theme-toggle-label { font-family: var(--fonte-poppins); font-size: 13px; font-weight: 600; color: var(--cinza-texto); }
 .theme-toggle {
-    width: 44px;  
-    height: 24px; 
-    border-radius: 24px;
-    background: transparent; 
-    border: 1px solid #CBD5E1; 
-    cursor: pointer;
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding: 3px; 
-    transition: border-color 0.4s ease;
-    overflow: hidden;
+    width: 44px; height: 24px; border-radius: 24px; background: transparent; border: 1px solid #CBD5E1; 
+    cursor: pointer; position: relative; display: flex; align-items: center; padding: 3px; transition: 0.4s ease; overflow: hidden;
 }
-
 .theme-toggle .toggle-circle {
-    width: 16px; 
-    height: 16px; 
-    border-radius: 50%;
-    background: #94A3B8; 
-    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55),
-                background 0.3s ease,
-                box-shadow 0.4s ease;
+    width: 16px; height: 16px; border-radius: 50%; background: #94A3B8; 
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55), background 0.3s ease, box-shadow 0.4s ease;
+}
+.theme-toggle.active { background: transparent; border-color: #475569; }
+.theme-toggle.active .toggle-circle { transform: translateX(20px); background: transparent; box-shadow: inset -5px -3px 0 0 #e9eff7; }
+
+/* Oculta ambos os switches por padrão (só aparecem se logado) */
+.mobile-theme-toggle, .desktop-theme-toggle { display: none; }
+
+/* ===== 04. ESTADO DE AUTENTICAÇÃO (PERFIS E FUNCIONALIDADES) ===== */
+/* Padrão (Visitante): Esconde os perfis e logouts */
+.mobile-profile-header, .user-profile-dropdown, .btn-logout-mobile { display: none; }
+
+/* Logado: Esconde botão Login */
+.site-header.is-logged-in .btn-login-nav { display: none; }
+
+/* Logado: Mostra o Dropdown no Desktop */
+.site-header.is-logged-in .user-profile-dropdown {
+    position: relative; display: flex; align-items: center;
 }
 
-.theme-toggle.active {
-    background: transparent; 
-    border-color: #475569; 
+/* O AVATAR */
+.avatar-circle {
+    width: 38px; height: 38px; border-radius: 50%; background: var(--azul-claro); color: var(--azul-principal);
+    border: 2px solid var(--azul-principal); font-weight: 700; font-family: var(--fonte-poppins); font-size: 16px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease;
 }
+.user-greeting { font-size: 14px; font-weight: 600; color: var(--azul-escuro); font-family: var(--fonte-poppins); }
 
-.theme-toggle.active .toggle-circle {
-    transform: translateX(20px);
-    background: transparent; 
-    box-shadow: inset -5px -3px 0 0 #e9eff7;
+/* Menu Dropdown Desktop */
+.profile-dropdown-menu {
+    display: none; position: absolute; top: 110%; right: 0; background: var(--fundo-card); border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12); padding: 15px 20px; min-width: 200px; z-index: 1000; flex-direction: column; gap: 12px;
 }
+.user-profile-dropdown:hover .profile-dropdown-menu { display: flex; }
 
+/* Exibe e alinha o switch de tema dentro do menu Desktop */
+.desktop-theme-toggle { display: flex; justify-content: space-between; width: 100%; padding: 4px 0; }
 
-/* ===== 03. HERO (PÁGINA INICIAL) ===== */
+.profile-divider { border: none; border-top: 1px solid #eeeeee; width: 100%; }
+.btn-logout-clean {
+    background: transparent; border: none; color: #d90429; font-weight: 600; font-size: 13px;
+    font-family: var(--fonte-poppins); cursor: pointer; text-align: left; transition: color 0.2s ease;
+}
+.btn-logout-clean:hover { color: #ff4d6d; }
+
+/* ===== 05. HERO ===== */
 .hero {
-    min-height: 550px;
-    padding-top: 60px; /* Sem padding-bottom para a imagem encostar na base */
-    background: url(media/hero-mural-encontrados.png) center bottom/cover no-repeat;
-    display: flex;
+    min-height: 550px; padding-top: 60px; background: url(media/hero-mural-encontrados.png) center bottom/cover no-repeat; display: flex;
 }
-
 .hero-container {
-    width: 92%;
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap; 
-    justify-content: space-between;
-    align-items: stretch; /* Estica as colunas verticalmente */
-    gap: 40px;
-    position: relative;
+    width: 92%; max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: stretch; gap: 40px; position: relative;
 }
-
 .hero-content {
-    width: 100%;
-    max-width: 550px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-bottom: 60px; /* O respiro volta aqui para o texto não colar na base */
-    gap: 20px;
-    z-index: 2;
+    width: 100%; max-width: 550px; display: flex; flex-direction: column; justify-content: center; padding-bottom: 60px; gap: 20px; z-index: 2;
 }
-
-.hero h1 {
-    font-size: 48px;
-    color: var(--azul-escuro);
-    font-weight: 700;
-    line-height: 1.2;
-}
-.hero h1 img {
-    width: 45px;
-    vertical-align: middle;
-}
-.hero p {
-    font-size: 16px;
-    color: var(--cinza-texto);
-    max-width: 480px;
-}
-
-.hero-image-wrapper {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end; /* Empurra os animais exatamente para a base da secção */
-}
-
-#cachorro {
-    width: 100%;
-    max-width: 450px;
-    object-fit: contain;
-    display: block; 
-}
-
-/* Ações do Hero */
-.hero-actions {
-    display: flex;
-    gap: 15px;
-    width: 100%;
-    margin-top: 10px;
-}
+.hero h1 { font-size: 48px; color: var(--azul-escuro); font-weight: 700; line-height: 1.2; }
+.hero h1 img { width: 45px; vertical-align: middle; }
+.hero p { font-size: 16px; color: var(--cinza-texto); max-width: 480px; }
+.hero-image-wrapper { flex: 1; display: flex; justify-content: flex-end; align-items: flex-end; }
+#cachorro { width: 100%; max-width: 450px; object-fit: contain; display: block; }
+.hero-actions { display: flex; gap: 15px; width: 100%; margin-top: 10px; }
 .btn-action {
-    flex: 1;
-    padding: 12px;
-    text-align: center;
-    border-radius: 25px;
-    font-family: var(--fonte-poppins);
-    font-weight: 600;
-    font-size: 14px;
-    text-decoration: none;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    flex: 1; padding: 12px; text-align: center; border-radius: 25px; font-family: var(--fonte-poppins);
+    font-weight: 600; font-size: 14px; text-decoration: none; transition: 0.2s ease;
 }
-.btn-action:hover {
-    transform: translateY(-2px);
-    opacity: 0.9;
-}
-.btn-lost {
-    background: var(--fundo-card);
-    color: var(--azul-principal);
-    border: 2px solid var(--azul-principal);
-}
-.btn-found {
-    background: var(--rosa-principal);
-    color: #FFFFFF;
-}
+.btn-action:hover { transform: translateY(-2px); opacity: 0.9; }
+.btn-lost { background: var(--fundo-card); color: var(--azul-principal); border: 2px solid var(--azul-principal); }
+.btn-found { background: var(--rosa-principal); color: #FFFFFF; }
+.search-box { width: 100%; margin-top: 20px; background: var(--azul-principal); padding: 15px; border-radius: 12px; }
+.search-input { display: flex; align-items: center; background: var(--branco); border-radius: 20px; padding: 5px 15px; gap: 10px; }
+.search-input input { flex: 1; border: none; outline: none; padding: 10px 0; background: transparent; color: var(--preto); font-size: 14px; }
+.btn-search { background: var(--azul-escuro); color: #FFFFFF; border: none; padding: 8px 16px; border-radius: 15px; cursor: pointer; font-weight: 600; font-family: var(--fonte-poppins); }
 
-/* Busca do Hero */
-.search-box {
-    width: 100%;
-    margin-top: 20px;
-    background: var(--azul-principal);
-    padding: 15px;
-    border-radius: 12px;
-}
-.search-input {
-    display: flex;
-    align-items: center;
-    background: var(--branco);
-    border-radius: 20px;
-    padding: 5px 15px;
-    gap: 10px;
-}
-.search-input input {
-    flex: 1;
-    border: none;
-    outline: none;
-    padding: 10px 0;
-    background: transparent;
-    color: var(--preto);
-    font-family: var(--fonte-open-sans);
-    font-size: 14px;
-}
-.btn-search {
-    background: var(--azul-escuro);
-    color: #FFFFFF;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 15px;
-    cursor: pointer;
-    font-family: var(--fonte-poppins);
-    font-weight: 600;
-}
-
-
-/* ===== 04. MURAIS DE ANIMAIS (GRID AUTOMÁTICO) ===== */
-.pets-section {
-    padding: 70px 0;
-}
+/* ===== 06. MURAIS ===== */
+.pets-section { padding: 70px 0; }
 .lost-section { background: var(--fundo-rosa); }
 .found-section { background: var(--fundo-azul); }
-
-.section-container {
-    width: 92%;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-.section-title {
-    margin-bottom: 30px;
-    text-align: center;
-}
+.section-container { width: 92%; max-width: 1200px; margin: 0 auto; }
+.section-title { margin-bottom: 30px; text-align: center; }
 .section-title h2 { font-size: 28px; }
 .lost-title h2, .lost-title p { color: var(--rosa-principal); }
 .found-title h2, .found-title p { color: var(--azul-principal); }
-
-/* Grid fluido e responsivo automático */
-.pets-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 25px;
-}
-
-.pet-card {
-    background: var(--fundo-card);
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    transition: transform 0.2s ease;
-    cursor: pointer;
-}
-.pet-card:hover {
-    transform: translateY(-5px);
-}
-.pet-card > img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-.pet-status {
-    display: block;
-    width: calc(100% - 30px);
-    margin: 12px auto;
-    padding: 6px 0;
-    text-align: center;
-    border-radius: 20px;
-    color: #FFFFFF;
-    font-size: 12px;
-    font-family: var(--fonte-poppins);
-    font-weight: 600;
-}
+.pets-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
+.pet-card { background: var(--fundo-card); border-radius: 14px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: transform 0.2s ease; cursor: pointer; }
+.pet-card:hover { transform: translateY(-5px); }
+.pet-card > img { width: 100%; height: 200px; object-fit: cover; }
+.pet-status { display: block; width: calc(100% - 30px); margin: 12px auto; padding: 6px 0; text-align: center; border-radius: 20px; color: #FFFFFF; font-size: 12px; font-weight: 600; font-family: var(--fonte-poppins); }
 .pet-status.lost { background: var(--rosa-principal); }
 .pet-status.found { background: var(--azul-principal); }
-
-.pet-info {
-    padding: 0 15px 20px;
-}
+.pet-info { padding: 0 15px 20px; }
 .pet-info h3 { font-size: 18px; margin-bottom: 8px; color: var(--preto); }
 .pet-info p { font-size: 13px; color: var(--cinza-texto); margin-bottom: 4px; }
-
-.ver-mais-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
-}
-.btn-ver-mais {
-    padding: 12px 40px;
-    border-radius: 25px;
-    font-family: var(--fonte-poppins);
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
+.ver-mais-wrapper { display: flex; justify-content: center; margin-top: 40px; }
+.btn-ver-mais { padding: 12px 40px; border-radius: 25px; font-weight: 600; font-family: var(--fonte-poppins); text-decoration: none; transition: 0.3s ease; }
 .btn-lost-outline { color: var(--rosa-principal); border: 2px solid var(--rosa-principal); }
 .btn-lost-outline:hover { background: var(--rosa-principal); color: #FFFFFF; }
 .btn-found-outline { color: var(--azul-principal); border: 2px solid var(--azul-principal); }
 .btn-found-outline:hover { background: var(--azul-principal); color: #FFFFFF; }
 
-
-/* ===== 05. OBJETIVOS ===== */
-.objectives-section {
-    padding: 70px 0;
-    background: var(--fundo-card);
-}
-.objectives-title h2 { 
-    color: var(--azul-escuro); 
-}
-
-.objectives-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-}
-.objective-card {
-    position: relative;
-    border-radius: 14px;
-    overflow: hidden;
-    height: 300px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-.objective-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.objective-content {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 20px;
-    background: rgba(233, 22, 107, 0.9);
-    color: #FFFFFF;
-}
+/* ===== 07. OBJETIVOS ===== */
+.objectives-section { padding: 70px 0; background: var(--fundo-card); }
+.objectives-title h2 { color: var(--azul-escuro); }
+.objectives-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+.objective-card { position: relative; border-radius: 14px; overflow: hidden; height: 300px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.objective-card img { width: 100%; height: 100%; object-fit: cover; }
+.objective-content { position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px; background: rgba(233, 22, 107, 0.9); color: #FFFFFF; }
 .objective-content h3 { font-size: 18px; margin-bottom: 5px; }
 .objective-content p { font-size: 13px; line-height: 1.5; }
 
-
-/* ===== 06. FORMULÁRIOS FLEXÍVEIS ===== */
-.cadastro-container,
-.formulario-selecao,
-.formulario-fotos {
-    width: 100%;
-    max-width: 850px;
-    min-height: 400px;
-    height: auto;
-    margin: 40px auto;
-    padding: 30px;
-    background: var(--fundo-card);
-    border: 2px solid var(--azul-escuro);
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-}
-.formulario-enunciado {
-    width: 100%;
-    max-width: 850px;
-    margin: 0 auto 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-
-/* ===== 07. FOOTER ===== */
-.site-footer {
-    background: var(--fundo-azul);
-    padding-top: 40px;
-}
-.footer-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    padding-bottom: 30px;
-}
-.footer-logo {
-    width: 250px;
-    object-fit: contain;
-}
-.footer-links {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-}
-.footer-links a {
-    color: var(--azul-escuro);
-    text-decoration: none;
-    font-family: var(--fonte-poppins);
-    font-weight: 500;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.footer-links a img { height: 20px; }
-
-.footer-bottom {
-    background: var(--azul-principal);
-    color: #FFFFFF;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    font-family: var(--fonte-poppins);
-    font-size: 14px;
-}
-
-/* =========================================================
-   09. AJUSTES ESPECÍFICOS DO MODO ESCURO
-   ========================================================= */
-
-/* Header e Menu Hambúrguer */
-html[data-tema="escuro"] .site-header {
-    border-bottom-color: #1e2c42; 
-}
-html[data-tema="escuro"] .header-divider {
-    background: #2a3b52;
-}
-html[data-tema="escuro"] .theme-toggle-label {
-    color: #6cc0f5;
-}
-
-@media (max-width: 900px) {
-    html[data-tema="escuro"] .nav-actions-group {
-        background: var(--fundo-header);
-        box-shadow: 0 15px 20px rgba(0,0,0,0.4);
-    }
-    html[data-tema="escuro"] .mobile-menu-btn span {
-        background-color: #6cc0f5;
-    }
-    html[data-tema="escuro"] .theme-toggle-wrapper {
-        background: #1e2c42;
-    }
-}
-
-/* Hero */
-html[data-tema="escuro"] .hero {
-    background: linear-gradient(rgba(14, 22, 33, 0.85), rgba(14, 22, 33, 0.85)), url(media/hero-mural-encontrados.png) center bottom/cover no-repeat;
-}
-html[data-tema="escuro"] .hero h1 {
-    color: #6cc0f5; 
-}
-html[data-tema="escuro"] .btn-lost {
-    background: var(--fundo-card);
-    color: #6cc0f5;
-    border-color: #6cc0f5;
-}
-html[data-tema="escuro"] .btn-lost:hover {
-    background: #6cc0f5;
-    color: #172233; 
-}
-
-/* Busca */
-html[data-tema="escuro"] .search-box {
-    background: #1e2c42;
-}
-html[data-tema="escuro"] .search-input {
-    background: #0f1722;
-}
-html[data-tema="escuro"] .btn-search {
-    background: #3d93cf;
-}
-
-/* =========================================================
-   10. TELA DE LOGIN E AUTENTICAÇÃO
-   ========================================================= */
-
+/* ===== 08. TELA DE LOGIN E AUTENTICAÇÃO ===== */
 .login-main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: calc(100vh - 75px); /* Preenche o ecrã descontando o header */
+    display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 75px);
     background: linear-gradient(135deg, var(--fundo-azul), var(--branco));
 }
+.cadastro-pink-section { display: none; }
+.login-container { max-width: 900px; padding: 0; overflow: hidden; background: var(--fundo-card); border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); margin: 40px auto; }
+.login-grid { display: flex; flex-wrap: wrap; }
+.login-form-area { flex: 1; min-width: 320px; padding: 50px 45px; display: flex; flex-direction: column; justify-content: center; }
+.login-form-area h1 { font-size: 26px; color: var(--azul-escuro); margin-bottom: 5px; line-height: 1.2; }
+.login-form-area p { font-size: 14px; color: var(--cinza-texto); margin-bottom: 30px; }
+.auth-form { display: flex; flex-direction: column; gap: 18px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-size: 12px; font-weight: 600; color: var(--azul-escuro); margin-left: 5px; }
+.form-group input { height: 46px; padding: 0 16px; border: 2px solid var(--azul-claro); border-radius: 12px; background: var(--fundo-card); color: var(--preto); font-family: var(--fonte-open-sans); font-size: 14px; transition: 0.3s ease; }
+.form-group input:focus { border-color: var(--rosa-principal); box-shadow: 0 0 0 3px rgba(233, 22, 107, 0.15); outline: none; }
+.btn-auth { width: 100%; height: 48px; background: var(--rosa-principal); color: #FFFFFF; border: none; border-radius: 25px; font-size: 15px; font-weight: 700; font-family: var(--fonte-poppins); cursor: pointer; margin-top: 10px; transition: 0.2s ease; }
+.btn-auth:hover { background: var(--botao-hover-rosa); transform: translateY(-2px); }
+.auth-links { margin-top: 25px; display: flex; justify-content: center; gap: 12px; font-size: 13px; }
+.auth-links a { color: var(--azul-principal); font-weight: 600; text-decoration: none; transition: 0.2s ease; }
+.auth-links a:hover { color: var(--rosa-principal); }
+.auth-links span { color: #cbd5e1; }
+.login-image-area { flex: 1; min-width: 320px; background: var(--azul-claro); display: flex; }
+.login-image-area img { width: 100%; height: 100%; object-fit: cover; }
 
-html[data-tema="escuro"] .login-main {
-    background: linear-gradient(135deg, #101d2e, #0e1621);
-}
+/* ===== 09. FOOTER ===== */
+.site-footer { background: var(--fundo-azul); padding-top: 40px; }
+.footer-content { display: flex; flex-direction: column; align-items: center; gap: 20px; padding-bottom: 30px; }
+.footer-logo { width: 250px; object-fit: contain; }
+.footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+.footer-links a { color: var(--azul-escuro); text-decoration: none; font-weight: 500; font-family: var(--fonte-poppins); font-size: 14px; display: flex; align-items: center; gap: 8px; }
+.footer-links a img { height: 20px; }
+.footer-bottom { background: var(--azul-principal); color: #FFFFFF; padding: 20px; display: flex; justify-content: center; align-items: center; gap: 20px; font-family: var(--fonte-poppins); font-size: 14px; }
 
-/* Oculta a faixa rosa desnecessária que estava na versão antiga */
-.cadastro-pink-section {
-    display: none;
-}
+/* ===== 10. RESPONSIVIDADE E MENU MOBILE ===== */
+.mobile-menu-btn { display: none; flex-direction: column; justify-content: space-between; width: 28px; height: 20px; background: transparent; border: none; cursor: pointer; z-index: 101; }
+.mobile-menu-btn span { width: 100%; height: 3px; background-color: var(--azul-principal); border-radius: 3px; transition: all 0.3s ease; }
 
-.login-container {
-    max-width: 900px;
-    padding: 0; /* Removemos o padding para a imagem colar nas bordas do cartão */
-    overflow: hidden;
-}
-
-.login-grid {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-/* --- ÁREA DO FORMULÁRIO --- */
-.login-form-area {
-    flex: 1;
-    min-width: 320px;
-    padding: 50px 45px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.login-form-area h1 {
-    font-size: 26px;
-    color: var(--azul-escuro);
-    margin-bottom: 5px;
-    line-height: 1.2;
-}
-
-html[data-tema="escuro"] .login-form-area h1 {
-    color: #6cc0f5;
-}
-
-.login-form-area p {
-    font-size: 14px;
-    color: var(--cinza-texto);
-    margin-bottom: 30px;
-}
-
-.auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.form-group label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--azul-escuro);
-    margin-left: 5px;
-}
-
-html[data-tema="escuro"] .form-group label {
-    color: #d5dfec;
-}
-
-.form-group input {
-    height: 46px;
-    padding: 0 16px;
-    border: 2px solid var(--azul-claro);
-    border-radius: 12px;
-    background: var(--fundo-card);
-    color: var(--preto);
-    font-family: var(--fonte-open-sans);
-    font-size: 14px;
-    transition: all 0.3s ease;
-}
-
-html[data-tema="escuro"] .form-group input {
-    border-color: #1e2c42;
-}
-
-.form-group input:focus {
-    border-color: var(--rosa-principal);
-    box-shadow: 0 0 0 3px rgba(233, 22, 107, 0.15);
-    outline: none;
-}
-
-.btn-auth {
-    width: 100%;
-    height: 48px;
-    background: var(--rosa-principal);
-    color: #FFFFFF;
-    border: none;
-    border-radius: 25px;
-    font-size: 15px;
-    font-weight: 700;
-    font-family: var(--fonte-poppins);
-    cursor: pointer;
-    margin-top: 10px;
-    transition: transform 0.2s ease, background 0.3s ease;
-}
-
-.btn-auth:hover {
-    background: var(--botao-hover-rosa);
-    transform: translateY(-2px);
-}
-
-.auth-links {
-    margin-top: 25px;
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    font-size: 13px;
-}
-
-.auth-links a {
-    color: var(--azul-principal);
-    font-weight: 600;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.auth-links a:hover {
-    color: var(--rosa-principal);
-}
-
-.auth-links span {
-    color: #cbd5e1;
-}
-
-/* --- ÁREA DA IMAGEM --- */
-.login-image-area {
-    flex: 1;
-    min-width: 320px;
-    background: var(--azul-claro);
-    display: flex;
-}
-
-.login-image-area img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* --- RESPONSIVO --- */
-@media (max-width: 768px) {
-    .login-main {
-        padding: 30px 15px;
-        align-items: flex-start;
-    }
+@media (max-width: 900px) {
+    .mobile-menu-btn { display: flex; }
     
-    /* No telemóvel, a imagem passa para cima para dar contexto, ou pode ser oculta */
-    .login-image-area {
-        height: 200px; /* Define uma altura fixa para a imagem no topo */
+    /* Configurações de exibição de login no Mobile */
+    .site-header.is-logged-in .user-profile-dropdown { display: none !important; }
+    .site-header.is-logged-in .mobile-profile-header { display: flex; }
+    .site-header.is-logged-in .btn-logout-mobile { display: block; }
+
+    .nav-actions-group {
+        position: absolute; top: 75px; left: 0; width: 100%; background: var(--fundo-header); flex-direction: column;
+        padding: 30px 20px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); transition: clip-path 0.4s ease-in-out;
     }
+    .nav-actions-group.active { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+
+    .header-actions { display: contents; } /* Permite flex order livre */
+
+    .mobile-profile-header { order: 1; width: 100%; flex-direction: column; align-items: center; gap: 10px; padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid #eeeeee; }
+    .main-nav { order: 2; display: flex !important; flex-direction: column; gap: 20px; width: 100%; text-align: center; margin-bottom: 30px; }
+    .main-nav a, .nav-dropdown-link { font-size: 16px; padding: 10px; }
+    .btn-cadastrar-nav, .btn-login-nav { order: 3; width: 100%; margin-bottom: 25px; justify-content: center; }
+    .theme-toggle-wrapper { order: 4; width: 100%; justify-content: space-between; padding: 12px 20px; background: var(--azul-claro); border-radius: 12px; }
+    .theme-toggle-label { display: block; }
+    .header-divider { display: none; }
+    .btn-logout-mobile { order: 5; background: transparent; border: none; color: #d90429; font-weight: 600; font-family: var(--fonte-poppins); font-size: 14px; margin-top: 25px; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+
+    .mobile-menu-btn.active span:nth-child(1) { transform: translateY(8.5px) rotate(45deg); }
+    .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+    .mobile-menu-btn.active span:nth-child(3) { transform: translateY(-8.5px) rotate(-45deg); }
     
-    .login-form-area {
-        padding: 35px 25px;
-    }
+    .hero-container { flex-direction: column; text-align: center; }
+    .hero-content { align-items: center; }
+    .hero-actions { flex-direction: column; width: 100%; max-width: 400px; }
+    .footer-bottom { flex-direction: column; gap: 10px; }
     
-    /* Inverte a ordem: imagem em cima, formulário em baixo no mobile */
-    .login-image-area {
-        order: -1;
-    }
+    /* Login Responsivo */
+    .login-main { padding: 30px 15px; align-items: flex-start; }
+    .login-image-area { height: 200px; order: -1; }
+    .login-form-area { padding: 35px 25px; }
 }
 
-/* =========================================================
-   11. GESTÃO DE ESTADO DE AUTENTICAÇÃO (CSS PURO)
-   ========================================================= */
-
-/* PADRÃO (VISITANTE): Esconde os perfis e logouts */
-.mobile-profile-header,
-.user-profile-dropdown,
-.btn-logout-mobile {
-    display: none;
-}
-
-/* QUANDO LOGADO (.is-logged-in no header): Esconde botão Login e Divisor */
-.site-header.is-logged-in .btn-login-nav,
-.site-header.is-logged-in .header-divider {
-    display: none;
-}
-
-/* QUANDO LOGADO: Mostra o Dropdown de Desktop (Apenas em ecrãs grandes) */
-.site-header.is-logged-in .user-profile-dropdown {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-
-/* --- O AVATAR --- */
-.avatar-circle {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: var(--azul-claro);
-    color: var(--azul-principal);
-    border: 2px solid var(--azul-principal);
-    font-weight: 700;
-    font-family: var(--fonte-poppins);
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-right: 15px; 
-}
-
-html[data-tema="escuro"] .avatar-circle {
-    background: #101d2e;
-    color: #6cc0f5;
-    border-color: #3d93cf;
-}
-
-.user-greeting {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--azul-escuro);
-    font-family: var(--fonte-poppins);
-}
-
-html[data-tema="escuro"] .user-greeting { color: #d5dfec; }
-
-
-/* --- DROPDOWN DO DESKTOP (Hover) --- */
-.profile-dropdown-menu {
-    display: none; 
-    position: absolute;
-    top: 110%; 
-    right: 0; 
-    background: var(--fundo-card);
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    padding: 15px 20px;
-    min-width: 180px;
-    z-index: 1000;
-    flex-direction: column;
-    gap: 12px;
-}
-
-/* A Mágica do Hover */
-.user-profile-dropdown:hover .profile-dropdown-menu {
-    display: flex;
-}
-
-.profile-divider {
-    border: none;
-    border-top: 1px solid #eeeeee;
-    width: 100%;
-}
-
-.btn-logout-clean {
-    background: transparent;
-    border: none;
-    color: #d90429;
-    font-weight: 600;
-    font-size: 13px;
-    font-family: var(--fonte-poppins);
-    cursor: pointer;
-    text-align: left;
-    transition: color 0.2s ease;
-}
-.btn-logout-clean:hover { color: #ff4d6d; }
-
+/* ===== 11. MODO ESCURO (VARIÁVEIS DE ESTADO) ===== */
+html[data-tema="escuro"] .site-header { border-bottom-color: #1e2c42; }
+html[data-tema="escuro"] .header-divider { background: #2a3b52; }
+html[data-tema="escuro"] .theme-toggle-label { color: #6cc0f5; }
+html[data-tema="escuro"] .avatar-circle { background: #101d2e; color: #6cc0f5; border-color: #3d93cf; }
 html[data-tema="escuro"] .profile-dropdown-menu { background: #1e2c42; }
 html[data-tema="escuro"] .profile-divider { border-color: #2a3b52; }
 html[data-tema="escuro"] .btn-logout-clean { color: #ff4d6d; }
+html[data-tema="escuro"] .btn-cadastrar-nav.disabled { background: #1e2c42; border-color: #1e2c42; color: #475569; }
 
-
-/* =========================================================
-   08. REORDENAÇÃO DO MENU MOBILE (FLEX ORDER)
-   ========================================================= */
 @media (max-width: 900px) {
-    
-    /* Regras de estado no Mobile: Se estiver logado... */
-    .site-header.is-logged-in .user-profile-dropdown {
-        display: none !important; /* Esconde o dropdown de desktop no mobile mesmo se logado */
-    }
-    
-    .site-header.is-logged-in .mobile-profile-header {
-        display: flex; /* Exibe o perfil do topo */
-    }
-    
-    .site-header.is-logged-in .btn-logout-mobile {
-        display: block; /* Exibe o link de sair no fundo */
-    }
-
-    .nav-actions-group {
-        display: flex;
-        flex-direction: column;
-        padding: 30px 20px;
-    }
-
-    .header-actions {
-        display: contents; 
-    }
-
-    /* 1. PERFIL NO TOPO */
-    .mobile-profile-header {
-        order: 1;
-        width: 100%;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        padding-bottom: 20px;
-        margin-bottom: 20px;
-        border-bottom: 1px solid #eeeeee;
-    }
-    
+    html[data-tema="escuro"] .nav-actions-group { background: var(--fundo-header); box-shadow: 0 15px 20px rgba(0,0,0,0.4); }
+    html[data-tema="escuro"] .mobile-menu-btn span { background-color: #6cc0f5; }
+    html[data-tema="escuro"] .theme-toggle-wrapper { background: #1e2c42; }
     html[data-tema="escuro"] .mobile-profile-header { border-color: #2a3b52; }
-
-    /* 2. NAVEGAÇÃO */
-    .main-nav {
-        order: 2;
-        margin-bottom: 30px;
-    }
-
-    /* 3. AÇÃO PRINCIPAL (CADASTRAR / LOGIN) */
-    .btn-cadastrar-nav, .btn-login-nav {
-        order: 3;
-        width: 100%;
-        margin-bottom: 25px;
-    }
-
-    /* 4. CONFIGURAÇÃO (MODO ESCURO) */
-    .theme-toggle-wrapper {
-        order: 4;
-        width: 100%;
-    }
-
-    /* 5. LOGOUT (Texto simples no fim do menu) */
-    .btn-logout-mobile {
-        order: 5;
-        background: transparent;
-        border: none;
-        color: #d90429;
-        font-weight: 600;
-        font-family: var(--fonte-poppins);
-        font-size: 14px;
-        margin-top: 25px;
-        text-decoration: underline;
-        text-underline-offset: 4px;
-        cursor: pointer;
-    }
-    
     html[data-tema="escuro"] .btn-logout-mobile { color: #ff4d6d; }
 }
 
-/* =========================================================
-   08. REORDENAÇÃO DO MENU MOBILE (FLEX ORDER)
-   ========================================================= */
-@media (max-width: 900px) {
-    /* Esconde o Dropdown de desktop */
-    .user-profile-dropdown { display: none !important; }
-
-    .nav-actions-group {
-        display: flex;
-        flex-direction: column;
-        padding: 30px 20px;
-    }
-
-    /* display: contents permite que os filhos de .header-actions sejam 
-       reordenados junto com os links do menu principal usando order */
-    .header-actions {
-        display: contents; 
-    }
-
-    /* 1. PERFIL NO TOPO */
-    .mobile-profile-header {
-        order: 1;
-        width: 100%;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        padding-bottom: 20px;
-        margin-bottom: 20px;
-        border-bottom: 1px solid #eeeeee;
-    }
-    
-    html[data-tema="escuro"] .mobile-profile-header { border-color: #2a3b52; }
-
-    /* 2. NAVEGAÇÃO */
-    .main-nav {
-        order: 2;
-        margin-bottom: 30px;
-    }
-
-    /* 3. AÇÃO PRINCIPAL (CADASTRAR / LOGIN) */
-    .btn-cadastrar-nav, .btn-login-nav {
-        order: 3;
-        width: 100%;
-        margin-bottom: 25px;
-    }
-
-    /* 4. CONFIGURAÇÃO (MODO ESCURO) */
-    .theme-toggle-wrapper {
-        order: 4;
-        width: 100%;
-    }
-
-    /* 5. LOGOUT (Texto simples no fim do menu) */
-    .btn-logout-mobile {
-        order: 5;
-        background: transparent;
-        border: none;
-        color: #d90429;
-        font-weight: 600;
-        font-family: var(--fonte-poppins);
-        font-size: 14px;
-        margin-top: 25px;
-        text-decoration: underline;
-        text-underline-offset: 4px;
-        cursor: pointer;
-    }
-    
-    html[data-tema="escuro"] .btn-logout-mobile { color: #ff4d6d; }
-}
+html[data-tema="escuro"] .hero { background: linear-gradient(rgba(14, 22, 33, 0.85), rgba(14, 22, 33, 0.85)), url(media/hero-mural-encontrados.png) center bottom/cover no-repeat; }
+html[data-tema="escuro"] .hero h1 { color: #6cc0f5; }
+html[data-tema="escuro"] .btn-lost { background: var(--fundo-card); color: #6cc0f5; border-color: #6cc0f5; }
+html[data-tema="escuro"] .btn-lost:hover { background: #6cc0f5; color: #172233; }
+html[data-tema="escuro"] .search-box { background: #1e2c42; }
+html[data-tema="escuro"] .search-input { background: #0f1722; }
+html[data-tema="escuro"] .btn-search { background: #3d93cf; }
+html[data-tema="escuro"] .login-main { background: linear-gradient(135deg, #101d2e, #0e1621); }
+html[data-tema="escuro"] .login-form-area h1 { color: #6cc0f5; }
+html[data-tema="escuro"] .form-group label { color: #d5dfec; }
+html[data-tema="escuro"] .form-group input { border-color: #1e2c42; }

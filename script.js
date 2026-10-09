@@ -96,7 +96,8 @@ async function verificarSessao() {
 
 // 3. Lógica do Header (Modo Escuro e Hambúrguer)
 function inicializarScriptsDoHeader() {
-    const themeToggle = document.getElementById('themeToggle');
+    // Agora selecionamos TODOS os botões de tema (desktop e mobile)
+    const themeToggles = document.querySelectorAll('.theme-toggle');
     const htmlElement = document.documentElement;
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const navActionsGroup = document.getElementById('navActionsGroup');
@@ -105,23 +106,24 @@ function inicializarScriptsDoHeader() {
     const savedTheme = localStorage.getItem('achepet_theme');
     if (savedTheme === 'escuro') {
         htmlElement.setAttribute('data-tema', 'escuro');
-        if (themeToggle) themeToggle.classList.add('active');
+        themeToggles.forEach(toggle => toggle.classList.add('active'));
     }
 
-    if (themeToggle) {
+    // Adiciona o evento de clique a todos os botões de tema existentes
+    themeToggles.forEach(themeToggle => {
         themeToggle.addEventListener('click', () => {
             const isDark = htmlElement.getAttribute('data-tema') === 'escuro';
             if (isDark) {
                 htmlElement.removeAttribute('data-tema');
-                themeToggle.classList.remove('active');
                 localStorage.setItem('achepet_theme', 'claro');
+                themeToggles.forEach(t => t.classList.remove('active')); // Desliga ambos
             } else {
                 htmlElement.setAttribute('data-tema', 'escuro');
-                themeToggle.classList.add('active');
                 localStorage.setItem('achepet_theme', 'escuro');
+                themeToggles.forEach(t => t.classList.add('active')); // Liga ambos
             }
         });
-    }
+    });
 
     // --- MENU HAMBÚRGUER ---
     if (mobileMenuBtn && navActionsGroup) {

@@ -1,7 +1,7 @@
 <header class="site-header">
     <div class="header-container">
         
-        <!-- LOGO -->
+        <!-- 1. LOGO -->
         <a href="index.html" class="logo">
             <img src="media/logo/logo.png" alt="Logotipo AchePet com patinha">
             <span>
@@ -9,18 +9,18 @@
             </span>
         </a>
 
-        <!-- BOTÃO HAMBÚRGUER -->
+        <!-- 2. BOTÃO HAMBÚRGUER -->
         <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir menu">
             <span></span>
             <span></span>
             <span></span>
         </button>
 
-        <!-- AGRUPAMENTO (Navegação + Ações) -->
+        <!-- 3. AGRUPAMENTO (Navegação + Ações) -->
         <div class="nav-actions-group" id="navActionsGroup">
             
-            <!-- PERFIL MOBILE (Começa oculto - ativado via JS) -->
-            <div class="mobile-profile-header" id="mobileProfileHeader" style="display: none;">
+            <!-- PERFIL MOBILE -->
+            <div class="mobile-profile-header" id="mobileProfileHeader">
                 <div class="avatar-circle" id="mobileAvatar">U</div>
                 <span class="user-greeting" id="mobileGreeting">Olá, Usuário</span>
             </div>
@@ -40,38 +40,46 @@
                 <a href="quem-somos.html">QUEM SOMOS</a>
             </nav>
 
-            <!-- AÇÕES DIREITAS -->
+            <!-- AÇÕES DIREITAS (Reordenadas: Cadastro -> Perfil) -->
             <div class="header-actions">
-                
-                <!-- SWITCH DE TEMA -->
-                <div class="theme-toggle-wrapper">
-                    <span class="theme-toggle-label">Modo Escuro</span>
-                    <button class="theme-toggle" id="themeToggle" aria-label="Alternar modo escuro">
-                        <span class="toggle-circle"></span>
-                    </button>
-                </div>
-                
-                <div class="header-divider" id="headerDivider"></div>
 
                 <!-- LOGIN (Visitantes) -->
                 <a href="login.html" class="btn-login-nav" id="navLoginBtn">LOGIN</a>
 
-                <!-- PERFIL DROPDOWN DESKTOP (Começa oculto - ativado via JS) -->
-                <div class="user-profile-dropdown" id="userProfile" style="display: none;">
+                <!-- AÇÃO PRINCIPAL -->
+                <a href="form1.html" class="btn-cadastrar-nav" id="navCadastrarBtn">CADASTRAR ANIMAL</a>
+
+                <!-- PERFIL DROPDOWN DESKTOP -->
+                <div class="user-profile-dropdown" id="userProfile">
                     <div class="avatar-circle avatar-desktop" id="desktopAvatar">U</div>
                     
                     <div class="profile-dropdown-menu">
                         <span class="user-greeting" id="userNameDisplay">Olá, Usuário</span>
                         <hr class="profile-divider">
+                        
+                        <!-- SWITCH DE TEMA DESKTOP (Dentro do menu) -->
+                        <div class="theme-toggle-wrapper desktop-theme-toggle">
+                            <span class="theme-toggle-label">Modo Escuro</span>
+                            <button class="theme-toggle" aria-label="Alternar modo escuro">
+                                <span class="toggle-circle"></span>
+                            </button>
+                        </div>
+
+                        <hr class="profile-divider">
                         <button id="btnLogoutDesktop" class="btn-logout-clean">Sair da conta</button>
                     </div>
                 </div>
 
-                <!-- AÇÃO PRINCIPAL -->
-                <a href="form1.html" class="btn-cadastrar-nav" id="navCadastrarBtn">CADASTRAR ANIMAL</a>
+                <!-- SWITCH DE TEMA MOBILE (Invisível no desktop) -->
+                <div class="theme-toggle-wrapper mobile-theme-toggle">
+                    <span class="theme-toggle-label">Modo Escuro</span>
+                    <button class="theme-toggle" aria-label="Alternar modo escuro">
+                        <span class="toggle-circle"></span>
+                    </button>
+                </div>
 
-                <!-- SAIR MOBILE (Começa oculto - ativado via JS) -->
-                <button id="btnLogoutMobile" class="btn-logout-mobile" style="display: none;">Sair da conta</button>
+                <!-- SAIR MOBILE -->
+                <button id="btnLogoutMobile" class="btn-logout-mobile">Sair da conta</button>
                 
             </div>
         </div>
