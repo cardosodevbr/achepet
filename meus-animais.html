@@ -168,9 +168,8 @@
                     if (animal.status !== 'final_feliz') {
                         acoesHTML = `
                             <div class="card-actions">
-                                <!-- Envia o ID na URL para a futura página de edição -->
                                 <a href="editar-animal.html?id=${animal.id_animal}" class="btn-acao btn-editar">✏️ Editar</a>
-                                <button onclick="marcarFinalFeliz(${animal.id_animal})" class="btn-acao btn-sucesso">Final Feliz 💖</button>
+                                <button onclick="marcarFinalFeliz('${animal.id_animal}')" class="btn-acao btn-sucesso">Final Feliz 💖</button>
                             </div>
                         `;
                     } else {
