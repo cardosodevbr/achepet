@@ -113,146 +113,166 @@
     <script src="script.js"></script>
 
     <script>
-        // 1. Variável de Estado Global - Agora começa em "todos"
-        let statusAtual = 'todos';
+    // 1. Variável de Estado Global - Agora começa em "todos"
+    let statusAtual = 'todos';
 
-        // 2. Lógica das Abas (Tabs)
-        const tabs = document.querySelectorAll('.mural-tab');
-        const heroSection = document.getElementById('muralHeroSection');
-        const title = document.getElementById('muralTitle');
+    // 2. Lógica das Abas (Tabs)
+    const tabs = document.querySelectorAll('.mural-tab');
+    const heroSection = document.getElementById('muralHeroSection');
+    const title = document.getElementById('muralTitle');
 
-        tabs.forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                tabs.forEach(t => t.classList.remove('active'));
-                e.target.classList.add('active');
-                statusAtual = e.target.getAttribute('data-target');
-                
-                // Muda as cores do topo dependendo da aba
-                if(statusAtual === 'perdido') {
-                    heroSection.style.background = 'var(--fundo-rosa)';
-                    title.innerHTML = 'Animais Perdidos <img src="media/coracao-rosa.png" style="width: 30px; vertical-align: middle;">';
-                } else if (statusAtual === 'achado_na_rua') {
-                    heroSection.style.background = 'var(--fundo-azul)';
-                    title.innerHTML = 'Animais Encontrados <img src="media/coracao-rosa.png" style="width: 30px; vertical-align: middle;">';
-                } else if (statusAtual === 'final_feliz') {
-                    heroSection.style.background = '#ECFDF5'; 
-                    title.innerHTML = 'Finais Felizes 💖';
-                } else {
-                    heroSection.style.background = 'var(--fundo-azul)';
-                    title.innerHTML = 'Mural de Pets <img src="media/coracao-rosa.png" style="width: 30px; vertical-align: middle;">';
-                }
-                
-                buscarAnimais();
-            });
-        });
-
-        // 3. Toggle de Filtros
-        document.getElementById('btnFiltros').addEventListener('click', () => {
-            const panel = document.getElementById('filtrosPanel');
-            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-        });
-
-        function formatarData(dataIso) {
-            if(!dataIso) return "Data desconhecida";
-            const partes = dataIso.split('-');
-            return `${partes[2]}/${partes[1]}/${partes[0]}`;
-        }
-
-        // 4. Busca principal no Supabase
-        async function buscarAnimais() {
-            const grid = document.getElementById('petsGrid');
-            const loading = document.getElementById('loadingMessage');
-            const emptyMsg = document.getElementById('emptyMessage');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            tabs.forEach(t => t.classList.remove('active'));
+            e.target.classList.add('active');
+            statusAtual = e.target.getAttribute('data-target');
             
-            const cidadeFiltro = document.getElementById('cidadeBusca').value.trim();
-            const especieFiltro = document.querySelector('input[name="especie"]:checked')?.value;
-
-            loading.style.display = 'block';
-            grid.innerHTML = '';
-            emptyMsg.style.display = 'none';
-
-            try {
-                let query = clienteSupabase
-                    .from('animais')
-                    .select('*')
-                    .eq('ativo', true)
-                    .order('created_at', { ascending: false });
-
-                // A MÁGICA ACONTECE AQUI: Só filtra o status se a aba não for "Todos"
-                if (statusAtual !== 'todos') {
-                    query = query.eq('status', statusAtual);
-                }
-
-                if (cidadeFiltro) query = query.ilike('cidade', `%${cidadeFiltro}%`);
-                
-                if (especieFiltro && especieFiltro !== 'todos') {
-                    query = query.eq('especie', especieFiltro);
-                }
-
-                const { data: animais, error } = await query;
-                if (error) throw error;
-
-                loading.style.display = 'none';
-
-                if (animais.length === 0) {
-                    emptyMsg.style.display = 'block';
-                    return;
-                }
-
-                animais.forEach(animal => {
-                    const fotoUrl = animal.foto_url || 'media/placeholder-pet.png';
-                    
-                    let badgeClass = '';
-                    let badgeText = '';
-                    
-                    if(animal.status === 'perdido') {
-                        badgeClass = 'lost';
-                        badgeText = 'PERDIDO';
-                    } else if (animal.status === 'achado_na_rua') {
-                        badgeClass = 'found';
-                        badgeText = 'ENCONTRADO';
-                    } else {
-                        badgeClass = 'happy';
-                        badgeText = 'FINAL FELIZ 💖';
-                    }
-                    
-                    const cardHTML = `
-                        <article class="pet-card">
-                            <img src="${fotoUrl}" alt="Foto de ${animal.nome}">
-                            <span class="pet-status ${badgeClass}">${badgeText}</span>
-                            <div class="pet-info">
-                                <h3>${animal.nome}</h3>
-                                <p>📌 ${animal.cidade}</p>
-                                <p>📅 ${formatarData(animal.data_evento)}</p>
-                            </div>
-                        </article>
-                    `;
-                    grid.innerHTML += cardHTML;
-                });
-
-            } catch (err) {
-                console.error("Erro:", err);
-                loading.innerText = "❌ Ocorreu um erro ao carregar o mural.";
+            // Muda as cores do topo dependendo da aba
+            if(statusAtual === 'perdido') {
+                heroSection.style.background = 'var(--fundo-rosa)';
+                title.innerHTML = 'Animais Perdidos <img src="media/coracao-rosa.png" style="width: 30px; vertical-align: middle;">';
+            } else if (statusAtual === 'achado_na_rua') {
+                heroSection.style.background = 'var(--fundo-azul)';
+                title.innerHTML = 'Animais Encontrados <img src="media/coracao-rosa.png" style="width: 30px; vertical-align: middle;">';
+            } else if (statusAtual === 'final_feliz') {
+                heroSection.style.background = '#ECFDF5'; 
+                title.innerHTML = 'Finais Felizes 💖';
+            } else {
+                heroSection.style.background = 'var(--fundo-azul)';
+                title.innerHTML = 'Mural de Pets <img src="media/coracao-rosa.png" style="width: 30px; vertical-align: middle;">';
             }
-        }
-
-        // 5. Botões e Ações Iniciais
-        document.getElementById('btnBuscar').addEventListener('click', buscarAnimais);
-        document.getElementById('btnAplicarFiltros').addEventListener('click', buscarAnimais);
-        
-        document.getElementById('btnLimparFiltros').addEventListener('click', () => {
-            document.getElementById('cidadeBusca').value = '';
-            
-            const radios = document.querySelectorAll('input[name="especie"]');
-            radios.forEach(r => {
-                if(r.value === 'todos') r.checked = true;
-            });
             
             buscarAnimais();
         });
+    });
 
-        // Executa a primeira busca ao abrir a página (agora carrega "Todos")
-        document.addEventListener('DOMContentLoaded', buscarAnimais);
-    </script>
+    // 3. Toggle de Filtros
+    document.getElementById('btnFiltros').addEventListener('click', () => {
+        const panel = document.getElementById('filtrosPanel');
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    });
+
+    function formatarData(dataIso) {
+        if(!dataIso) return "Data desconhecida";
+        const partes = dataIso.split('-');
+        return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    }
+
+    // --- NOVA LÓGICA: CAPTURA A BUSCA DO INDEX E LIMPA A URL ---
+    function lerFiltroDaURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const cidadeUrl = urlParams.get('cidade');
+        
+        if (cidadeUrl) {
+            const campoBusca = document.getElementById('cidadeBusca');
+            if (campoBusca) {
+                // Preenche o input do mural com a palavra recebida
+                campoBusca.value = cidadeUrl; 
+            }
+            // Limpa a URL para que, se o utilizador atualizar a página depois de limpar a busca, ela não volte a "puxar" a cidade antiga
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    }
+
+    // 4. Busca principal no Supabase
+    async function buscarAnimais() {
+        const grid = document.getElementById('petsGrid');
+        const loading = document.getElementById('loadingMessage');
+        const emptyMsg = document.getElementById('emptyMessage');
+        
+        const cidadeFiltro = document.getElementById('cidadeBusca').value.trim();
+        const especieFiltro = document.querySelector('input[name="especie"]:checked')?.value;
+
+        loading.style.display = 'block';
+        grid.innerHTML = '';
+        emptyMsg.style.display = 'none';
+
+        try {
+            let query = clienteSupabase
+                .from('animais')
+                .select('*')
+                .eq('ativo', true)
+                .order('created_at', { ascending: false });
+
+            // A MÁGICA ACONTECE AQUI: Só filtra o status se a aba não for "Todos"
+            if (statusAtual !== 'todos') {
+                query = query.eq('status', statusAtual);
+            }
+
+            if (cidadeFiltro) query = query.ilike('cidade', `%${cidadeFiltro}%`);
+            
+            if (especieFiltro && especieFiltro !== 'todos') {
+                query = query.eq('especie', especieFiltro);
+            }
+
+            const { data: animais, error } = await query;
+            if (error) throw error;
+
+            loading.style.display = 'none';
+
+            if (animais.length === 0) {
+                emptyMsg.style.display = 'block';
+                return;
+            }
+
+            animais.forEach(animal => {
+                const fotoUrl = animal.foto_url || 'media/placeholder-pet.png';
+                
+                let badgeClass = '';
+                let badgeText = '';
+                
+                if(animal.status === 'perdido') {
+                    badgeClass = 'lost';
+                    badgeText = 'PERDIDO';
+                } else if (animal.status === 'achado_na_rua') {
+                    badgeClass = 'found';
+                    badgeText = 'ENCONTRADO';
+                } else {
+                    badgeClass = 'happy';
+                    badgeText = 'FINAL FELIZ 💖';
+                }
+                
+                const cardHTML = `
+                    <article class="pet-card">
+                        <img src="${fotoUrl}" alt="Foto de ${animal.nome}">
+                        <span class="pet-status ${badgeClass}">${badgeText}</span>
+                        <div class="pet-info">
+                            <h3>${animal.nome}</h3>
+                            <p>📌 ${animal.cidade}</p>
+                            <p>📅 ${formatarData(animal.data_evento)}</p>
+                        </div>
+                    </article>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+
+        } catch (err) {
+            console.error("Erro:", err);
+            loading.innerText = "❌ Ocorreu um erro ao carregar o mural.";
+        }
+    }
+
+    // 5. Botões e Ações Iniciais
+    document.getElementById('btnBuscar').addEventListener('click', buscarAnimais);
+    document.getElementById('btnAplicarFiltros').addEventListener('click', buscarAnimais);
+    
+    document.getElementById('btnLimparFiltros').addEventListener('click', () => {
+        document.getElementById('cidadeBusca').value = '';
+        
+        const radios = document.querySelectorAll('input[name="especie"]');
+        radios.forEach(r => {
+            if(r.value === 'todos') r.checked = true;
+        });
+        
+        buscarAnimais();
+    });
+
+    // Executa a primeira busca ao abrir a página
+    document.addEventListener('DOMContentLoaded', () => {
+        // Primeiro lemos a URL, depois iniciamos a busca
+        lerFiltroDaURL();
+        buscarAnimais();
+    });
+</script>
 </body>
 </html>
