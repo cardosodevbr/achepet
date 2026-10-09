@@ -180,7 +180,12 @@
         const loading = document.getElementById('loadingMessage');
         const emptyMsg = document.getElementById('emptyMessage');
         
+        // Pega o texto digitado
         const cidadeFiltro = document.getElementById('cidadeBusca').value.trim();
+        
+        // LIMPEZA: Remove acentos e converte para minúsculas (Ex: "São Paulo" -> "sao paulo")
+        const cidadeNormalizada = cidadeFiltro.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
         const especieFiltro = document.querySelector('input[name="especie"]:checked')?.value;
 
         loading.style.display = 'block';
@@ -194,12 +199,15 @@
                 .eq('ativo', true)
                 .order('created_at', { ascending: false });
 
-            // A MÁGICA ACONTECE AQUI: Só filtra o status se a aba não for "Todos"
+            // Só filtra o status se a aba não for "Todos"
             if (statusAtual !== 'todos') {
                 query = query.eq('status', statusAtual);
             }
 
-            if (cidadeFiltro) query = query.ilike('cidade', `%${cidadeFiltro}%`);
+            // Usa a coluna invisível do banco de dados para buscar sem acentos
+            if (cidadeNormalizada) {
+                query = query.ilike('cidade_busca', `%${cidadeNormalizada}%`);
+            }
             
             if (especieFiltro && especieFiltro !== 'todos') {
                 query = query.eq('especie', especieFiltro);

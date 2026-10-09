@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Recuperar Senha | AchePet 🐾</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+</head>
+<body data-page="login">
+    <div id="header-placeholder"></div>
+
+    <main class="login-main">
+        <section class="cadastro-section">
+            <div class="cadastro-container login-container" style="min-height: 400px; max-width: 500px;">
+                <div class="login-grid" style="flex-direction: column;;">
+                    <div class="login-form-area" style="padding: 40px;">
+                        <h1 style="font-size: 24px;">Recuperar Senha</h1>
+                        <p>Digite o e-mail associado à sua conta.<br>Enviaremos um link para criar uma nova senha.</p>
+                        
+                        <form id="recuperarForm" class="auth-form" onsubmit="event.preventDefault(); enviarLinkRecuperacao();">
+                            <div class="form-group">
+                                <label for="emailRecuperacao">E-mail</label>
+                                <input type="email" id="emailRecuperacao" placeholder="Digite o seu e-mail" required>
+                            </div>
+                            
+                            <button type="submit" class="btn-auth" id="btnRecuperar">ENVIAR LINK</button>
+                        </form>
+                        
+                        <div class="auth-links">
+                            <a href="login.html">Voltar para o Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+    <script src="script.js"></script>
+
+    <script>
+        async function enviarLinkRecuperacao() {
+            const email = document.getElementById('emailRecuperacao').value.trim();
+            const btnRecuperar = document.getElementById('btnRecuperar');
+            
+            btnRecuperar.innerText = "A enviar...";
+            btnRecuperar.disabled = true;
+
+            // O Supabase envia o e-mail e diz para onde o utilizador deve voltar ao clicar no link
+            const urlRedirecionamento = window.location.origin + '/redefinir-senha.html';
+
+            const { data, error } = await clienteSupabase.auth.resetPasswordForEmail(email, {
+                redirectTo: urlRedirecionamento,
+            });
+
+            btnRecuperar.innerText = "ENVIAR LINK";
+            btnRecuperar.disabled = false;
+
+            if (error) {
+                alert("❌ Erro: " + error.message);
+            } else {
+                alert("✅ Se este e-mail estiver registado, receberá um link de recuperação em breves instantes.");
+                window.location.href = "login.html";
+            }
+        }
+    </script>
+</body>
+</html>

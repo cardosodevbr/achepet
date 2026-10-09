@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Nova Senha | AchePet 🐾</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+</head>
+<body data-page="login">
+    <div id="header-placeholder"></div>
+
+    <main class="login-main">
+        <section class="cadastro-section">
+            <div class="cadastro-container login-container" style="min-height: 400px; max-width: 500px;">
+                <div class="login-grid" style="flex-direction: column;">
+                    <div class="login-form-area" style="padding: 40px;">
+                        <h1 style="font-size: 24px;">Criar Nova Senha</h1>
+                        <p>Digite a sua nova senha abaixo.</p>
+                        
+                        <form id="novaSenhaForm" class="auth-form" onsubmit="event.preventDefault(); salvarNovaSenha();">
+                            <div class="form-group">
+                                <label for="novaSenha">Nova Senha</label>
+                                <input type="password" id="novaSenha" placeholder="Mínimo de 8 caracteres" minlength="8" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmarNovaSenha">Confirmar Nova Senha</label>
+                                <input type="password" id="confirmarNovaSenha" placeholder="Repita a nova senha" minlength="8" required>
+                            </div>
+                            
+                            <button type="submit" class="btn-auth" id="btnSalvarSenha">GUARDAR NOVA SENHA</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+    <script src="script.js"></script>
+
+    <script>
+        // Ouve a mudança de estado da autenticação. Se o link do e-mail for válido, 
+        // o Supabase dispara um evento "PASSWORD_RECOVERY".
+        clienteSupabase.auth.onAuthStateChange(async (event, session) => {
+            if (event === "PASSWORD_RECOVERY") {
+                console.log("Modo de recuperação de senha ativado!");
+            }
+        });
+
+        async function salvarNovaSenha() {
+            const senha = document.getElementById('novaSenha').value;
+            const confirmarSenha = document.getElementById('confirmarNovaSenha').value;
+            const btnSalvar = document.getElementById('btnSalvarSenha');
+
+            if (senha !== confirmarSenha) {
+                return alert("⚠️ As senhas não coincidem.");
+            }
+
+            btnSalvar.innerText = "A guardar...";
+            btnSalvar.disabled = true;
+
+            // O Supabase usa a sessão temporária criada pelo clique no e-mail para atualizar o utilizador
+            const { error } = await clienteSupabase.auth.updateUser({
+                password: senha
+            });
+
+            btnSalvar.innerText = "GUARDAR NOVA SENHA";
+            btnSalvar.disabled = false;
+
+            if (error) {
+                alert("❌ Erro ao atualizar a senha: " + error.message);
+            } else {
+                alert("✅ A sua senha foi atualizada com sucesso!");
+                window.location.href = "login.html";
+            }
+        }
+    </script>
+</body>
+</html>
