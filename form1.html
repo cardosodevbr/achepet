@@ -29,7 +29,6 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* Classe de container adicionada para alinhar com o Header e evitar estourar a largura */
         .container {
             width: 92%;
             max-width: 850px;
@@ -37,7 +36,6 @@
             padding: 20px;
         }
 
-        /* Estilos específicos para o formulário de animais que complementam o style.css */
         .form-grid-2-col {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -48,7 +46,6 @@
             .form-grid-2-col { grid-template-columns: 1fr; }
         }
 
-        /* Botões de seleção de Status (Perdido vs Encontrado) */
         .status-selector {
             display: flex;
             gap: 15px;
@@ -72,28 +69,25 @@
             transition: all 0.3s ease;
         }
 
-        /* Estado ativo para "Perdi" */
         #status_perdido:checked + .status-label {
             border-color: var(--rosa-principal);
             background: var(--rosa-claro);
             color: var(--rosa-principal);
         }
 
-        /* Estado ativo para "Encontrei" */
         #status_encontrado:checked + .status-label {
             border-color: var(--azul-principal);
             background: var(--azul-claro);
             color: var(--azul-principal);
         }
 
-        /* UX: Caixa de Dica Dinâmica */
         .ux-dica-box {
             margin-top: 15px; padding: 15px; border-radius: 10px; font-size: 13px;
             display: flex; gap: 10px; align-items: flex-start; line-height: 1.5;
             background: #f8fafc; border-left: 4px solid #cbd5e1; color: var(--cinza-texto);
             transition: all 0.3s ease;
         }
-        .ux-dica-box strong { font-family: var(--fonte-poppins); }
+        
         .ux-dica-icon { font-size: 20px; }
 
         html[data-tema="escuro"] .ux-dica-box {
@@ -101,77 +95,78 @@
         }
 
         textarea {
-            width: 100%;
-            min-height: 100px;
-            padding: 12px 16px;
-            border: 2px solid var(--azul-claro);
-            border-radius: 12px;
-            font-family: var(--fonte-open-sans);
-            resize: vertical;
-        }
-        html[data-tema="escuro"] textarea {
-            background: var(--fundo-card);
-            color: var(--preto);
-            border-color: #1e2c42;
-        }
-
-        /*preview grande da imagem anexada */
-        /* Estilos do Preview da Imagem */
-        .preview-container {
-            width: 100%;
-            height: 250px;
-            border: 2px dashed var(--azul-claro);
-            border-radius: 12px;
-            margin-top: 10px;
-            display: none; /* Escondido por defeito */
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            background: #f8fafc;
-            position: relative;
+            width: 100%; min-height: 100px; padding: 12px 16px; border: 2px solid var(--azul-claro);
+            border-radius: 12px; font-family: var(--fonte-open-sans); resize: vertical;
         }
         
-        .preview-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* Mantém a proporção da imagem sem a cortar */
-            z-index: 1;
+        html[data-tema="escuro"] textarea {
+            background: var(--fundo-card); color: var(--preto); border-color: #1e2c42;
         }
 
+        /* --- ESTILOS DA NOVA LISTA SUSPENSA CUSTOMIZADA --- */
+        .custom-autocomplete { position: relative; }
+        
+        .autocomplete-list {
+            position: absolute; top: calc(100% - 10px); left: 0; right: 0;
+            background: var(--fundo-card);
+            border: 2px solid var(--azul-claro); 
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            max-height: 200px; 
+            overflow-y: auto; 
+            z-index: 1000;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            display: none; /* Escondido por defeito */
+        }
+        
+        .autocomplete-item {
+            padding: 12px 16px; 
+            cursor: pointer; 
+            color: var(--preto);
+            font-family: var(--fonte-open-sans); 
+            font-size: 14px;
+            transition: 0.2s ease;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .autocomplete-item:last-child { border-bottom: none; }
+        
+        .autocomplete-item:hover { 
+            background: var(--azul-claro); 
+            color: var(--azul-principal); 
+            padding-left: 20px; /* Pequeno efeito de movimento ao passar o rato */
+        }
+        
+        html[data-tema="escuro"] .autocomplete-list { 
+            background: var(--fundo-card); border-color: #1e2c42; 
+        }
+        html[data-tema="escuro"] .autocomplete-item { border-bottom-color: #2a3b52; }
+        html[data-tema="escuro"] .autocomplete-item:hover { 
+            background: #1e2c42; color: #6cc0f5; 
+        }
+
+        /* --- PREVIEW DA FOTO --- */
+        .preview-container {
+            width: 100%; height: 250px; border: 2px dashed var(--azul-claro);
+            border-radius: 12px; margin-top: 10px; display: none; 
+            align-items: center; justify-content: center; overflow: hidden;
+            background: #f8fafc; position: relative;
+        }
+        .preview-container img { width: 100%; height: 100%; object-fit: contain; z-index: 1; }
         .btn-remover-foto {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(233, 22, 107, 0.9);
-            color: white;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 2;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: absolute; top: 10px; right: 10px; background: rgba(233, 22, 107, 0.9);
+            color: white; border: none; width: 30px; height: 30px; border-radius: 50%;
+            cursor: pointer; z-index: 2; font-weight: bold; display: flex;
+            align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-
-        html[data-tema="escuro"] .preview-container {
-            background: #1e2c42;
-            border-color: #475569;
-        }
-
+        html[data-tema="escuro"] .preview-container { background: #1e2c42; border-color: #475569; }
     </style>
 </head>
 
 <body data-page="cadastro-animal">
 
-    <!-- COMPONENTES DINÂMICOS -->
     <div id="header-placeholder"></div>
 
     <main class="login-main" style="align-items: flex-start; padding-top: 40px;">
-        <!-- AQUI: Removido style="width: 100%;" e adicionada a classe container -->
         <section class="cadastro-section container">
             <div class="cadastro-container" style="padding: 40px; margin-top: 0;">
                 
@@ -193,12 +188,10 @@
                             <label for="status_encontrado" class="status-label">👀 Achei um pet na rua</label>
                         </div>
                         
-                        <!-- Caixa de UX que muda com base na escolha -->
                         <div class="ux-dica-box" id="dicaStatus">
                             <span class="ux-dica-icon">💡</span>
                             <div>
                                 Antes de cadastrar, acesse o <a href="mural.html" style="color: var(--azul-principal);">Mural</a>. Alguém já pode ter achado o seu pet! 
-                                
                             </div>
                         </div>
                     </div>
@@ -209,14 +202,14 @@
                             <label for="nome_pet">Nome do Animal</label>
                             <input type="text" id="nome_pet" placeholder="Ex: Isac (ou 'Desconhecido')" required>
                         </div>
-                        <div class="form-group">
+                        
+                        <!-- NOVA ESPÉCIE CUSTOMIZADA COM DROPDOWN -->
+                        <div class="form-group custom-autocomplete">
                             <label for="especie_pet">Espécie</label>
-                            <select id="especie_pet" required style="height: 46px; border: 2px solid var(--azul-claro); border-radius: 12px; padding: 0 16px; outline: none;">
-                                <option value="" disabled selected>Selecione...</option>
-                                <option value="Cachorro">Cachorro</option>
-                                <option value="Gato">Gato</option>
-                                <option value="Outro">Outro (Coelho, Pássaro, etc.)</option>
-                            </select>
+                            <input type="text" id="especie_pet" placeholder="Selecione ou digite a espécie..." required autocomplete="off" style="width: 100%; height: 46px; border: 2px solid var(--azul-claro); border-radius: 12px; padding: 0 16px; outline: none; font-family: var(--fonte-open-sans); position: relative; z-index: 1001;">
+                            
+                            <!-- Lista Suspensa gerada via JavaScript -->
+                            <div id="lista_especies_custom" class="autocomplete-list"></div>
                         </div>
                     </div>
 
@@ -242,19 +235,21 @@
                         <label for="foto_pet">Fotografia (Obrigatório)</label>
                         <input type="file" id="foto_pet" accept="image/*" style="padding-top: 10px; border: none; background: transparent;">
                         
-                        <!-- NOVO: Contentor do Preview -->
+                        <!-- Contentor do Preview -->
                         <div class="preview-container" id="previewBox">
                             <button type="button" class="btn-remover-foto" id="btnRemoverFoto" title="Remover foto">X</button>
                             <img id="imagemPreview" src="" alt="Preview da foto">
                         </div>
                     </div>
+                    
+                    <button type="submit" class="btn-auth" id="btnSalvarAnimal" style="margin-top: 20px;">PUBLICAR NO MURAL</button>
+                </form>
+
+            </div>
         </section>
     </main>
 
-    <!-- COMPONENTES DINÂMICOS -->
     <div id="footer-placeholder"></div>
-
-    <!-- SCRIPTS -->
     <script src="script.js"></script>
     
     <script>
@@ -269,7 +264,6 @@
                 Antes de cadastrar, acesse o <a href="mural.html" style="color: var(--azul-principal);">Mural</a>. Alguém já pode ter achado o seu pet!
             </div>
         `;
-
         const textoEncontrado = `
             <span class="ux-dica-icon">💡</span>
             <div>
@@ -290,10 +284,89 @@
                 dicaBox.style.borderLeftColor = 'var(--azul-principal)';
             }
         });
-        
         dicaBox.style.borderLeftColor = 'var(--rosa-principal)';
 
-        // --- LÓGICA REAL DE BANCO DE DADOS (SUPABASE) ---
+
+        // --- LÓGICA DA LISTA SUSPENSA DE ESPÉCIES (DROPDOWN INTELIGENTE) ---
+        const especiesSugeridas = [
+            "Cachorro", "Gato", "Coelho", "Calopsita", "Papagaio", 
+            "Pássaro (Outro)", "Tartaruga", "Hamster", "Porquinho-da-índia", "Cavalo"
+        ];
+        
+        const inputEspecie = document.getElementById('especie_pet');
+        const listaEspeciesCustom = document.getElementById('lista_especies_custom');
+
+        // Função que desenha a lista com base no que a pessoa digitou
+        function renderizarListaEspecies(filtro = '') {
+            listaEspeciesCustom.innerHTML = ''; // Limpa a lista anterior
+            const termo = filtro.toLowerCase().trim();
+            
+            // Filtra as sugestões que contenham o que foi digitado
+            const filtradas = especiesSugeridas.filter(esp => esp.toLowerCase().includes(termo));
+            
+            // Se não houver correspondência, esconde a lista (mas deixa a pessoa escrever à vontade)
+            if (filtradas.length === 0) {
+                listaEspeciesCustom.style.display = 'none';
+                return;
+            }
+
+            // Cria os elementos visuais na lista suspensa
+            filtradas.forEach(esp => {
+                const div = document.createElement('div');
+                div.className = 'autocomplete-item';
+                div.textContent = esp;
+                
+                // Ao clicar numa sugestão, preenche o input e fecha a lista
+                div.onmousedown = function() { // onmousedown previne conflito com o onblur do input
+                    inputEspecie.value = esp;
+                    listaEspeciesCustom.style.display = 'none';
+                };
+                
+                listaEspeciesCustom.appendChild(div);
+            });
+            
+            listaEspeciesCustom.style.display = 'block';
+        }
+
+        // Eventos do input de espécie
+        inputEspecie.addEventListener('focus', () => renderizarListaEspecies(inputEspecie.value));
+        inputEspecie.addEventListener('input', (e) => renderizarListaEspecies(e.target.value));
+        inputEspecie.addEventListener('blur', () => {
+            // Pequeno atraso para dar tempo do clique no item da lista ser registado
+            setTimeout(() => { listaEspeciesCustom.style.display = 'none'; }, 150);
+        });
+
+
+        // --- LÓGICA DE PREVIEW DA FOTOGRAFIA ---
+        const inputFoto = document.getElementById('foto_pet');
+        const previewBox = document.getElementById('previewBox');
+        const imagemPreview = document.getElementById('imagemPreview');
+        const btnRemoverFoto = document.getElementById('btnRemoverFoto');
+
+        inputFoto.addEventListener('change', function(event) {
+            const ficheiro = event.target.files[0];
+            if (ficheiro) {
+                const leitor = new FileReader();
+                leitor.onload = function(e) {
+                    imagemPreview.src = e.target.result;
+                    previewBox.style.display = 'flex'; 
+                }
+                leitor.readAsDataURL(ficheiro);
+            } else {
+                limparPreview();
+            }
+        });
+
+        btnRemoverFoto.addEventListener('click', limparPreview);
+
+        function limparPreview() {
+            inputFoto.value = ''; 
+            imagemPreview.src = '';
+            previewBox.style.display = 'none'; 
+        }
+
+
+        // --- LÓGICA DE BANCO DE DADOS (SUPABASE) ---
         async function salvarAnimal() {
             const btnSalvar = document.getElementById('btnSalvarAnimal');
             btnSalvar.innerText = "A PUBLICAR...";
@@ -311,11 +384,16 @@
                 // 2. CAPTURA DADOS DO FORMULÁRIO
                 const status = document.querySelector('input[name="status_pet"]:checked').value;
                 const nome = document.getElementById('nome_pet').value.trim();
-                const especie = document.getElementById('especie_pet').value;
+                const especie = document.getElementById('especie_pet').value.trim();
                 const cidade = document.getElementById('cidade_pet').value.trim();
                 const dataOcorrido = document.getElementById('data_pet').value;
                 const descricao = document.getElementById('descricao_pet').value.trim();
                 const fotoInput = document.getElementById('foto_pet');
+
+                // Validação extra garantindo que a espécie foi preenchida
+                if (!especie) {
+                    throw new Error("Por favor, informe a espécie do animal.");
+                }
 
                 if (fotoInput.files.length === 0) {
                     throw new Error("Por favor, anexe uma fotografia do animal.");
@@ -363,12 +441,11 @@
                     throw new Error("Erro ao salvar os dados no banco: " + insertError.message);
                 }
 
-                // 6. SUCESSO E REDIRECIONAMENTO PARA O MURAL UNIFICADO
+                // 6. SUCESSO E REDIRECIONAMENTO
                 btnSalvar.innerText = "PUBLICAR NO MURAL";
                 btnSalvar.disabled = false;
                 alert(`✅ Animal cadastrado com sucesso!`);
                 
-                // Redireciona sempre para o mural unificado
                 window.location.href = "mural.html";
 
             } catch (error) {
@@ -377,40 +454,6 @@
                 btnSalvar.innerText = "PUBLICAR NO MURAL";
                 btnSalvar.disabled = false;
             }
-        }
-
-        // --- LÓGICA DE PREVIEW DA FOTOGRAFIA ---
-        const inputFoto = document.getElementById('foto_pet');
-        const previewBox = document.getElementById('previewBox');
-        const imagemPreview = document.getElementById('imagemPreview');
-        const btnRemoverFoto = document.getElementById('btnRemoverFoto');
-
-        // Quando o utilizador escolhe um ficheiro
-        inputFoto.addEventListener('change', function(event) {
-            const ficheiro = event.target.files[0];
-            
-            if (ficheiro) {
-                // Usa o FileReader para converter a imagem num URL local temporário
-                const leitor = new FileReader();
-                
-                leitor.onload = function(e) {
-                    imagemPreview.src = e.target.result;
-                    previewBox.style.display = 'flex'; // Mostra a caixa
-                }
-                
-                leitor.readAsDataURL(ficheiro);
-            } else {
-                limparPreview();
-            }
-        });
-
-        // Quando o utilizador clica no 'X' para remover a imagem
-        btnRemoverFoto.addEventListener('click', limparPreview);
-
-        function limparPreview() {
-            inputFoto.value = ''; // Limpa o input do ficheiro
-            imagemPreview.src = '';
-            previewBox.style.display = 'none'; // Esconde a caixa
         }
     </script>
 
