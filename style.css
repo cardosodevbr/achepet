@@ -337,3 +337,92 @@ html[data-tema="escuro"] .login-main { background: linear-gradient(135deg, #101d
 html[data-tema="escuro"] .login-form-area h1 { color: #6cc0f5; }
 html[data-tema="escuro"] .form-group label { color: #d5dfec; }
 html[data-tema="escuro"] .form-group input { border-color: #1e2c42; }
+
+/* =========================================================
+   12. ABAS DO MURAL UNIFICADO E STATUS FINAL FELIZ
+   ========================================================= */
+
+/* Contentor das abas */
+.mural-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: -30px auto 40px;
+    position: relative;
+    z-index: 10;
+}
+
+/* Botão padrão da aba */
+.mural-tab {
+    padding: 12px 30px;
+    border-radius: 30px;
+    border: 2px solid var(--cinza);
+    background: var(--fundo-card);
+    font-family: var(--fonte-poppins);
+    font-weight: 600;
+    color: var(--cinza-texto);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* Estado Ativo: TODOS (Azul Escuro/Neutro) */
+.mural-tab.active[data-target="todos"] {
+    border-color: var(--azul-escuro); background: var(--branco); color: var(--azul-escuro);
+}
+html[data-tema="escuro"] .mural-tab.active[data-target="todos"] {
+    background: rgba(8, 115, 190, 0.15); border-color: #6cc0f5; color: #6cc0f5;
+}
+
+html[data-tema="escuro"] .mural-tab {
+    border-color: #2a3b52;
+    background: #1e2c42;
+    color: #94a3b8;
+}
+
+/* Estado Ativo: PERDIDOS (Rosa) */
+.mural-tab.active[data-target="perdido"] {
+    border-color: var(--rosa-principal); background: var(--rosa-claro); color: var(--rosa-principal);
+}
+html[data-tema="escuro"] .mural-tab.active[data-target="perdido"] {
+    background: rgba(233, 22, 107, 0.15); border-color: var(--rosa-principal);
+}
+
+/* Estado Ativo: ENCONTRADOS (Azul) */
+.mural-tab.active[data-target="achado_na_rua"] {
+    border-color: var(--azul-principal); background: var(--azul-claro); color: var(--azul-principal);
+}
+html[data-tema="escuro"] .mural-tab.active[data-target="achado_na_rua"] {
+    background: rgba(20, 137, 216, 0.15); border-color: var(--azul-principal);
+}
+
+/* Estado Ativo: FINAL FELIZ (Verde) */
+.mural-tab.active[data-target="final_feliz"] {
+    border-color: #10B981; background: #D1FAE5; color: #059669;
+}
+html[data-tema="escuro"] .mural-tab.active[data-target="final_feliz"] {
+    background: rgba(16, 185, 129, 0.15); color: #34D399; border-color: #34D399;
+}
+
+/* Etiqueta (Badge) no Card do Animal para Final Feliz */
+.pet-status.happy {
+    background: #10B981; /* Verde Esmeralda */
+    color: white;
+}
+html[data-tema="escuro"] .pet-status.happy {
+    background: #059669;
+}
+
+.pet-card > img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain; /* Garante que 100% da foto fica visível */
+    object-position: center; /* Mantém a foto no centro exato */
+    background-color: var(--cinza); /* Adiciona um fundo neutro suave onde sobrar espaço */
+}
+
+/* Para o modo escuro ficar elegante com esta opção */
+html[data-tema="escuro"] .pet-card > img {
+    background-color: #1e2c42;
+}

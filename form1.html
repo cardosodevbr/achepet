@@ -29,6 +29,14 @@
     <link rel="stylesheet" href="style.css">
 
     <style>
+        /* Classe de container adicionada para alinhar com o Header e evitar estourar a largura */
+        .container {
+            width: 92%;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
         /* Estilos específicos para o formulário de animais que complementam o style.css */
         .form-grid-2-col {
             display: grid;
@@ -78,6 +86,20 @@
             color: var(--azul-principal);
         }
 
+        /* UX: Caixa de Dica Dinâmica */
+        .ux-dica-box {
+            margin-top: 15px; padding: 15px; border-radius: 10px; font-size: 13px;
+            display: flex; gap: 10px; align-items: flex-start; line-height: 1.5;
+            background: #f8fafc; border-left: 4px solid #cbd5e1; color: var(--cinza-texto);
+            transition: all 0.3s ease;
+        }
+        .ux-dica-box strong { font-family: var(--fonte-poppins); }
+        .ux-dica-icon { font-size: 20px; }
+
+        html[data-tema="escuro"] .ux-dica-box {
+            background: #1e2c42; border-left-color: #475569; color: #d5dfec;
+        }
+
         textarea {
             width: 100%;
             min-height: 100px;
@@ -101,8 +123,8 @@
     <div id="header-placeholder"></div>
 
     <main class="login-main" style="align-items: flex-start; padding-top: 40px;">
-        <section class="cadastro-section" style="width: 100%;">
-            <!-- Usamos o max-width de 850px que já existe no CSS -->
+        <!-- AQUI: Removido style="width: 100%;" e adicionada a classe container -->
+        <section class="cadastro-section container">
             <div class="cadastro-container" style="padding: 40px; margin-top: 0;">
                 
                 <div class="cadastro-title" style="text-align: center; margin-bottom: 30px;">
@@ -112,15 +134,24 @@
 
                 <form id="animalForm" class="auth-form" onsubmit="event.preventDefault(); salvarAnimal();">
                     
-                    <!-- 1. DEFINIÇÃO DO STATUS (O que muda a categoria) -->
+                    <!-- 1. DEFINIÇÃO DO STATUS -->
                     <div class="form-group">
                         <label>O que aconteceu?</label>
                         <div class="status-selector">
-                            <input type="radio" name="status_pet" id="status_perdido" value="perdido" checked>
+                            <input type="radio" name="status_pet" id="status_perdido" class="status-radio" value="perdido" checked>
                             <label for="status_perdido" class="status-label">🐾 Perdi o meu pet</label>
                             
-                            <input type="radio" name="status_pet" id="status_encontrado" value="encontrado">
-                            <label for="status_encontrado" class="status-label">👀 Encontrei um pet</label>
+                            <input type="radio" name="status_pet" id="status_encontrado" class="status-radio" value="achado_na_rua">
+                            <label for="status_encontrado" class="status-label">👀 Achei um pet na rua</label>
+                        </div>
+                        
+                        <!-- Caixa de UX que muda com base na escolha -->
+                        <div class="ux-dica-box" id="dicaStatus">
+                            <span class="ux-dica-icon">💡</span>
+                            <div>
+                                Antes de cadastrar, acesse o <a href="mural.html" style="color: var(--azul-principal);">Mural</a>. Alguém já pode ter achado o seu pet! 
+                                
+                            </div>
                         </div>
                     </div>
 
@@ -141,7 +172,7 @@
                         </div>
                     </div>
 
-                    <!-- 3. LOCALIZAÇÃO E DATA (Alimenta o rodapé do Card) -->
+                    <!-- 3. LOCALIZAÇÃO E DATA -->
                     <div class="form-grid-2-col">
                         <div class="form-group">
                             <label for="cidade_pet">Cidade e Estado</label>
@@ -161,7 +192,6 @@
 
                     <div class="form-group">
                         <label for="foto_pet">Fotografia (Obrigatório)</label>
-                        <!-- Num cenário real, faríamos upload para o Supabase Storage. -->
                         <input type="file" id="foto_pet" accept="image/*" style="padding-top: 10px; border: none; background: transparent;">
                     </div>
                     
@@ -187,16 +217,14 @@
         const textoPerdido = `
             <span class="ux-dica-icon">💡</span>
             <div>
-                <strong>Dica de Ouro:</strong> Antes de cadastrar, dê uma olhada no mural de <a href="mural-encontrados.html" style="color: var(--azul-principal);">Animais Encontrados</a>. Alguém já pode ter achado o seu pet! 
-                <br><br><em>Nota: Quando ele voltar para casa, poderá editar este anúncio no seu perfil para "Final Feliz" e ele mudará de categoria.</em>
+                Antes de cadastrar, acesse o <a href="mural.html" style="color: var(--azul-principal);">Mural</a>. Alguém já pode ter achado o seu pet!
             </div>
         `;
 
         const textoEncontrado = `
             <span class="ux-dica-icon">💡</span>
             <div>
-                <strong>Dica de Ouro:</strong> Antes de cadastrar, verifique o mural de <a href="mural-procurados.html" style="color: var(--rosa-principal);">Animais Procurados</a>. O tutor dele pode estar a procurar por ele lá!
-                <br><br><em>Nota: Quando encontrar o dono, poderá editar este anúncio no seu perfil para "Final Feliz" e ele mudará de categoria.</em>
+                Antes de cadastrar, acesse o <a href="mural.html" style="color: var(--rosa-principal);">Mural</a>. O tutor dele pode estar a procurar por ele lá!
             </div>
         `;
 
@@ -240,35 +268,32 @@
                 const descricao = document.getElementById('descricao_pet').value.trim();
                 const fotoInput = document.getElementById('foto_pet');
 
-                // Validação de segurança da foto
                 if (fotoInput.files.length === 0) {
                     throw new Error("Por favor, anexe uma fotografia do animal.");
                 }
 
                 const arquivoFoto = fotoInput.files[0];
                 const extensao = arquivoFoto.name.split('.').pop();
-                // Cria um nome único para a foto usando a data atual + número aleatório
                 const nomeArquivo = `${Date.now()}_${Math.floor(Math.random() * 1000)}.${extensao}`;
-                // Guarda numa pasta com o ID do utilizador (boa prática de organização)
                 const caminhoStorage = `${session.user.id}/${nomeArquivo}`;
 
                 // 3. UPLOAD DA FOTO PARA O STORAGE
                 const { data: uploadData, error: uploadError } = await clienteSupabase.storage
-                    .from('fotos_pets') // Nome do Bucket no Supabase
+                    .from('fotos_pets') 
                     .upload(caminhoStorage, arquivoFoto);
 
                 if (uploadError) {
                     throw new Error("Falha ao fazer upload da imagem: " + uploadError.message);
                 }
 
-                // 4. OBTER A URL PÚBLICA DA FOTO RECÉM-CADASTRADA
+                // 4. OBTER A URL PÚBLICA DA FOTO
                 const { data: publicUrlData } = clienteSupabase.storage
                     .from('fotos_pets')
                     .getPublicUrl(caminhoStorage);
 
                 const urlDaFoto = publicUrlData.publicUrl;
 
-                // 5. INSERIR DADOS NA TABELA DO BANCO DE DADOS
+                // 5. INSERIR DADOS NA TABELA
                 const novoAnimal = {
                     user_id: session.user.id,
                     status: status,
@@ -282,23 +307,20 @@
                 };
 
                 const { error: insertError } = await clienteSupabase
-                    .from('animais') // Nome da Tabela no Supabase
+                    .from('animais')
                     .insert([novoAnimal]);
 
                 if (insertError) {
                     throw new Error("Erro ao salvar os dados no banco: " + insertError.message);
                 }
 
-                // 6. SUCESSO E REDIRECIONAMENTO
+                // 6. SUCESSO E REDIRECIONAMENTO PARA O MURAL UNIFICADO
                 btnSalvar.innerText = "PUBLICAR NO MURAL";
                 btnSalvar.disabled = false;
                 alert(`✅ Animal cadastrado com sucesso!`);
                 
-                if(status === 'perdido') {
-                    window.location.href = "mural-procurados.html";
-                } else {
-                    window.location.href = "mural-encontrados.html";
-                }
+                // Redireciona sempre para o mural unificado
+                window.location.href = "mural.html";
 
             } catch (error) {
                 console.error("Erro na operação:", error);
