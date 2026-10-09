@@ -236,8 +236,24 @@ h1, h2, h3, h4, h5, h6 { font-family: var(--fonte-poppins); }
     background: linear-gradient(135deg, var(--fundo-azul), var(--branco));
 }
 .cadastro-pink-section { display: none; }
-.login-container { max-width: 900px; padding: 0; overflow: hidden; background: var(--fundo-card); border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); margin: 40px auto; }
-.login-grid { display: flex; flex-wrap: wrap; }
+.login-container { 
+    max-width: 900px; 
+    min-height: 550px; /* Força uma altura mínima equivalente à do cadastro */
+    padding: 0; 
+    overflow: hidden; 
+    background: var(--fundo-card); 
+    border-radius: 15px; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08); 
+    margin: 40px auto; 
+    display: flex; /* Permite que o conteúdo interior estique */
+}
+
+.login-grid { 
+    display: flex; 
+    flex-wrap: wrap; 
+    width: 100%; 
+    min-height: 100%; /* Força a grelha a ocupar toda a altura disponível */
+}
 .login-form-area { flex: 1; min-width: 320px; padding: 50px 45px; display: flex; flex-direction: column; justify-content: center; }
 .login-form-area h1 { font-size: 26px; color: var(--azul-escuro); margin-bottom: 5px; line-height: 1.2; }
 .login-form-area p { font-size: 14px; color: var(--cinza-texto); margin-bottom: 30px; }
