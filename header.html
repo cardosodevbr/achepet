@@ -22,7 +22,11 @@
             <!-- PERFIL MOBILE -->
             <div class="mobile-profile-header" id="mobileProfileHeader">
                 <div class="avatar-circle" id="mobileAvatar">U</div>
-                <span class="user-greeting" id="mobileGreeting">Olá, Usuário</span>
+                <div style="display: flex; flex-direction: column;">
+                    <span class="user-greeting" id="mobileGreeting">Olá, Usuário</span>
+                    <!-- AQUI ESTÁ O LINK DO PERFIL NO MOBILE -->
+                    <a href="perfil.html" style="text-decoration: none; color: var(--azul-escuro); font-family: var(--fonte-poppins); font-size: 13px; font-weight: 600; margin-top: 5px;">⚙️ Meu Perfil</a>
+                </div>
             </div>
 
             <!-- NAVEGAÇÃO -->
@@ -30,7 +34,7 @@
                 <a href="index.html" class="active">INÍCIO</a>
                 
                 <div class="nav-dropdown">
-                    <a href="mural.html">MURAL</a>
+                    <a href="mural.html" class="active">MURAL</a>
                 </div>
                 
                 <a href="quem-somos.html">QUEM SOMOS</a>
@@ -52,6 +56,11 @@
                     <div class="profile-dropdown-menu">
                         <span class="user-greeting" id="userNameDisplay">Olá, Usuário</span>
                         <hr class="profile-divider">
+                        
+                        <!-- AQUI ESTÁ O LINK DO PERFIL NO DESKTOP -->
+                        <a href="perfil.html" style="text-decoration: none; color: var(--azul-escuro); font-family: var(--fonte-poppins); font-size: 13px; font-weight: 600; padding: 4px 0; display: block; transition: color 0.2s ease;">
+                            Meu Perfil
+                        </a>
                         
                         <!-- SWITCH DE TEMA DESKTOP (Dentro do menu) -->
                         <div class="theme-toggle-wrapper desktop-theme-toggle">

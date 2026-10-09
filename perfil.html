@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil | AchePet 🐾</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- CONEXÃO COM O SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+
+    <style>
+        .perfil-foto-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .foto-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--azul-claro);
+            background-color: var(--cinza);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: var(--azul-principal);
+            font-family: var(--fonte-poppins);
+            font-weight: 700;
+        }
+        .btn-inativar {
+            background: transparent;
+            color: #d90429;
+            border: 2px solid #d90429;
+            margin-top: 15px;
+        }
+        .btn-inativar:hover {
+            background: #d90429;
+            color: white;
+        }
+    </style>
+</head>
+
+<body data-page="perfil">
+    <div id="header-placeholder"></div>
+
+    <main class="login-main" style="align-items: center; justify-content: center; min-height: calc(100vh - 150px); padding-top: 20px; padding-bottom: 40px;">
+        <section class="cadastro-section" style="width: 100%; display: flex; justify-content: center;">
+            <div class="cadastro-container" style="padding: 40px; margin-top: 0; max-width: 500px; width: 100%;">
+                
+                <div class="cadastro-title" style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="color: var(--azul-escuro);">Meu Perfil</h1>
+                    <p style="color: var(--cinza-texto);">Atualize as suas informações de contato.</p>
+                </div>
+
+                <form id="perfilForm" class="auth-form" onsubmit="event.preventDefault(); salvarPerfil();">
+                    
+                    <div class="perfil-foto-wrapper">
+                        <div id="fotoPreviewBox" class="foto-preview">U</div>
+                        <input type="file" id="foto_perfil" accept="image/*" style="font-size: 12px; width: 220px; margin: 0 auto; display: block;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nome_perfil">Nome de Exibição</label>
+                        <input type="text" id="nome_perfil" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cidade_perfil">Cidade Base (Para buscas)</label>
+                        <input type="text" id="cidade_perfil" placeholder="Ex: Praia Grande, SP">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="whatsapp_perfil">WhatsApp de Contato</label>
+                        <input type="text" id="whatsapp_perfil" placeholder="Ex: (11) 99999-9999">
+                    </div>
+                    
+                    <button type="submit" class="btn-auth" id="btnSalvarPerfil">SALVAR ALTERAÇÕES</button>
+                    <!-- vamos evitar né...
+                     <button type="button" class="btn-auth btn-inativar" onclick="inativarConta()">INATIVAR CONTA</button>
+                -->
+                </form>
+
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+    
+    <script>
+        let usuarioAtual = null;
+
+        // 1. Carregar os dados ao abrir a página
+        document.addEventListener('DOMContentLoaded', async () => {
+            const { data: { session } } = await clienteSupabase.auth.getSession();
+            if (!session) return window.location.replace('login.html');
+
+            usuarioAtual = session.user;
+            const meta = usuarioAtual.user_metadata;
+
+            // Preencher os campos
+            document.getElementById('nome_perfil').value = meta?.display_name || '';
+            document.getElementById('cidade_perfil').value = meta?.cidade || '';
+            document.getElementById('whatsapp_perfil').value = meta?.whatsapp || '';
+
+            // Preencher a foto
+            const previewBox = document.getElementById('fotoPreviewBox');
+            if (meta?.foto_url) {
+                previewBox.innerHTML = `<img src="${meta.foto_url}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+            } else {
+                previewBox.innerText = (meta?.display_name || 'U').charAt(0).toUpperCase();
+            }
+        });
+
+        // 2. Salvar Alterações
+        async function salvarPerfil() {
+            const btnSalvar = document.getElementById('btnSalvarPerfil');
+            btnSalvar.innerText = "A GUARDAR...";
+            btnSalvar.disabled = true;
+
+            try {
+                const nome = document.getElementById('nome_perfil').value.trim();
+                const cidade = document.getElementById('cidade_perfil').value.trim();
+                const whatsapp = document.getElementById('whatsapp_perfil').value.trim();
+                const fotoInput = document.getElementById('foto_perfil');
+
+                let fotoUrlFinal = usuarioAtual.user_metadata?.foto_url;
+
+                // Se escolheu uma foto nova, faz o upload!
+                if (fotoInput.files.length > 0) {
+                    const arquivoFoto = fotoInput.files[0];
+                    const extensao = arquivoFoto.name.split('.').pop();
+                    const nomeArquivo = `${Date.now()}_avatar.${extensao}`;
+                    const caminhoStorage = `${usuarioAtual.id}/${nomeArquivo}`;
+
+                    // Upload para o novo bucket 'avatares'
+                    const { error: uploadError } = await clienteSupabase.storage
+                        .from('avatares')
+                        .upload(caminhoStorage, arquivoFoto, { upsert: true });
+
+                    if (uploadError) throw uploadError;
+
+                    // Pega a URL pública
+                    const { data: publicUrlData } = clienteSupabase.storage
+                        .from('avatares')
+                        .getPublicUrl(caminhoStorage);
+                    
+                    fotoUrlFinal = publicUrlData.publicUrl;
+                }
+
+                // Atualiza o perfil do utilizador no Supabase Auth
+                const { error: updateError } = await clienteSupabase.auth.updateUser({
+                    data: {
+                        display_name: nome,
+                        cidade: cidade,
+                        whatsapp: whatsapp,
+                        foto_url: fotoUrlFinal
+                    }
+                });
+
+                if (updateError) throw updateError;
+
+                alert("✅ Perfil atualizado com sucesso!");
+                window.location.reload();
+
+            } catch (error) {
+                alert("❌ Erro ao salvar: " + error.message);
+                btnSalvar.innerText = "SALVAR ALTERAÇÕES";
+                btnSalvar.disabled = false;
+            }
+        }
+
+        // 3. Inativar Conta
+        async function inativarConta() {
+            const confirmacao = confirm("⚠️ Tem certeza que deseja inativar a sua conta?\nTodos os seus anúncios de animais deixarão de aparecer no mural.");
+            if (!confirmacao) return;
+
+            try {
+                // Oculta todos os animais deste utilizador no mural (ativo = false)
+                await clienteSupabase
+                    .from('animais')
+                    .update({ ativo: false })
+                    .eq('user_id', usuarioAtual.id);
+
+                // Marca o perfil como inativo
+                await clienteSupabase.auth.updateUser({
+                    data: { inativo: true }
+                });
+
+                // Faz o logout
+                await clienteSupabase.auth.signOut();
+                alert("A sua conta foi inativada e os anúncios ocultados.");
+                window.location.replace('index.html');
+
+            } catch (error) {
+                alert("Erro ao inativar: " + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

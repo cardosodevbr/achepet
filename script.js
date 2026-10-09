@@ -47,17 +47,30 @@ async function verificarSessao() {
         // Adiciona a classe de estado logado ao header
         if (siteHeader) siteHeader.classList.add('is-logged-in');
         
-        // Pega o nome e a primeira letra para o Avatar
-        const nomeCompleto = session.user.user_metadata?.display_name || session.user.email.split('@')[0];
+        // Pega o nome, primeira letra e a foto (se existir)
+        const metadata = session.user.user_metadata;
+        const nomeCompleto = metadata?.display_name || session.user.email.split('@')[0];
         const primeiroNome = nomeCompleto.split(' ')[0];
         const inicial = primeiroNome.charAt(0).toUpperCase();
+        const fotoPerfilUrl = metadata?.foto_url;
+
+        // Função auxiliar para injetar a foto ou a letra
+        const renderizarAvatar = (elemento) => {
+            if (!elemento) return;
+            if (fotoPerfilUrl) {
+                elemento.innerHTML = `<img src="${fotoPerfilUrl}" alt="Perfil" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+                elemento.style.border = "none"; // Remove a borda azul se tiver foto
+            } else {
+                elemento.innerText = inicial;
+            }
+        };
 
         // Preenche os dados visuais (Desktop)
-        if (desktopAvatar) desktopAvatar.innerText = inicial;
+        renderizarAvatar(desktopAvatar);
         if (userNameDisplay) userNameDisplay.innerText = `Olá, ${primeiroNome}`;
 
         // Preenche os dados visuais (Mobile)
-        if (mobileAvatar) mobileAvatar.innerText = inicial;
+        renderizarAvatar(mobileAvatar);
         if (mobileGreeting) mobileGreeting.innerText = `Olá, ${primeiroNome}`;
 
         // Libera o Botão de Cadastrar
@@ -92,6 +105,39 @@ async function verificarSessao() {
             });
         }
     }
+
+    // 5. ALERTA DE PERFIL INCOMPLETO (Injetado abaixo do header)
+        const hasFoto = !!metadata?.foto_url;
+        const hasCidade = !!metadata?.cidade;
+        const hasWhatsapp = !!metadata?.whatsapp;
+        const perfilCompleto = hasFoto && hasCidade && hasWhatsapp;
+
+        // Verifica se está incompleto e se o utilizador ainda não fechou o alerta nesta sessão
+        if (!perfilCompleto && !sessionStorage.getItem('alerta_perfil_oculto')) {
+            const alertBanner = document.createElement('div');
+            alertBanner.innerHTML = `
+                <div style="background-color: #FEF3C7; color: #92400E; text-align: center; padding: 12px 20px; font-family: var(--fonte-poppins); font-size: 13px; font-weight: 500; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid #FDE68A;">
+                    <span style="flex-grow: 1;">
+                        ⚠️ O seu perfil está incompleto! 
+                        <a href="perfil.html" style="color: #92400E; font-weight: 700; text-decoration: underline;">Complete os seus dados</a> 
+                        (foto, cidade e WhatsApp) para facilitar os contactos.
+                    </span>
+                    <button id="fecharAlertaPerfil" style="background: transparent; border: none; color: #92400E; font-size: 20px; cursor: pointer; font-weight: bold; padding: 0 10px; line-height: 1;">&times;</button>
+                </div>
+            `;
+            
+            // Injeta o alerta visualmente dentro do header-placeholder (logo abaixo do menu)
+            const headerPlaceholder = document.getElementById('header-placeholder');
+            if (headerPlaceholder) {
+                headerPlaceholder.appendChild(alertBanner);
+                
+                // Lógica para fechar o alerta e não mostrar mais durante esta sessão
+                document.getElementById('fecharAlertaPerfil').addEventListener('click', () => {
+                    alertBanner.style.display = 'none';
+                    sessionStorage.setItem('alerta_perfil_oculto', 'true');
+                });
+            }
+        }
 }
 
 // 3. Lógica do Header (Modo Escuro e Hambúrguer)
@@ -169,7 +215,7 @@ async function carregarUltimosPerdidos() {
             .eq('status', 'perdido')
             .eq('ativo', true)
             .order('created_at', { ascending: false })
-            .limit(6); // Traz apenas os 6 últimos
+            .limit(8); // Traz apenas os 6 últimos
 
         if (error) throw error;
 
