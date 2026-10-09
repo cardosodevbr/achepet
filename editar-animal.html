@@ -37,3 +37,138 @@
         
         .foto-atual-container { margin-bottom: 15px; text-align: center; }
         .foto-atual-container img { max-width: 200px; border-radius: 12px; border: 2px solid var(--azul-claro); }
+    </style>
+</head>
+
+<body data-page="editar-animal">
+
+    <div id="header-placeholder"></div>
+
+    <main class="login-main" style="align-items: center; justify-content: center; min-height: calc(100vh - 150px); padding-top: 40px; padding-bottom: 40px;">
+        <section class="cadastro-section" style="width: 100%; display: flex; justify-content: center;">
+            <div class="cadastro-container" style="padding: 40px; margin-top: 0; max-width: 850px; width: 100%;">
+                
+                <div class="cadastro-title" style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="color: var(--azul-escuro); margin-bottom: 10px;">Editar Animal</h1>
+                    <p style="color: var(--cinza-texto);">Atualize as informações do seu anúncio.</p>
+                </div>
+
+                <div id="loadingEditar" style="text-align: center; font-weight: 600; color: var(--azul-escuro);">
+                    A carregar dados do animal... 🐾
+                </div>
+
+                <!-- Formulário com exibição forçada para teste -->
+                <form id="editarForm" class="auth-form" onsubmit="event.preventDefault(); atualizarAnimal();">
+                    
+                    <div class="form-group">
+                        <label>Status Atual</label>
+                        <div class="status-selector">
+                            <input type="radio" name="status_pet" id="status_perdido" value="perdido">
+                            <label for="status_perdido" class="status-label">🐾 Perdido</label>
+                            
+                            <input type="radio" name="status_pet" id="status_encontrado" value="achado_na_rua">
+                            <label for="status_encontrado" class="status-label">👀 Encontrado</label>
+
+                            <input type="radio" name="status_pet" id="status_final_feliz" value="final_feliz">
+                            <label for="status_final_feliz" class="status-label">💖 Final Feliz</label>
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2-col">
+                        <div class="form-group">
+                            <label for="nome_pet">Nome do Animal</label>
+                            <input type="text" id="nome_pet" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="especie_pet">Espécie</label>
+                            <select id="especie_pet" required style="height: 46px; border: 2px solid var(--azul-claro); border-radius: 12px; padding: 0 16px; outline: none;">
+                                <option value="Cachorro">Cachorro</option>
+                                <option value="Gato">Gato</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2-col">
+                        <div class="form-group">
+                            <label for="cidade_pet">Cidade e Estado</label>
+                            <input type="text" id="cidade_pet" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="data_pet">Data do Ocorrido</label>
+                            <input type="date" id="data_pet" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descricao_pet">Descrição / Detalhes</label>
+                        <textarea id="descricao_pet" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fotografia</label>
+                        <div class="foto-atual-container" id="fotoAtualContainer">
+                            <img id="imgAtual" src="" alt="Foto atual do pet">
+                            <p style="font-size: 12px; color: var(--cinza-texto); margin-top: 5px;">Foto atual gravada.</p>
+                        </div>
+                        <input type="file" id="foto_pet" accept="image/*" style="padding-top: 10px; border: none; background: transparent;">
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; margin-top: 20px;">
+                        <button type="button" class="btn-auth" style="background: transparent; color: var(--cinza-texto); border: 2px solid var(--cinza);" onclick="window.location.href='meus-animais.html'">CANCELAR</button>
+                        <button type="submit" class="btn-auth" id="btnSalvarEdicao">SALVAR ALTERAÇÕES</button>
+                    </div>
+                </form>
+
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+    <script src="script.js"></script>
+    
+    <script>
+        let animalIdUrl = null;
+        let fotoUrlAntiga = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log("Iniciando página de edição...");
+            const { data: { session } } = await clienteSupabase.auth.getSession();
+            if (!session) {
+                console.warn("Utilizador não autenticado. A redirecionar...");
+                return window.location.replace('login.html');
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            animalIdUrl = urlParams.get('id');
+            console.log("ID capturado na URL:", animalIdUrl);
+
+            if (!animalIdUrl) {
+                alert("Erro: ID do animal não fornecido.");
+                window.location.href = "meus-animais.html";
+                return;
+            }
+
+            carregarDadosDoAnimal(session.user.id);
+        });
+
+        async function carregarDadosDoAnimal(userId) {
+            try {
+                console.log("A consultar Supabase para o id_animal:", animalIdUrl);
+                const { data: animal, error } = await clienteSupabase
+                    .from('animais')
+                    .select('*')
+                    .eq('id_animal', animalIdUrl)
+                    .single();
+
+                if (error) throw error;
+                console.log("Dados recebidos do Supabase:", animal);
+
+                // Preencher campos
+                document.getElementById('nome_pet').value = animal.nome || '';
+                document.getElementById('especie_pet').value = animal.especie || 'Cachorro';
+                document.getElementById('cidade_pet').value = animal.cidade || '';
+                document.getElementById('data_pet').value = animal.data_evento || '';
+                document.getElementById('descricao_pet').value = animal.descricao || '';
+                
+                if (animal.status === 'perdido') document
