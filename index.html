@@ -57,8 +57,10 @@
                     <div class="search-box">
                         <div class="search-input">
                             <span class="search-icon" aria-hidden="true">⌖</span>
+                            <!-- O input já tem o id="cidadeBusca" -->
                             <input type="text" id="cidadeBusca" placeholder="Busque por cidade (Ex: São Paulo)" autocomplete="off">
-                            <button class="btn-search">BUSCAR</button>
+                            <!-- Adicionámos o id="btnBuscaIndex" ao botão -->
+                            <button id="btnBuscaIndex" class="btn-search">BUSCAR</button>
                         </div>
                     </div>
                 </div>
@@ -193,6 +195,33 @@
     </main>
 
     <div id="footer-placeholder"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnBusca = document.getElementById('btnBuscaIndex');
+            const inputBusca = document.getElementById('cidadeBusca');
+
+            if (btnBusca && inputBusca) {
+                // Função que pega no texto e envia para o mural
+                const realizarBusca = () => {
+                    const cidade = inputBusca.value.trim();
+                    if (cidade) {
+                        window.location.href = `mural.html?cidade=${encodeURIComponent(cidade)}`;
+                    } else {
+                        window.location.href = 'mural.html';
+                    }
+                };
+
+                // Executa a função ao clicar no botão
+                btnBusca.addEventListener('click', realizarBusca);
+
+                // Executa a função ao pressionar a tecla "Enter"
+                inputBusca.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') realizarBusca();
+                });
+            }
+        });
+    </script>
 
     <script src="script.js"></script>
 </body>
