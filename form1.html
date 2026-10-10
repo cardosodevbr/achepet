@@ -420,9 +420,12 @@
 
                 const urlDaFoto = publicUrlData.publicUrl;
 
-                // 5. INSERIR DADOS NA TABELA
+                // 5. INSERIR DADOS NA TABELA (Agora incluindo os dados do tutor!)
                 const novoAnimal = {
                     user_id: session.user.id,
+                    tutor_nome: session.user.user_metadata?.display_name || 'Tutor não identificado',
+                    tutor_telefone: session.user.user_metadata?.whatsapp || '',
+                    tutor_foto: session.user.user_metadata?.foto_url || '',
                     status: status,
                     nome: nome,
                     especie: especie,
@@ -432,7 +435,7 @@
                     foto_url: urlDaFoto,
                     ativo: true
                 };
-
+                
                 const { error: insertError } = await clienteSupabase
                     .from('animais')
                     .insert([novoAnimal]);
