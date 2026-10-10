@@ -476,3 +476,591 @@ html[data-tema="escuro"] .btn-happy-outline:hover {
     background: #34D399; 
     color: #1e2c42; 
 }
+
+
+/* QUEM SOMOS */
+
+.quem-somos {
+    background: var(--fundo-azul);
+    padding: 70px 0;
+}
+
+.quem-somos-container {
+    width: 92%;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 60px;
+}
+
+.quem-somos-content {
+    width: 55%;
+}
+
+.quem-somos-label {
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    color: var(--rosa-principal);
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.quem-somos-content h1 {
+    margin-bottom: 20px;
+
+    color: var(--azul-principal);
+
+    font-size: 38px;
+    font-weight: 700;
+}
+
+.quem-somos-content p {
+    margin-bottom: 15px;
+
+    color: var(--texto-secundario);
+
+    font-family: var(--fonte-open-sans);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.quem-somos-image {
+    width: 40%;
+
+    display: flex;
+    justify-content: center;
+}
+
+.quem-somos-image img {
+    width: 100%;
+    max-width: 430px;
+
+    border-radius: 18px;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.10);
+}
+
+
+/* NOSSA MISSÃO */
+
+.missao-section {
+    padding: 60px 0;
+
+    background: var(--fundo-rosa);
+
+    text-align: center;
+}
+
+.missao-container {
+    width: 92%;
+    max-width: 850px;
+
+    margin: 0 auto;
+}
+
+.missao-container h2 {
+    margin-bottom: 15px;
+
+    color: var(--rosa-principal);
+
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.missao-container p {
+    color: var(--texto-secundario);
+
+    font-family: var(--fonte-open-sans);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* COMO FUNCIONA */
+
+.como-funciona {
+    padding: 65px 0;
+
+    background: var(--fundo-azul);
+}
+
+.como-funciona-container {
+    width: 92%;
+    max-width: 1200px;
+
+    margin: 0 auto;
+}
+
+.como-funciona-title {
+    margin-bottom: 30px;
+
+    text-align: center;
+}
+
+.como-funciona-title h2 {
+    color: var(--azul-principal);
+
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.como-funciona-title p {
+    margin-top: 5px;
+
+    color: var(--texto-secundario);
+
+    font-family: var(--fonte-open-sans);
+    font-size: 13px;
+}
+
+.quem-somos-cards {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 22px;
+}
+
+.quem-somos-card {
+    padding: 30px 25px;
+
+    background: var(--branco);
+
+    border-radius: 14px;
+
+    text-align: center;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+
+    transition: transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.quem-somos-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.quem-somos-icon {
+    width: 55px;
+    height: 55px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--rosa-claro);
+
+    border-radius: 50%;
+
+    font-size: 25px;
+}
+
+.quem-somos-card h3 {
+    margin-bottom: 10px;
+
+    color: var(--azul-principal);
+
+    font-size: 17px;
+}
+
+.quem-somos-card p {
+    color: var(--texto-secundario);
+
+    font-family: var(--fonte-open-sans);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* POR QUE CRIAMOS */
+
+.porque-section {
+    padding: 65px 0;
+
+    background: var(--branco);
+}
+
+.porque-container {
+    width: 92%;
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    text-align: center;
+}
+
+.porque-container h2 {
+    margin-bottom: 20px;
+
+    color: var(--azul-principal);
+
+    font-size: 28px;
+}
+
+.porque-container p {
+    margin-bottom: 14px;
+
+    color: var(--texto-secundario);
+
+    font-family: var(--fonte-open-sans);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* CHAMADA FINAL */
+
+.quem-somos-final {
+    padding: 55px 20px;
+
+    background: var(--rosa-principal);
+
+    color: var(--branco);
+
+    text-align: center;
+}
+
+/*Imagens Animais Encontrados*/
+
+.lista-animais {
+    display: grid;
+    grid-template-columns: repeat(5, 180px);
+    gap: 25px;
+    justify-content: center;
+}
+
+.animal {
+    width: 180px;
+}
+
+.animal img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+
+.animal .status1 {
+    display: block;
+    background-color: var(--azul-principal);
+    color: var(--branco);
+    text-align: center;
+}
+
+.quem-somos-content,
+.quem-somos-image {
+    width: 100%;
+}
+
+.quem-somos-image img {
+    max-width: 500px;
+}
+
+.quem-somos-cards {
+    grid-template-columns: 1fr;
+}
+
+
+/* QUEM SOMOS */
+
+.quem-somos {
+    background: var(--fundo-azul);
+    padding: 70px 0;
+}
+
+.quem-somos-container {
+    width: 92%;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 60px;
+}
+
+.quem-somos-content {
+    width: 55%;
+}
+
+.quem-somos-label {
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    color: var(--rosa-principal);
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.quem-somos-content h1 {
+    margin-bottom: 20px;
+
+    color: var(--azul-principal);
+
+    font-size: 38px;
+    font-weight: 700;
+}
+
+.quem-somos-content p {
+    margin-bottom: 15px;
+
+    color: var(--texto-secundario);
+
+    font-family: var(--fonte-open-sans);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.quem-somos-image {
+    width: 40%;
+
+    display: flex;
+    justify-content: center;
+}
+
+.quem-somos-image img {
+    width: 100%;
+    max-width: 430px;
+
+    border-radius: 18px;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.10);
+}
+
+
+/* NOSSA MISSÃO */
+
+.missao-section {
+    padding: 60px 0;
+
+    background: var(--fundo-rosa);
+
+    text-align: center;
+}
+
+.missao-container {
+    width: 92%;
+    max-width: 850px;
+
+    margin: 0 auto;
+}
+
+.missao-container h2 {
+    margin-bottom: 15px;
+
+    color: var(--rosa-principal);
+
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.missao-container p {
+    color: var(--texto-secundario);
+
+    font-family: var(--fonte-open-sans);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* COMO FUNCIONA */
+
+.como-funciona {
+    padding: 65px 0;
+
+    background: var(--fundo-azul);
+}
+
+.como-funciona-container {
+    width: 92%;
+    max-width: 1200px;
+
+    margin: 0 auto;
+}
+
+.como-funciona-title {
+    margin-bottom: 30px;
+
+    text-align: center;
+}
+
+.como-funciona-title h2 {
+    color: var(--azul-principal);
+
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.como-funciona-title p {
+    margin-top: 5px;
+
+    color: var(--texto-secundario);
+
+    font-family: var(--fonte-open-sans);
+    font-size: 13px;
+}
+
+.quem-somos-cards {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 22px;
+}
+
+.quem-somos-card {
+    padding: 30px 25px;
+
+    background: var(--branco);
+
+    border-radius: 14px;
+
+    text-align: center;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+
+    transition: transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.quem-somos-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.quem-somos-icon {
+    width: 55px;
+    height: 55px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--rosa-claro);
+
+    border-radius: 50%;
+
+    font-size: 25px;
+}
+
+.quem-somos-card h3 {
+    margin-bottom: 10px;
+
+    color: var(--azul-principal);
+
+    font-size: 17px;
+}
+
+.quem-somos-card p {
+    color: var(--texto-secundario);
+
+    font-family: var(--fonte-open-sans);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* POR QUE CRIAMOS */
+
+.porque-section {
+    padding: 65px 0;
+
+    background: var(--branco);
+}
+
+.porque-container {
+    width: 92%;
+    max-width: 900px;
+
+    margin: 0 auto;
+
+    text-align: center;
+}
+
+.porque-container h2 {
+    margin-bottom: 20px;
+
+    color: var(--azul-principal);
+
+    font-size: 28px;
+}
+
+.porque-container p {
+    margin-bottom: 14px;
+
+    color: var(--texto-secundario);
+
+    font-family: var(--fonte-open-sans);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* CHAMADA FINAL */
+
+.quem-somos-final {
+    padding: 55px 20px;
+
+    background: var(--rosa-principal);
+
+    color: var(--branco);
+
+    text-align: center;
+}
+
+/*Imagens Animais Encontrados*/
+
+.lista-animais {
+    display: grid;
+    grid-template-columns: repeat(5, 180px);
+    gap: 25px;
+    justify-content: center;
+}
+
+.animal {
+    width: 180px;
+}
+
+.animal img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+}
+
+.animal .status1 {
+    display: block;
+    background-color: var(--azul-principal);
+    color: var(--branco);
+    text-align: center;
+}
+
+.quem-somos-content,
+.quem-somos-image {
+    width: 100%;
+}
+
+.quem-somos-image img {
+    max-width: 500px;
+}
+
+.quem-somos-cards {
+    grid-template-columns: 1fr;
+}
