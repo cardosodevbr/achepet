@@ -226,32 +226,9 @@
             animais.forEach(animal => {
                 const fotoUrl = animal.foto_url || 'media/placeholder-pet.png';
                 
-                let badgeClass = '';
-                let badgeText = '';
-                
-                if(animal.status === 'perdido') {
-                    badgeClass = 'lost';
-                    badgeText = 'PERDIDO';
-                } else if (animal.status === 'achado_na_rua') {
-                    badgeClass = 'found';
-                    badgeText = 'ENCONTRADO';
-                } else {
-                    badgeClass = 'happy';
-                    badgeText = 'FINAL FELIZ 💖';
-                }
-                
-                const cardHTML = `
-                    <article class="pet-card">
-                        <img src="${fotoUrl}" alt="Foto de ${animal.nome}">
-                        <span class="pet-status ${badgeClass}">${badgeText}</span>
-                        <div class="pet-info">
-                            <h3>${animal.nome}</h3>
-                            <p>📌 ${animal.cidade}</p>
-                            <p>📅 ${formatarData(animal.data_evento)}</p>
-                        </div>
-                    </article>
-                `;
-                grid.innerHTML += cardHTML;
+                animais.forEach(animal => {
+                grid.innerHTML += gerarCardAnimal(animal);
+            });
             });
 
         } catch (err) {
