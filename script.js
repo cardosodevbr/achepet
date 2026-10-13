@@ -176,7 +176,7 @@ window.toggleDetalhes = function(id, btnElement) {
     }
 }
 
-// O NOVO GERADOR DE CARTÕES (SEM BOTÃO DE NOTIFICAÇÃO E WHATSAPP DISCRETO)
+// O NOVO GERADOR DE CARTÕES (PRIVACIDADE TOTAL E CTA ÚNICO PARA WHATSAPP)
 window.gerarCardAnimal = function(animal) {
     const fotoUrl = animal.foto_url || 'media/placeholder-pet.png';
     let badgeClass = '';
@@ -198,62 +198,51 @@ window.gerarCardAnimal = function(animal) {
     // SÓ GERA A ÁREA DE DETALHES SE NÃO FOR UM FINAL FELIZ
     if (animal.status !== 'final_feliz') {
         const idDetalhe = `detalhe-${animal.id_animal}`;
-        let areaBotoesContatoHTML = '';
+        let areaContatoHTML = '';
         
         const descricaoPet = animal.descricao ? animal.descricao : 'Nenhuma descrição detalhada fornecida.';
-        const fotoTutor = animal.tutor_foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(animal.tutor_nome || 'U')}&background=random`;
-        const nomeTutor = animal.tutor_nome || 'Usuário não identificado';
 
-        // SE O UTILIZADOR NÃO ESTIVER LOGADO (Trava de Privacidade - Apenas mensagem)
+        // SE O UTILIZADOR NÃO ESTIVER LOGADO (Trava de Privacidade Oculta Tudo)
         if (!window.sessaoAtual) {
-            areaBotoesContatoHTML = `
+            areaContatoHTML = `
                 <div style="margin-top: 15px; padding: 10px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; text-align: center;">
-                    <p style="color: #991b1b; font-size: 13px; margin: 0; font-weight: 500;">🔒 Faça login para ver o contato e ajudar.</p>
+                    <p style="color: #991b1b; font-size: 13px; margin: 0; font-weight: 500;">🔒 Faça login para ver quem cadastrou e entrar em contato.</p>
                 </div>
             `;
         } 
-        // SE O UTILIZADOR ESTIVER LOGADO (Mostra o Botão de WhatsApp)
+        // SE O UTILIZADOR ESTIVER LOGADO (Mostra Tutor e CTA do WhatsApp)
         else {
+            const fotoTutor = animal.tutor_foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(animal.tutor_nome || 'U')}&background=random`;
+            const nomeTutor = animal.tutor_nome || 'Usuário não identificado';
             const telefoneTutor = animal.tutor_telefone || ''; 
             const numeroWhatsLimpo = telefoneTutor.replace(/\D/g, '');
             
-            // Mensagem automática para o WhatsApp
-            let textoMensagem = '';
-            if (animal.status === 'perdido') {
-                textoMensagem = `Olá!%20Tenho%20informações%20ou%20encontrei%20o%20animal%20(${animal.nome})%20divulgado%20no%20AchePet!`;
-            } else {
-                textoMensagem = `Olá!%20Acredito%20que%20o%20animal%20(${animal.nome})%20que%20você%20encontrou%20no%20AchePet%20seja%20meu!`;
-            }
-
+            let botaoContatoHTML = '';
+            
+            // Se houver número, cria o CTA discreto para o WhatsApp
             if(numeroWhatsLimpo) {
-                 const linkWhatsApp = `https://wa.me/55${numeroWhatsLimpo}?text=${textoMensagem}`;
+                // Ajusta o texto da mensagem com base no tipo de anúncio
+                let textoMensagem = '';
+                if (animal.status === 'perdido') {
+                    textoMensagem = `Olá!%20Tenho%20informações%20sobre%20o%20pet%20(${animal.nome})%20divulgado%20no%20AchePet!`;
+                } else {
+                    textoMensagem = `Olá!%20Acredito%20que%20o%20animal%20(${animal.nome})%20que%20você%20encontrou%20no%20AchePet%20seja%20meu!`;
+                }
+
+                const linkWhatsApp = `https://wa.me/55${numeroWhatsLimpo}?text=${textoMensagem}`;
                  
-                 // Design leve e discreto para o WhatsApp (Fundo claro, texto verde)
-                 areaBotoesContatoHTML = `
-                    <a href="${linkWhatsApp}" target="_blank" style="background: #f0fdf4; color: #16a34a; border: 1px solid #22c55e; padding: 10px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px; font-family: var(--fonte-poppins); display: block; margin-top: 15px; transition: all 0.3s ease;">
-                        💬 Tenho informações / Encontrei esse animal
+                botaoContatoHTML = `
+                    <a href="${linkWhatsApp}" target="_blank" style="background: #f8fafc; color: var(--azul-principal); border: 1px solid var(--azul-claro); padding: 10px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px; font-family: var(--fonte-poppins); display: block; margin-top: 15px; transition: all 0.3s ease;">
+                        🐾 Encontrei ou tenho informações sobre esse pet
                     </a>
-                 `;
+                `;
             } else {
-                areaBotoesContatoHTML = '<p style="font-size: 12px; color: #dc2626; margin-top:10px; text-align: center;">Contato não fornecido</p>';
+                botaoContatoHTML = '<p style="font-size: 12px; color: #dc2626; margin-top:10px; text-align: center;">Contato não fornecido</p>';
             }
-        }
 
-        // Constrói a parte dos detalhes com a descrição e quem cadastrou visíveis para todos
-        areaDetalhesHTML = `
-            <button onclick="toggleDetalhes('${idDetalhe}', this)" style="background: transparent; color: var(--azul-principal); border: 1px solid var(--azul-principal); padding: 8px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: var(--fonte-poppins); width: 100%; margin-top: 10px; transition: 0.3s;">
-                + Ver Mais Detalhes
-            </button>
-
-            <div id="${idDetalhe}" style="display: none; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
-                
-                <div style="font-size: 13px; color: var(--cinza-texto); margin-bottom: 15px; background: #f8fafc; padding: 10px; border-radius: 8px;">
-                    <strong>Descrição:</strong><br>
-                    ${descricaoPet}
-                </div>
-
-                <!-- Dados de Quem Cadastrou (Visível para todos) -->
-                <div style="display: flex; align-items: center; gap: 10px; background: #f3f4f6; padding: 10px; border-radius: 8px;">
+            areaContatoHTML = `
+                <!-- Dados de Quem Cadastrou (Protegido pelo Login) -->
+                <div style="display: flex; align-items: center; gap: 10px; margin-top: 15px; background: #f3f4f6; padding: 10px; border-radius: 8px;">
                     <div style="width: 45px; height: 45px; border-radius: 50%; overflow: hidden; background: var(--cinza); border: 2px solid var(--azul-claro); flex-shrink: 0;">
                        <img src="${fotoTutor}" alt="Contato" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
@@ -263,8 +252,27 @@ window.gerarCardAnimal = function(animal) {
                     </div>
                 </div>
 
-                <!-- Botão de WhatsApp discreto ou Mensagem de Login -->
-                ${areaBotoesContatoHTML}
+                <!-- CTA Discreto direto para o WhatsApp -->
+                ${botaoContatoHTML}
+            `;
+        }
+
+        // Constrói a área "Ver Mais Detalhes"
+        areaDetalhesHTML = `
+            <button onclick="toggleDetalhes('${idDetalhe}', this)" style="background: transparent; color: var(--azul-principal); border: 1px solid var(--azul-principal); padding: 8px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: var(--fonte-poppins); width: 100%; margin-top: 10px; transition: 0.3s;">
+                + Ver Mais Detalhes
+            </button>
+
+            <div id="${idDetalhe}" style="display: none; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+                
+                <!-- Descrição é pública -->
+                <div style="font-size: 13px; color: var(--cinza-texto); background: #f8fafc; padding: 10px; border-radius: 8px;">
+                    <strong>Descrição:</strong><br>
+                    ${descricaoPet}
+                </div>
+
+                <!-- Contactos e CTA (Ou mensagem de bloqueio) -->
+                ${areaContatoHTML}
             </div>
         `;
     }
