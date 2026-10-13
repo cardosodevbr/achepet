@@ -176,7 +176,7 @@ window.toggleDetalhes = function(id, btnElement) {
     }
 }
 
-// O NOVO GERADOR DE CARTÕES COM TRAVA DE PRIVACIDADE E SEM DETALHES PARA FINAIS FELIZES
+// O NOVO GERADOR DE CARTÕES COM LÓGICA DE NEGÓCIO CORRIGIDA
 window.gerarCardAnimal = function(animal) {
     const fotoUrl = animal.foto_url || 'media/placeholder-pet.png';
     let badgeClass = '';
@@ -198,19 +198,21 @@ window.gerarCardAnimal = function(animal) {
     // SÓ GERA A ÁREA DE DETALHES SE NÃO FOR UM FINAL FELIZ
     if (animal.status !== 'final_feliz') {
         const idDetalhe = `detalhe-${animal.id_animal}`;
-        let areaContatoHTML = '';
+        let areaBotoesContatoHTML = '';
         
         const descricaoPet = animal.descricao ? animal.descricao : 'Nenhuma descrição detalhada fornecida.';
+        const fotoTutor = animal.tutor_foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(animal.tutor_nome || 'U')}&background=random`;
+        const nomeTutor = animal.tutor_nome || 'Usuário não identificado';
 
-        // SE O UTILIZADOR NÃO ESTIVER LOGADO (Trava de Privacidade - Apenas texto)
+        // SE O UTILIZADOR NÃO ESTIVER LOGADO (Trava de Privacidade - Apenas mensagem, sem botões)
         if (!window.sessaoAtual) {
-            areaContatoHTML = `
-                <div style="margin-top: 15px; padding: 15px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; text-align: center;">
-                    <p style="color: #991b1b; font-size: 13px; margin: 0; font-weight: 500;">🔒 Faça login para ver os contatos de quem cadastrou o animal.</p>
+            areaBotoesContatoHTML = `
+                <div style="margin-top: 15px; padding: 10px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; text-align: center;">
+                    <p style="color: #991b1b; font-size: 13px; margin: 0; font-weight: 500;">🔒 Faça login para ver o contato e ajudar.</p>
                 </div>
             `;
         } 
-        // SE O UTILIZADOR ESTIVER LOGADO (Mostra os Dados Reais)
+        // SE O UTILIZADOR ESTIVER LOGADO (Mostra os Botões de Contato)
         else {
             const telefoneTutor = animal.tutor_telefone || ''; 
             const numeroWhatsLimpo = telefoneTutor.replace(/\D/g, '');
@@ -233,12 +235,37 @@ window.gerarCardAnimal = function(animal) {
                  `;
             }
 
-            const fotoTutor = animal.tutor_foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(animal.tutor_nome || 'U')}&background=random`;
-            const nomeTutor = animal.tutor_nome || 'Usuário não identificado';
+            areaBotoesContatoHTML = `
+                ${botaoWhatsAppTutor}
 
-            areaContatoHTML = `
-                <!-- Dados de Contato (Quem cadastrou) -->
-                <div style="display: flex; align-items: center; gap: 10px; margin-top: 15px; background: #f3f4f6; padding: 10px; border-radius: 8px;">
+                <!-- Botão Encontrei/Meu Animal (Muda com base no status) -->
+                ${animal.status === 'perdido' ? `
+                    <button onclick="notificarTutor('${animal.id_animal}', '${animal.user_id}', '${animal.nome}')" style="background: var(--azul-principal); color: white; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: var(--fonte-poppins); width: 100%; margin-top: 10px;">
+                        🚨 ENCONTREI ESSE ANIMAL
+                    </button>
+                ` : `
+                    <button onclick="notificarTutor('${animal.id_animal}', '${animal.user_id}', '${animal.nome}')" style="background: var(--rosa-principal); color: white; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: var(--fonte-poppins); width: 100%; margin-top: 10px;">
+                        🚨 ESTE ANIMAL É MEU
+                    </button>
+                `}
+            `;
+        }
+
+        // Constrói a parte dos detalhes com a descrição e quem cadastrou visíveis para todos
+        areaDetalhesHTML = `
+            <button onclick="toggleDetalhes('${idDetalhe}', this)" style="background: transparent; color: var(--azul-principal); border: 1px solid var(--azul-principal); padding: 8px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: var(--fonte-poppins); width: 100%; margin-top: 10px; transition: 0.3s;">
+                + Ver Mais Detalhes
+            </button>
+
+            <div id="${idDetalhe}" style="display: none; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+                
+                <div style="font-size: 13px; color: var(--cinza-texto); margin-bottom: 15px; background: #f8fafc; padding: 10px; border-radius: 8px;">
+                    <strong>Descrição:</strong><br>
+                    ${descricaoPet}
+                </div>
+
+                <!-- Dados de Quem Cadastrou (Visível para todos) -->
+                <div style="display: flex; align-items: center; gap: 10px; background: #f3f4f6; padding: 10px; border-radius: 8px;">
                     <div style="width: 45px; height: 45px; border-radius: 50%; overflow: hidden; background: var(--cinza); border: 2px solid var(--azul-claro); flex-shrink: 0;">
                        <img src="${fotoTutor}" alt="Contato" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
@@ -248,29 +275,8 @@ window.gerarCardAnimal = function(animal) {
                     </div>
                 </div>
 
-                ${botaoWhatsAppTutor}
-
-                <!-- Botão Encontrei (Só aparece se o animal estiver perdido) -->
-                ${animal.status === 'perdido' ? `
-                    <button onclick="notificarTutor('${animal.id_animal}', '${animal.user_id}', '${animal.nome}')" style="background: var(--azul-principal); color: white; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: var(--fonte-poppins); width: 100%; margin-top: 10px;">
-                        🚨 ENCONTREI ESSE ANIMAL
-                    </button>
-                ` : ''}
-            `;
-        }
-
-        // Constrói a parte dos detalhes que só existe se não for final feliz
-        areaDetalhesHTML = `
-            <button onclick="toggleDetalhes('${idDetalhe}', this)" style="background: transparent; color: var(--azul-principal); border: 1px solid var(--azul-principal); padding: 8px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: var(--fonte-poppins); width: 100%; margin-top: 10px; transition: 0.3s;">
-                + Ver Mais Detalhes
-            </button>
-
-            <div id="${idDetalhe}" style="display: none; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
-                <div style="font-size: 13px; color: var(--cinza-texto); background: #f8fafc; padding: 10px; border-radius: 8px;">
-                    <strong>Descrição:</strong><br>
-                    ${descricaoPet}
-                </div>
-                ${areaContatoHTML}
+                <!-- Botões de Ação ou Mensagem de Login -->
+                ${areaBotoesContatoHTML}
             </div>
         `;
     }
