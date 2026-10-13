@@ -176,7 +176,7 @@ window.toggleDetalhes = function(id, btnElement) {
     }
 }
 
-// O NOVO GERADOR MESTRE DE CARTÕES
+// O NOVO GERADOR DE CARTÕES COM TRAVA DE PRIVACIDADE E DETALHES
 window.gerarCardAnimal = function(animal) {
     const fotoUrl = animal.foto_url || 'media/placeholder-pet.png';
     let badgeClass = '';
@@ -194,25 +194,70 @@ window.gerarCardAnimal = function(animal) {
     }
 
     const idDetalhe = `detalhe-${animal.id_animal}`;
+    let areaContatoHTML = '';
     
-    // Links para os botões do WhatsApp
-    const telefoneTutor = animal.tutor_telefone || ''; 
-    const numeroWhatsLimpo = telefoneTutor.replace(/\D/g, '');
-    let linkWhatsApp = '#';
-    if(numeroWhatsLimpo) {
-         linkWhatsApp = `https://wa.me/55${numeroWhatsLimpo}?text=Olá!%20Encontrei%20seu%20animal%20perdido%20(${animal.nome})%20divulgado%20no%20AchePet!`;
+    // Puxa a descrição do banco ou exibe um texto padrão se estiver vazio
+    const descricaoPet = animal.descricao ? animal.descricao : 'Nenhuma descrição detalhada fornecida.';
+
+    // SE O UTILIZADOR NÃO ESTIVER LOGADO (Trava de Privacidade)
+    if (!window.sessaoAtual) {
+        areaContatoHTML = `
+            <div style="margin-top: 15px; padding: 15px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; text-align: center;">
+                <p style="color: #991b1b; font-size: 13px; margin: 0; font-weight: 500;">🔒 Faça login para ver os contatos de quem cadastrou o animal.</p>
+            </div>
+        `;
+    } 
+    // SE O UTILIZADOR ESTIVER LOGADO (Mostra os Dados Reais)
+    else {
+        const telefoneTutor = animal.tutor_telefone || ''; 
+        const numeroWhatsLimpo = telefoneTutor.replace(/\D/g, '');
+        let botaoWhatsAppTutor = '';
+        
+        // Mensagem automática muda consoante o tipo de anúncio
+        let textoMensagem = '';
+        if (animal.status === 'perdido') {
+            textoMensagem = `Olá!%20Encontrei%20seu%20animal%20perdido%20(${animal.nome})%20divulgado%20no%20AchePet!`;
+        } else {
+            textoMensagem = `Olá!%20Acredito%20que%20o%20animal%20(${animal.nome})%20que%20você%20encontrou%20no%20AchePet%20seja%20meu!`;
+        }
+
+        // Se houver número de WhatsApp, cria o botão verde genérico.
+        if(numeroWhatsLimpo) {
+             const linkWhatsApp = `https://wa.me/55${numeroWhatsLimpo}?text=${textoMensagem}`;
+             botaoWhatsAppTutor = `
+                <a href="${linkWhatsApp}" target="_blank" style="background: #25D366; color: white; padding: 10px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: bold; font-family: var(--fonte-poppins); display: block; margin-top: 15px;">
+                    💬 WhatsApp para Contato
+                </a>
+             `;
+        }
+
+        const fotoTutor = animal.tutor_foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(animal.tutor_nome || 'U')}&background=random`;
+        const nomeTutor = animal.tutor_nome || 'Usuário não identificado';
+
+        areaContatoHTML = `
+            <!-- Dados de Contato (Quem cadastrou) -->
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 15px; background: #f3f4f6; padding: 10px; border-radius: 8px;">
+                <div style="width: 45px; height: 45px; border-radius: 50%; overflow: hidden; background: var(--cinza); border: 2px solid var(--azul-claro); flex-shrink: 0;">
+                   <img src="${fotoTutor}" alt="Contato" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div style="overflow: hidden;">
+                    <p style="font-size: 13px; font-weight: 600; color: var(--azul-escuro); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${nomeTutor}</p>
+                    <p style="font-size: 11px; color: var(--cinza-texto); margin: 0;">📌 ${animal.cidade}</p>
+                </div>
+            </div>
+
+            ${botaoWhatsAppTutor}
+
+            <!-- Botão Encontrei (Só aparece se o animal estiver perdido) -->
+            ${animal.status === 'perdido' ? `
+                <button onclick="notificarTutor('${animal.id_animal}', '${animal.user_id}', '${animal.nome}')" style="background: var(--azul-principal); color: white; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: var(--fonte-poppins); width: 100%; margin-top: 10px;">
+                    🚨 ENCONTREI ESSE ANIMAL
+                </button>
+            ` : ''}
+        `;
     }
 
-    const botaoWhatsAppTutor = numeroWhatsLimpo ? `
-        <a href="${linkWhatsApp}" target="_blank" style="background: #25D366; color: white; padding: 10px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: bold; font-family: var(--fonte-poppins); display: block; margin-top: 15px;">
-            💬 WhatsApp do Tutor
-        </a>
-    ` : '<p style="font-size: 12px; color: red; margin-top:10px; text-align: center;">Tutor não forneceu WhatsApp</p>';
-
-    // Tratamento caso o tutor não tenha foto
-    const fotoTutor = animal.tutor_foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(animal.tutor_nome || 'A')}&background=random`;
-    const nomeTutor = animal.tutor_nome || 'Tutor não identificado';
-
+    // Retorna a estrutura visual unificada
     return `
         <article class="pet-card">
             <img src="${fotoUrl}" alt="Foto de ${animal.nome}">
@@ -222,38 +267,20 @@ window.gerarCardAnimal = function(animal) {
                 <p>📌 ${animal.cidade}</p>
                 <p>📅 ${formatarDataSimples(animal.data_evento)}</p>
                 
-                <!-- Botão Ver Mais Detalhes -->
                 <button onclick="toggleDetalhes('${idDetalhe}', this)" style="background: transparent; color: var(--azul-principal); border: 1px solid var(--azul-principal); padding: 8px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: var(--fonte-poppins); width: 100%; margin-top: 10px; transition: 0.3s;">
                     + Ver Mais Detalhes
                 </button>
 
-                <!-- Área Expandida (Escondida por defeito) -->
                 <div id="${idDetalhe}" style="display: none; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
                     
-                    <div style="font-size: 13px; color: var(--cinza-texto); margin-bottom: 15px; background: #f8fafc; padding: 10px; border-radius: 8px;">
+                    <!-- A descrição aparece para todos (logados ou não) -->
+                    <div style="font-size: 13px; color: var(--cinza-texto); background: #f8fafc; padding: 10px; border-radius: 8px;">
                         <strong>Descrição:</strong><br>
-                        ${animal.descricao}
+                        ${descricaoPet}
                     </div>
 
-                    <!-- Dados do Tutor -->
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; background: #f3f4f6; padding: 10px; border-radius: 8px;">
-                        <div style="width: 45px; height: 45px; border-radius: 50%; overflow: hidden; background: var(--cinza); border: 2px solid var(--azul-claro); flex-shrink: 0;">
-                           <img src="${fotoTutor}" alt="Tutor" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
-                        <div style="overflow: hidden;">
-                            <p style="font-size: 13px; font-weight: 600; color: var(--azul-escuro); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${nomeTutor}</p>
-                            <p style="font-size: 11px; color: var(--cinza-texto); margin: 0;">📌 ${animal.cidade}</p>
-                        </div>
-                    </div>
-
-                    ${botaoWhatsAppTutor}
-
-                    <!-- Botão Encontrei (Só aparece se o animal estiver perdido) -->
-                    ${animal.status === 'perdido' ? `
-                        <button onclick="notificarTutor('${animal.id_animal}', '${animal.user_id}', '${animal.nome}')" style="background: var(--azul-principal); color: white; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: var(--fonte-poppins); width: 100%; margin-top: 10px;">
-                            🚨 ENCONTREI ESSE ANIMAL
-                        </button>
-                    ` : ''}
+                    <!-- Aqui entra a trava de privacidade ou os contatos/botões -->
+                    ${areaContatoHTML}
                 </div>
             </div>
         </article>
