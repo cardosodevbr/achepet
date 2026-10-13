@@ -176,7 +176,7 @@ window.toggleDetalhes = function(id, btnElement) {
     }
 }
 
-// O NOVO GERADOR DE CARTÕES COM LÓGICA DE NEGÓCIO CORRIGIDA
+// O NOVO GERADOR DE CARTÕES (SEM BOTÃO DE NOTIFICAÇÃO E WHATSAPP DISCRETO)
 window.gerarCardAnimal = function(animal) {
     const fotoUrl = animal.foto_url || 'media/placeholder-pet.png';
     let badgeClass = '';
@@ -204,7 +204,7 @@ window.gerarCardAnimal = function(animal) {
         const fotoTutor = animal.tutor_foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(animal.tutor_nome || 'U')}&background=random`;
         const nomeTutor = animal.tutor_nome || 'Usuário não identificado';
 
-        // SE O UTILIZADOR NÃO ESTIVER LOGADO (Trava de Privacidade - Apenas mensagem, sem botões)
+        // SE O UTILIZADOR NÃO ESTIVER LOGADO (Trava de Privacidade - Apenas mensagem)
         if (!window.sessaoAtual) {
             areaBotoesContatoHTML = `
                 <div style="margin-top: 15px; padding: 10px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; text-align: center;">
@@ -212,43 +212,31 @@ window.gerarCardAnimal = function(animal) {
                 </div>
             `;
         } 
-        // SE O UTILIZADOR ESTIVER LOGADO (Mostra os Botões de Contato)
+        // SE O UTILIZADOR ESTIVER LOGADO (Mostra o Botão de WhatsApp)
         else {
             const telefoneTutor = animal.tutor_telefone || ''; 
             const numeroWhatsLimpo = telefoneTutor.replace(/\D/g, '');
-            let botaoWhatsAppTutor = '';
             
-            // Mensagem automática muda consoante o tipo de anúncio
+            // Mensagem automática para o WhatsApp
             let textoMensagem = '';
             if (animal.status === 'perdido') {
-                textoMensagem = `Olá!%20Encontrei%20seu%20animal%20perdido%20(${animal.nome})%20divulgado%20no%20AchePet!`;
+                textoMensagem = `Olá!%20Tenho%20informações%20ou%20encontrei%20o%20animal%20(${animal.nome})%20divulgado%20no%20AchePet!`;
             } else {
                 textoMensagem = `Olá!%20Acredito%20que%20o%20animal%20(${animal.nome})%20que%20você%20encontrou%20no%20AchePet%20seja%20meu!`;
             }
 
             if(numeroWhatsLimpo) {
                  const linkWhatsApp = `https://wa.me/55${numeroWhatsLimpo}?text=${textoMensagem}`;
-                 botaoWhatsAppTutor = `
-                    <a href="${linkWhatsApp}" target="_blank" style="background: #25D366; color: white; padding: 10px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: bold; font-family: var(--fonte-poppins); display: block; margin-top: 15px;">
-                        💬 WhatsApp para Contato
+                 
+                 // Design leve e discreto para o WhatsApp (Fundo claro, texto verde)
+                 areaBotoesContatoHTML = `
+                    <a href="${linkWhatsApp}" target="_blank" style="background: #f0fdf4; color: #16a34a; border: 1px solid #22c55e; padding: 10px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px; font-family: var(--fonte-poppins); display: block; margin-top: 15px; transition: all 0.3s ease;">
+                        💬 Tenho informações / Encontrei esse animal
                     </a>
                  `;
+            } else {
+                areaBotoesContatoHTML = '<p style="font-size: 12px; color: #dc2626; margin-top:10px; text-align: center;">Contato não fornecido</p>';
             }
-
-            areaBotoesContatoHTML = `
-                ${botaoWhatsAppTutor}
-
-                <!-- Botão Encontrei/Meu Animal (Muda com base no status) -->
-                ${animal.status === 'perdido' ? `
-                    <button onclick="notificarTutor('${animal.id_animal}', '${animal.user_id}', '${animal.nome}')" style="background: var(--azul-principal); color: white; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: var(--fonte-poppins); width: 100%; margin-top: 10px;">
-                        🚨 ENCONTREI ESSE ANIMAL
-                    </button>
-                ` : `
-                    <button onclick="notificarTutor('${animal.id_animal}', '${animal.user_id}', '${animal.nome}')" style="background: var(--rosa-principal); color: white; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: var(--fonte-poppins); width: 100%; margin-top: 10px;">
-                        🚨 ESTE ANIMAL É MEU
-                    </button>
-                `}
-            `;
         }
 
         // Constrói a parte dos detalhes com a descrição e quem cadastrou visíveis para todos
@@ -275,7 +263,7 @@ window.gerarCardAnimal = function(animal) {
                     </div>
                 </div>
 
-                <!-- Botões de Ação ou Mensagem de Login -->
+                <!-- Botão de WhatsApp discreto ou Mensagem de Login -->
                 ${areaBotoesContatoHTML}
             </div>
         `;
