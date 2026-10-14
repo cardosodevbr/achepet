@@ -176,7 +176,7 @@ window.toggleDetalhes = function(id, btnElement) {
     }
 }
 
-// O NOVO GERADOR DE CARTÕES (PRIVACIDADE TOTAL E CTA ÚNICO PARA WHATSAPP)
+// O NOVO GERADOR DE CARTÕES COM TRAVA E BOTÃO HÍBRIDO
 window.gerarCardAnimal = function(animal) {
     const fotoUrl = animal.foto_url || 'media/placeholder-pet.png';
     let badgeClass = '';
@@ -195,14 +195,13 @@ window.gerarCardAnimal = function(animal) {
 
     let areaDetalhesHTML = '';
 
-    // SÓ GERA A ÁREA DE DETALHES SE NÃO FOR UM FINAL FELIZ
     if (animal.status !== 'final_feliz') {
         const idDetalhe = `detalhe-${animal.id_animal}`;
         let areaContatoHTML = '';
         
         const descricaoPet = animal.descricao ? animal.descricao : 'Nenhuma descrição detalhada fornecida.';
 
-        // SE O UTILIZADOR NÃO ESTIVER LOGADO (Trava de Privacidade Oculta Tudo)
+        // SE O UTILIZADOR NÃO ESTIVER LOGADO
         if (!window.sessaoAtual) {
             areaContatoHTML = `
                 <div style="margin-top: 15px; padding: 10px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; text-align: center;">
@@ -210,7 +209,7 @@ window.gerarCardAnimal = function(animal) {
                 </div>
             `;
         } 
-        // SE O UTILIZADOR ESTIVER LOGADO (Mostra Tutor e CTA do WhatsApp)
+        // SE ESTIVER LOGADO
         else {
             const fotoTutor = animal.tutor_foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(animal.tutor_nome || 'U')}&background=random`;
             const nomeTutor = animal.tutor_nome || 'Usuário não identificado';
@@ -219,29 +218,18 @@ window.gerarCardAnimal = function(animal) {
             
             let botaoContatoHTML = '';
             
-            // Se houver número, cria o CTA discreto para o WhatsApp
             if(numeroWhatsLimpo) {
-                // Ajusta o texto da mensagem com base no tipo de anúncio
-                let textoMensagem = '';
-                if (animal.status === 'perdido') {
-                    textoMensagem = `Olá!%20Tenho%20informações%20sobre%20o%20pet%20(${animal.nome})%20divulgado%20no%20AchePet!`;
-                } else {
-                    textoMensagem = `Olá!%20Acredito%20que%20o%20animal%20(${animal.nome})%20que%20você%20encontrou%20no%20AchePet%20seja%20meu!`;
-                }
-
-                const linkWhatsApp = `https://wa.me/55${numeroWhatsLimpo}?text=${textoMensagem}`;
-                 
+                // Em vez de um link direto, chamamos a função Híbrida que notifica e abre o WhatsApp
                 botaoContatoHTML = `
-                    <a href="${linkWhatsApp}" target="_blank" style="background: #f8fafc; color: var(--azul-principal); border: 1px solid var(--azul-claro); padding: 10px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px; font-family: var(--fonte-poppins); display: block; margin-top: 15px; transition: all 0.3s ease;">
+                    <button onclick="dispararContato('${animal.id_animal}', '${animal.user_id}', '${animal.nome}', '${numeroWhatsLimpo}', '${animal.status}')" style="background: #f8fafc; color: var(--azul-principal); border: 1px solid var(--azul-claro); padding: 10px; text-align: center; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; font-family: var(--fonte-poppins); width: 100%; margin-top: 15px; transition: all 0.3s ease;">
                         🐾 Encontrei ou tenho informações sobre esse pet
-                    </a>
+                    </button>
                 `;
             } else {
                 botaoContatoHTML = '<p style="font-size: 12px; color: #dc2626; margin-top:10px; text-align: center;">Contato não fornecido</p>';
             }
 
             areaContatoHTML = `
-                <!-- Dados de Quem Cadastrou (Protegido pelo Login) -->
                 <div style="display: flex; align-items: center; gap: 10px; margin-top: 15px; background: #f3f4f6; padding: 10px; border-radius: 8px;">
                     <div style="width: 45px; height: 45px; border-radius: 50%; overflow: hidden; background: var(--cinza); border: 2px solid var(--azul-claro); flex-shrink: 0;">
                        <img src="${fotoTutor}" alt="Contato" style="width: 100%; height: 100%; object-fit: cover;">
@@ -251,33 +239,23 @@ window.gerarCardAnimal = function(animal) {
                         <p style="font-size: 11px; color: var(--cinza-texto); margin: 0;">📌 ${animal.cidade}</p>
                     </div>
                 </div>
-
-                <!-- CTA Discreto direto para o WhatsApp -->
                 ${botaoContatoHTML}
             `;
         }
 
-        // Constrói a área "Ver Mais Detalhes"
         areaDetalhesHTML = `
             <button onclick="toggleDetalhes('${idDetalhe}', this)" style="background: transparent; color: var(--azul-principal); border: 1px solid var(--azul-principal); padding: 8px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: var(--fonte-poppins); width: 100%; margin-top: 10px; transition: 0.3s;">
                 + Ver Mais Detalhes
             </button>
-
             <div id="${idDetalhe}" style="display: none; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
-                
-                <!-- Descrição é pública -->
                 <div style="font-size: 13px; color: var(--cinza-texto); background: #f8fafc; padding: 10px; border-radius: 8px;">
-                    <strong>Descrição:</strong><br>
-                    ${descricaoPet}
+                    <strong>Descrição:</strong><br>${descricaoPet}
                 </div>
-
-                <!-- Contactos e CTA (Ou mensagem de bloqueio) -->
                 ${areaContatoHTML}
             </div>
         `;
     }
 
-    // Retorna a estrutura visual final do cartão
     return `
         <article class="pet-card">
             <img src="${fotoUrl}" alt="Foto de ${animal.nome}">
@@ -286,8 +264,6 @@ window.gerarCardAnimal = function(animal) {
                 <h3>${animal.nome}</h3>
                 <p>📌 ${animal.cidade}</p>
                 <p>📅 ${formatarDataSimples(animal.data_evento)}</p>
-                
-                <!-- A área de detalhes só será injetada aqui se não for Final Feliz -->
                 ${areaDetalhesHTML}
             </div>
         </article>
@@ -411,3 +387,38 @@ document.addEventListener('DOMContentLoaded', () => {
         carregarUltimosFelizes();
     });
 });
+
+// FUNÇÃO HÍBRIDA: Salva Notificação e Abre o WhatsApp
+window.dispararContato = async function(idAnimal, idTutor, nomeAnimal, numeroWhatsTutor, statusAnimal) {
+    if (!window.sessaoAtual) {
+        alert("⚠️ Faça login para entrar em contato.");
+        return;
+    }
+
+    if (window.sessaoAtual.user.id === idTutor) {
+        return alert("Este anúncio já pertence a você.");
+    }
+
+    // 1. Tenta gravar a notificação silenciosamente no Supabase
+    try {
+        const remetenteMeta = window.sessaoAtual.user.user_metadata;
+        await clienteSupabase.from('notificacoes').insert([{
+            animal_id: idAnimal,
+            tutor_id: idTutor,
+            remetente_nome: remetenteMeta.display_name || 'Usuário AchePet',
+            remetente_telefone: remetenteMeta.whatsapp || 'Não informado',
+            remetente_cidade: remetenteMeta.cidade || 'Não informada',
+            remetente_foto: remetenteMeta.foto_url || 'media/placeholder-user.png'
+        }]);
+    } catch (err) {
+        console.error("Notificação interna falhou, mas continuaremos para o WhatsApp:", err);
+    }
+
+    // 2. Prepara e abre o WhatsApp
+    let textoMensagem = statusAnimal === 'perdido' 
+        ? `Olá! Tenho informações sobre o pet (${nomeAnimal}) divulgado no AchePet!`
+        : `Olá! Acredito que o animal (${nomeAnimal}) que você encontrou no AchePet seja meu!`;
+    
+    const linkWhatsApp = `https://wa.me/55${numeroWhatsTutor}?text=${encodeURIComponent(textoMensagem)}`;
+    window.open(linkWhatsApp, '_blank');
+};

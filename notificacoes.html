@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Notificações | AchePet 🐾</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    
+    <script>
+        // Proteção da página
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (typeof clienteSupabase === 'undefined') return;
+            const { data: { session } } = await clienteSupabase.auth.getSession();
+            if (!session) {
+                window.location.replace('login.html');
+            }
+        });
+    </script>
+</head>
+
+<body data-page="notificacoes">
+    <div id="header-placeholder"></div>
+
+    <main style="padding-top: 40px; padding-bottom: 60px; min-height: calc(100vh - 150px);">
+        <div class="container" style="max-width: 800px; margin: 0 auto; padding: 0 20px;">
+            <div class="section-title">
+                <h2 style="color: var(--azul-escuro);">🔔 Minhas Notificações</h2>
+                <p>Pessoas que têm informações sobre os seus anúncios.</p>
+            </div>
+
+            <div id="loadingNotificacoes" style="text-align: center; color: var(--cinza-texto); padding: 40px;">
+                A carregar alertas...
+            </div>
+            
+            <div id="gridNotificacoes" style="display: flex; flex-direction: column; gap: 15px;">
+                <!-- Os cards entram aqui -->
+            </div>
+            
+            <div id="emptyNotificacoes" style="display: none; text-align: center; padding: 40px; background: var(--fundo-card); border-radius: 12px; border: 2px dashed var(--cinza);">
+                <p style="color: var(--cinza-texto); font-family: var(--fonte-poppins);">Nenhuma notificação recebida até ao momento.</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+    <script src="script.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarTodasNotificacoes();
+        });
+
+        async function carregarTodasNotificacoes() {
+            const grid = document.getElementById('gridNotificacoes');
+            const loading = document.getElementById('loadingNotificacoes');
+            const emptyMsg = document.getElementById('emptyNotificacoes');
+
+            const { data: { session } } = await clienteSupabase.auth.getSession();
+            if (!session) return;
+
+            try {
+                // Busca notificações e o nome do animal associado
+                const { data: alertas, error } = await clienteSupabase
+                    .from('notificacoes')
+                    .select('*, animais(nome)')
+                    .eq('tutor_id', session.user.id)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                loading.style.display = 'none';
+
+                if (alertas.length === 0) {
+                    emptyMsg.style.display = 'block';
+                    return;
+                }
+
+                alertas.forEach(alerta => {
+                    const nomeAnimal = alerta.animais ? alerta.animais.nome : 'Animal não encontrado';
+                    const dataAlerta = new Date(alerta.created_at).toLocaleDateString('pt-BR');
+                    
+                    const numRemetenteLimpo = alerta.remetente_telefone.replace(/\D/g, '');
+                    const linkResposta = numRemetenteLimpo 
+                        ? `https://wa.me/55${numRemetenteLimpo}?text=Olá%20${alerta.remetente_nome}!%20Recebi%20sua%20notificação%20no%20AchePet%20sobre%20o%20${nomeAnimal}.`
+                        : '#';
+
+                    const avatar = alerta.remetente_foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(alerta.remetente_nome)}&background=random`;
+
+                    const card = `
+                        <div style="background: var(--fundo-card); border: 1px solid var(--azul-claro); border-left: 5px solid var(--rosa-principal); padding: 20px; border-radius: 12px; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+                            <img src="${avatar}" alt="Avatar" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #eee;">
+                            
+                            <div style="flex: 1; min-width: 200px;">
+                                <h4 style="color: var(--azul-escuro); margin-bottom: 5px; font-family: var(--fonte-poppins);">Informação sobre: <strong>${nomeAnimal}</strong></h4>
+                                <p style="font-size: 13px; color: var(--cinza-texto); margin-bottom: 3px;">
+                                    <strong>${alerta.remetente_nome}</strong> de ${alerta.remetente_cidade}
+                                </p>
+                                <p style="font-size: 12px; color: #64748b;">📅 ${dataAlerta} • 📞 ${alerta.remetente_telefone}</p>
+                            </div>
+                            
+                            ${numRemetenteLimpo ? `
+                                <a href="${linkResposta}" target="_blank" style="background: #25D366; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 13px; font-family: var(--fonte-poppins); white-space: nowrap;">
+                                    Responder no WhatsApp
+                                </a>
+                            ` : ''}
+                        </div>
+                    `;
+                    grid.innerHTML += card;
+                });
+
+            } catch (err) {
+                console.error(err);
+                loading.innerText = "❌ Ocorreu um erro ao carregar as suas notificações.";
+            }
+        }
+    </script>
+</body>
+</html>
