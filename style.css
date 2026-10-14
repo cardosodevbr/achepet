@@ -2687,9 +2687,10 @@ html[data-tema="escuro"] .btn-happy-outline:hover {
 ======================================== */
 
 .carrossel-promocional {
-    width: 180%;
-    height: 200px;
-    margin: 15px 0 25px;
+    width: 100%;
+    max-width: 1400px;
+    height: 250px;
+    margin: 15px auto 25px;
     position: relative;
     overflow: hidden;
     border-radius: 8px;
@@ -2720,23 +2721,29 @@ html[data-tema="escuro"] .btn-happy-outline:hover {
 
 /* Troca automática dos cinco banners */
 @keyframes passarBanners {
-    0%, 16% {
+
+    0%,
+    16% {
         transform: translateX(0);
     }
 
-    20%, 36% {
+    20%,
+    36% {
         transform: translateX(-20%);
     }
 
-    40%, 56% {
+    40%,
+    56% {
         transform: translateX(-40%);
     }
 
-    60%, 76% {
+    60%,
+    76% {
         transform: translateX(-60%);
     }
 
-    80%, 99.9% {
+    80%,
+    99.9% {
         transform: translateX(-80%);
     }
 
