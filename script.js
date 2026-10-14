@@ -1,3 +1,6 @@
+// Variável global para sabermos se o utilizador está logado
+window.sessaoAtual = null;
+
 // =========================================================
 // 1. CARREGAMENTO DOS COMPONENTES BASE (HEADER/FOOTER)
 // =========================================================
@@ -92,7 +95,6 @@ async function verificarSessao() {
                     <button id="fecharAlertaPerfil" style="background: transparent; border: none; color: #92400E; font-size: 20px; cursor: pointer; font-weight: bold; padding: 0 10px; line-height: 1;">&times;</button>
                 </div>
             `;
-            
             const headerPlaceholder = document.getElementById('header-placeholder');
             if (headerPlaceholder) {
                 headerPlaceholder.appendChild(alertBanner);
@@ -102,10 +104,8 @@ async function verificarSessao() {
                 });
             }
         }
-
     } else {
         if (siteHeader) siteHeader.classList.remove('is-logged-in');
-        
         if (cadastrarBtn) {
             cadastrarBtn.classList.add('disabled');
             cadastrarBtn.href = "#"; 
@@ -119,7 +119,7 @@ async function verificarSessao() {
 }
 
 // =========================================================
-// 3. EVENTOS DO HEADER (TEMA ESCURO E MENU MOBILE)
+// 3. EVENTOS DO HEADER
 // =========================================================
 function inicializarScriptsDoHeader() {
     const themeToggles = document.querySelectorAll('.theme-toggle');
@@ -157,7 +157,7 @@ function inicializarScriptsDoHeader() {
 }
 
 // =========================================================
-// 4. FUNÇÕES GLOBAIS ÚTEIS E GERADOR DE CARTÕES
+// 4. FUNÇÕES GLOBAIS E GERADOR DE CARTÕES
 // =========================================================
 function formatarDataSimples(dataIso) {
     if(!dataIso) return "Data desconhecida";
@@ -165,7 +165,6 @@ function formatarDataSimples(dataIso) {
     return `${partes[2]}/${partes[1]}/${partes[0]}`;
 }
 
-// Função para abrir/fechar os detalhes no card
 window.toggleDetalhes = function(id, btnElement) {
     const el = document.getElementById(id);
     if(el.style.display === 'none') {
@@ -177,7 +176,7 @@ window.toggleDetalhes = function(id, btnElement) {
     }
 }
 
-// O NOVO GERADOR DE CARTÕES (CTA DISCRETO PARA WHATSAPP E PRIVACIDADE TOTAL)
+// O NOVO GERADOR DE CARTÕES
 window.gerarCardAnimal = function(animal) {
     const fotoUrl = animal.foto_url || 'media/placeholder-pet.png';
     let badgeClass = '';
@@ -196,14 +195,12 @@ window.gerarCardAnimal = function(animal) {
 
     let areaDetalhesHTML = '';
 
-    // SÓ GERA A ÁREA DE DETALHES SE NÃO FOR UM FINAL FELIZ
     if (animal.status !== 'final_feliz') {
         const idDetalhe = `detalhe-${animal.id_animal}`;
         let areaContatoHTML = '';
-        
         const descricaoPet = animal.descricao ? animal.descricao : 'Nenhuma descrição detalhada fornecida.';
 
-        // SE O UTILIZADOR NÃO ESTIVER LOGADO (Bloqueia contatos e foto de quem cadastrou)
+        // NÃO LOGADO: Trava total
         if (!window.sessaoAtual) {
             areaContatoHTML = `
                 <div style="margin-top: 15px; padding: 15px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; text-align: center;">
@@ -211,7 +208,7 @@ window.gerarCardAnimal = function(animal) {
                 </div>
             `;
         } 
-        // SE O UTILIZADOR ESTIVER LOGADO (Mostra o usuário e o CTA discreto do WhatsApp)
+        // LOGADO: Exibe dados de quem cadastrou e o botão híbrido
         else {
             const fotoTutor = animal.tutor_foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(animal.tutor_nome || 'U')}&background=random`;
             const nomeTutor = animal.tutor_nome || 'Usuário não identificado';
@@ -220,29 +217,17 @@ window.gerarCardAnimal = function(animal) {
             
             let botaoCTA = '';
             
-            // Se houver número de WhatsApp, gera o CTA
             if(numeroWhatsLimpo) {
-                let textoMensagem = animal.status === 'perdido' 
-                    ? `Olá! Tenho informações ou encontrei o animal (${animal.nome}) divulgado no AchePet!`
-                    : `Olá! Acredito que o animal (${animal.nome}) que você encontrou no AchePet seja meu!`;
-                    
-                let textoBotao = animal.status === 'perdido'
-                    ? '🐾 Encontrei ou tenho informações sobre esse pet'
-                    : '🐾 Acredito que este animal seja meu';
-
-                const linkWhatsApp = `https://wa.me/55${numeroWhatsLimpo}?text=${encodeURIComponent(textoMensagem)}`;
-                 
-                // Botão CTA Discreto (Fundo transparente, texto e borda na cor principal)
+                // Ao invés de um link (a href), é um botão que dispara a notificação e o modal
                 botaoCTA = `
-                    <a href="${linkWhatsApp}" target="_blank" style="display: block; width: 100%; text-align: center; background: transparent; color: var(--azul-principal); border: 1px solid var(--azul-principal); padding: 10px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px; font-family: var(--fonte-poppins); margin-top: 15px; transition: 0.3s;">
-                        ${textoBotao}
-                    </a>
+                    <button onclick="acionarFluxoContato('${animal.id_animal}', '${animal.user_id}', '${animal.nome}', '${numeroWhatsLimpo}', '${animal.status}')" style="background: transparent; color: var(--azul-principal); border: 1px solid var(--azul-principal); padding: 10px; width: 100%; text-align: center; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; font-family: var(--fonte-poppins); margin-top: 15px; transition: 0.3s;">
+                        🐾 Encontrei ou tenho informações sobre esse pet
+                    </button>
                 `;
             } else {
                 botaoCTA = '<p style="font-size: 12px; color: #dc2626; margin-top:10px; text-align: center;">Contato não fornecido</p>';
             }
 
-            // Monta os dados de quem cadastrou + o botão do WhatsApp
             areaContatoHTML = `
                 <div style="display: flex; align-items: center; gap: 10px; margin-top: 15px; background: #f3f4f6; padding: 10px; border-radius: 8px;">
                     <div style="width: 45px; height: 45px; border-radius: 50%; overflow: hidden; background: var(--cinza); border: 2px solid var(--azul-claro); flex-shrink: 0;">
@@ -257,27 +242,19 @@ window.gerarCardAnimal = function(animal) {
             `;
         }
 
-        // Constrói a área de "Ver Mais Detalhes"
         areaDetalhesHTML = `
             <button onclick="toggleDetalhes('${idDetalhe}', this)" style="background: transparent; color: var(--azul-principal); border: 1px solid var(--azul-principal); padding: 8px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: var(--fonte-poppins); width: 100%; margin-top: 10px; transition: 0.3s;">
                 + Ver Mais Detalhes
             </button>
-
             <div id="${idDetalhe}" style="display: none; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
-                
-                <!-- Descrição Pública -->
                 <div style="font-size: 13px; color: var(--cinza-texto); background: #f8fafc; padding: 10px; border-radius: 8px;">
-                    <strong>Descrição:</strong><br>
-                    ${descricaoPet}
+                    <strong>Descrição:</strong><br>${descricaoPet}
                 </div>
-
-                <!-- Aqui entram os dados de contato (apenas se logado) -->
                 ${areaContatoHTML}
             </div>
         `;
     }
 
-    // Retorna a estrutura visual final
     return `
         <article class="pet-card">
             <img src="${fotoUrl}" alt="Foto de ${animal.nome}">
@@ -286,7 +263,6 @@ window.gerarCardAnimal = function(animal) {
                 <h3>${animal.nome}</h3>
                 <p>📌 ${animal.cidade}</p>
                 <p>📅 ${formatarDataSimples(animal.data_evento)}</p>
-                
                 ${areaDetalhesHTML}
             </div>
         </article>
@@ -294,135 +270,19 @@ window.gerarCardAnimal = function(animal) {
 }
 
 // =========================================================
-// 5. CARREGAMENTO DO INDEX (MURAIS DA PÁGINA INICIAL)
+// 5. FLUXO HÍBRIDO (NOTIFICAÇÃO + MODAL)
 // =========================================================
-async function carregarUltimosPerdidos() {
-    const grid = document.getElementById('ultimosPerdidosGrid');
-    const loading = document.getElementById('loadingPerdidos');
-    const emptyMsg = document.getElementById('emptyPerdidos');
-    if (!grid) return;
-    try {
-        const { data: animais, error } = await clienteSupabase.from('animais').select('*').eq('status', 'perdido').eq('ativo', true).order('created_at', { ascending: false }).limit(8);
-        if (error) throw error;
-        if (loading) loading.style.display = 'none';
-        if (animais.length === 0) {
-            if (emptyMsg) emptyMsg.style.display = 'block';
-            return;
-        }
-        grid.innerHTML = '';
-        animais.forEach(animal => { grid.innerHTML += gerarCardAnimal(animal); });
-    } catch (err) {
-        console.error(err);
-        if (loading) loading.innerText = "❌ Erro ao carregar.";
-    }
-}
-
-async function carregarUltimosEncontrados() {
-    const grid = document.getElementById('ultimosEncontradosGrid');
-    const loading = document.getElementById('loadingEncontrados');
-    const emptyMsg = document.getElementById('emptyEncontrados');
-    if (!grid) return;
-    try {
-        const { data: animais, error } = await clienteSupabase.from('animais').select('*').eq('status', 'achado_na_rua').eq('ativo', true).order('created_at', { ascending: false }).limit(8);
-        if (error) throw error;
-        if (loading) loading.style.display = 'none';
-        if (animais.length === 0) {
-            if (emptyMsg) emptyMsg.style.display = 'block';
-            return;
-        }
-        grid.innerHTML = '';
-        animais.forEach(animal => { grid.innerHTML += gerarCardAnimal(animal); });
-    } catch (err) {
-        console.error(err);
-        if (loading) loading.innerText = "❌ Erro ao carregar.";
-    }
-}
-
-async function carregarUltimosFelizes() {
-    const grid = document.getElementById('ultimosFelizesGrid');
-    const loading = document.getElementById('loadingFelizes');
-    const emptyMsg = document.getElementById('emptyFelizes');
-    if (!grid) return;
-    try {
-        const { data: animais, error } = await clienteSupabase.from('animais').select('*').eq('status', 'final_feliz').eq('ativo', true).order('created_at', { ascending: false }).limit(8);
-        if (error) throw error;
-        if (loading) loading.style.display = 'none';
-        if (animais.length === 0) {
-            if (emptyMsg) emptyMsg.style.display = 'block';
-            return;
-        }
-        grid.innerHTML = '';
-        animais.forEach(animal => { grid.innerHTML += gerarCardAnimal(animal); });
-    } catch (err) {
-        console.error(err);
-        if (loading) loading.innerText = "❌ Erro ao carregar.";
-    }
-}
-
-// =========================================================
-// 6. SISTEMA GLOBAL DE NOTIFICAÇÃO (ENCONTREI O PET)
-// =========================================================
-window.notificarTutor = async function(idAnimal, idTutor, nomeAnimal) {
-    const { data: { session } } = await clienteSupabase.auth.getSession();
-    
-    if (!session) {
-        alert("⚠️ Para proteger os tutores, faça login ou cadastre-se para informar que encontrou este animal.");
-        window.location.href = 'login.html';
-        return;
-    }
-
-    if (session.user.id === idTutor) {
-        return alert("Este anúncio já pertence a você.");
-    }
-
-    const confirmacao = confirm(`Você tem certeza que encontrou ${nomeAnimal}? O seu nome e telefone serão enviados para o tutor.`);
-    if (!confirmacao) return;
-
-    try {
-        const remetenteMeta = session.user.user_metadata;
-        
-        const { error } = await clienteSupabase.from('notificacoes').insert([{
-            animal_id: idAnimal,
-            tutor_id: idTutor,
-            remetente_nome: remetenteMeta.display_name || 'Usuário AchePet',
-            remetente_telefone: remetenteMeta.whatsapp || 'Não informado',
-            remetente_cidade: remetenteMeta.cidade || 'Não informada',
-            remetente_foto: remetenteMeta.foto_url || 'media/placeholder-user.png'
-        }]);
-
-        if (error) throw error;
-        alert("✅ Fantástico! O tutor foi notificado e recebeu os seus dados de contato. Se puder, chame-o também no WhatsApp!");
-
-    } catch (err) {
-        console.error("Erro na notificação:", err);
-        alert("❌ Erro ao notificar o tutor: " + err.message);
-    }
-};
-
-// =========================================================
-// 7. INICIALIZAÇÃO DA PÁGINA
-// =========================================================
-document.addEventListener('DOMContentLoaded', () => {
-    carregarComponentes().then(() => {
-        verificarSessao();
-        carregarUltimosPerdidos(); 
-        carregarUltimosEncontrados();
-        carregarUltimosFelizes();
-    });
-});
-
-// FUNÇÃO HÍBRIDA: Salva Notificação e Abre o WhatsApp
-window.dispararContato = async function(idAnimal, idTutor, nomeAnimal, numeroWhatsTutor, statusAnimal) {
+window.acionarFluxoContato = async function(idAnimal, idTutor, nomeAnimal, numeroWhatsTutor, statusAnimal) {
     if (!window.sessaoAtual) {
-        alert("⚠️ Faça login para entrar em contato.");
+        alert("🔒 Faça login para entrar em contato.");
         return;
     }
 
     if (window.sessaoAtual.user.id === idTutor) {
-        return alert("Este anúncio já pertence a você.");
+        return alert("Este anúncio foi criado por você.");
     }
 
-    // 1. Tenta gravar a notificação silenciosamente no Supabase
+    // 1. Grava a Notificação Interna
     try {
         const remetenteMeta = window.sessaoAtual.user.user_metadata;
         await clienteSupabase.from('notificacoes').insert([{
@@ -434,59 +294,124 @@ window.dispararContato = async function(idAnimal, idTutor, nomeAnimal, numeroWha
             remetente_foto: remetenteMeta.foto_url || 'media/placeholder-user.png'
         }]);
     } catch (err) {
-        console.error("Notificação interna falhou, mas continuaremos para o WhatsApp:", err);
+        console.error("Notificação interna falhou:", err);
     }
 
-    // 2. Prepara e abre o WhatsApp
+    // 2. Abre o Modal Responsivo com o Link do WhatsApp
+    const modalExistente = document.getElementById('modal-contato-achepet');
+    if (modalExistente) modalExistente.remove();
+
     let textoMensagem = statusAnimal === 'perdido' 
         ? `Olá! Tenho informações sobre o pet (${nomeAnimal}) divulgado no AchePet!`
         : `Olá! Acredito que o animal (${nomeAnimal}) que você encontrou no AchePet seja meu!`;
     
     const linkWhatsApp = `https://wa.me/55${numeroWhatsTutor}?text=${encodeURIComponent(textoMensagem)}`;
-    window.open(linkWhatsApp, '_blank');
-};
-// ==========================================
-// SISTEMA DE LOGOUT AUTOMÁTICO (5 MINUTOS)
-// ==========================================
 
-const TEMPO_INATIVIDADE = 5 * 60 * 1000; // 5 minutos em milissegundos
+    const modalHTML = `
+        <div id="modal-contato-achepet" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 9999; padding: 20px; box-sizing: border-box; backdrop-filter: blur(3px);">
+            <div style="background: white; border-radius: 12px; padding: 25px; max-width: 400px; width: 100%; text-align: center; font-family: var(--fonte-poppins); position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+                <button onclick="document.getElementById('modal-contato-achepet').remove()" style="position: absolute; top: 12px; right: 15px; background: transparent; border: none; font-size: 24px; color: var(--cinza-texto); cursor: pointer;">&times;</button>
+                
+                <div style="font-size: 45px; margin-bottom: 10px;">✅</div>
+                <h3 style="color: var(--azul-escuro); margin-bottom: 10px; font-size: 18px;">Compartilhamos seus dados!</h3>
+                <p style="color: var(--cinza-texto); font-size: 13px; margin-bottom: 25px; line-height: 1.5;">
+                    Já compartilhamos os seus dados de contato com quem cadastrou o pet. Deseja enviar uma mensagem para quem cadastrou o pet?
+                </p>
+                
+                <a href="${linkWhatsApp}" target="_blank" onclick="document.getElementById('modal-contato-achepet').remove()" style="display: block; background: #25D366; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; margin-bottom: 10px;">
+                    Entrar em contato
+                </a>
+                
+                <button onclick="document.getElementById('modal-contato-achepet').remove()" style="display: block; width: 100%; background: transparent; color: var(--cinza-texto); border: 1px solid #e2e8f0; padding: 10px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer;">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+};
+
+// =========================================================
+// 6. CARREGAMENTO DO INDEX (MURAIS DA PÁGINA INICIAL)
+// =========================================================
+async function carregarUltimosPerdidos() {
+    const grid = document.getElementById('ultimosPerdidosGrid');
+    if (!grid) return;
+    try {
+        const { data: animais, error } = await clienteSupabase.from('animais').select('*').eq('status', 'perdido').eq('ativo', true).order('created_at', { ascending: false }).limit(8);
+        if (error) throw error;
+        document.getElementById('loadingPerdidos').style.display = 'none';
+        if (animais.length === 0) return document.getElementById('emptyPerdidos').style.display = 'block';
+        grid.innerHTML = '';
+        animais.forEach(animal => { grid.innerHTML += gerarCardAnimal(animal); });
+    } catch (err) { console.error(err); }
+}
+
+async function carregarUltimosEncontrados() {
+    const grid = document.getElementById('ultimosEncontradosGrid');
+    if (!grid) return;
+    try {
+        const { data: animais, error } = await clienteSupabase.from('animais').select('*').eq('status', 'achado_na_rua').eq('ativo', true).order('created_at', { ascending: false }).limit(8);
+        if (error) throw error;
+        document.getElementById('loadingEncontrados').style.display = 'none';
+        if (animais.length === 0) return document.getElementById('emptyEncontrados').style.display = 'block';
+        grid.innerHTML = '';
+        animais.forEach(animal => { grid.innerHTML += gerarCardAnimal(animal); });
+    } catch (err) { console.error(err); }
+}
+
+async function carregarUltimosFelizes() {
+    const grid = document.getElementById('ultimosFelizesGrid');
+    if (!grid) return;
+    try {
+        const { data: animais, error } = await clienteSupabase.from('animais').select('*').eq('status', 'final_feliz').eq('ativo', true).order('created_at', { ascending: false }).limit(8);
+        if (error) throw error;
+        document.getElementById('loadingFelizes').style.display = 'none';
+        if (animais.length === 0) return document.getElementById('emptyFelizes').style.display = 'block';
+        grid.innerHTML = '';
+        animais.forEach(animal => { grid.innerHTML += gerarCardAnimal(animal); });
+    } catch (err) { console.error(err); }
+}
+
+// =========================================================
+// 7. INICIALIZAÇÃO DA PÁGINA
+// =========================================================
+document.addEventListener('DOMContentLoaded', () => {
+    carregarComponentes().then(async () => {
+        await verificarSessao(); 
+        carregarUltimosPerdidos(); 
+        carregarUltimosEncontrados();
+        carregarUltimosFelizes();
+    });
+});
+
+// =========================================================
+// 8. SISTEMA DE LOGOUT AUTOMÁTICO (5 MINUTOS DE INATIVIDADE)
+// =========================================================
+const TEMPO_INATIVIDADE = 5 * 60 * 1000;
 let timerInatividade;
 
-// Função que reinicia a contagem sempre que o utilizador mexe no site
 function resetarTimerInatividade() {
-    // Só inicia a contagem se o utilizador estiver logado
     if (!window.sessaoAtual) return;
-
-    // Limpa o timer anterior
     clearTimeout(timerInatividade);
-    
-    // Começa uma nova contagem de 5 minutos
     timerInatividade = setTimeout(logoutPorInatividade, TEMPO_INATIVIDADE);
 }
 
-// Função que faz o logout efetivo
 async function logoutPorInatividade() {
     if (typeof clienteSupabase !== 'undefined') {
-        await clienteSupabase.auth.signOut(); // Desloga do Supabase
+        await clienteSupabase.auth.signOut();
     }
-    
-    window.sessaoAtual = null; // Limpa a variável global
-    
-    // Avisa o utilizador e manda para o login
+    window.sessaoAtual = null;
     alert("🔒 A sua sessão expirou devido a 5 minutos de inatividade. Por favor, faça login novamente para sua segurança.");
     window.location.replace('login.html');
 }
 
-// Lista de eventos que indicam que o utilizador está ativo
 const eventosAtividade = ['mousemove', 'keydown', 'scroll', 'click', 'touchstart'];
-
-// Adiciona os "escutadores" ao documento
 eventosAtividade.forEach(evento => {
     document.addEventListener(evento, resetarTimerInatividade, true);
 });
 
-// Dá o arranque inicial ao timer quando a página carrega
-// Um pequeno atraso garante que a verificação de sessão do Supabase já terminou
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(resetarTimerInatividade, 2000); 
 });
