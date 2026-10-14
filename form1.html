@@ -7,7 +7,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- CONEXÃO COM O SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -25,6 +27,8 @@
         });
     </script>
 
+    <link rel="icon" type="image/png" href="media/logo.png">
+
     <title>Cadastrar Animal | AchePet 🐾</title>
     <link rel="stylesheet" href="style.css">
 
@@ -41,9 +45,11 @@
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
-        
+
         @media (max-width: 600px) {
-            .form-grid-2-col { grid-template-columns: 1fr; }
+            .form-grid-2-col {
+                grid-template-columns: 1fr;
+            }
         }
 
         .status-selector {
@@ -51,11 +57,11 @@
             gap: 15px;
             margin-bottom: 20px;
         }
-        
+
         .status-radio {
             display: none;
         }
-        
+
         .status-label {
             flex: 1;
             text-align: center;
@@ -69,96 +75,161 @@
             transition: all 0.3s ease;
         }
 
-        #status_perdido:checked + .status-label {
+        #status_perdido:checked+.status-label {
             border-color: var(--rosa-principal);
             background: var(--rosa-claro);
             color: var(--rosa-principal);
         }
 
-        #status_encontrado:checked + .status-label {
+        #status_encontrado:checked+.status-label {
             border-color: var(--azul-principal);
             background: var(--azul-claro);
             color: var(--azul-principal);
         }
 
         .ux-dica-box {
-            margin-top: 15px; padding: 15px; border-radius: 10px; font-size: 13px;
-            display: flex; gap: 10px; align-items: flex-start; line-height: 1.5;
-            background: #f8fafc; border-left: 4px solid #cbd5e1; color: var(--cinza-texto);
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 13px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            line-height: 1.5;
+            background: #f8fafc;
+            border-left: 4px solid #cbd5e1;
+            color: var(--cinza-texto);
             transition: all 0.3s ease;
         }
-        
-        .ux-dica-icon { font-size: 20px; }
+
+        .ux-dica-icon {
+            font-size: 20px;
+        }
 
         html[data-tema="escuro"] .ux-dica-box {
-            background: #1e2c42; border-left-color: #475569; color: #d5dfec;
+            background: #1e2c42;
+            border-left-color: #475569;
+            color: #d5dfec;
         }
 
         textarea {
-            width: 100%; min-height: 100px; padding: 12px 16px; border: 2px solid var(--azul-claro);
-            border-radius: 12px; font-family: var(--fonte-open-sans); resize: vertical;
+            width: 100%;
+            min-height: 100px;
+            padding: 12px 16px;
+            border: 2px solid var(--azul-claro);
+            border-radius: 12px;
+            font-family: var(--fonte-open-sans);
+            resize: vertical;
         }
-        
+
         html[data-tema="escuro"] textarea {
-            background: var(--fundo-card); color: var(--preto); border-color: #1e2c42;
+            background: var(--fundo-card);
+            color: var(--preto);
+            border-color: #1e2c42;
         }
 
         /* --- ESTILOS DA NOVA LISTA SUSPENSA CUSTOMIZADA --- */
-        .custom-autocomplete { position: relative; }
-        
+        .custom-autocomplete {
+            position: relative;
+        }
+
         .autocomplete-list {
-            position: absolute; top: calc(100% - 10px); left: 0; right: 0;
+            position: absolute;
+            top: calc(100% - 10px);
+            left: 0;
+            right: 0;
             background: var(--fundo-card);
-            border: 2px solid var(--azul-claro); 
+            border: 2px solid var(--azul-claro);
             border-top: none;
             border-radius: 0 0 12px 12px;
-            max-height: 200px; 
-            overflow-y: auto; 
+            max-height: 200px;
+            overflow-y: auto;
             z-index: 1000;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-            display: none; /* Escondido por defeito */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            display: none;
+            /* Escondido por defeito */
         }
-        
+
         .autocomplete-item {
-            padding: 12px 16px; 
-            cursor: pointer; 
+            padding: 12px 16px;
+            cursor: pointer;
             color: var(--preto);
-            font-family: var(--fonte-open-sans); 
+            font-family: var(--fonte-open-sans);
             font-size: 14px;
             transition: 0.2s ease;
             border-bottom: 1px solid #f1f5f9;
         }
-        .autocomplete-item:last-child { border-bottom: none; }
-        
-        .autocomplete-item:hover { 
-            background: var(--azul-claro); 
-            color: var(--azul-principal); 
-            padding-left: 20px; /* Pequeno efeito de movimento ao passar o rato */
+
+        .autocomplete-item:last-child {
+            border-bottom: none;
         }
-        
-        html[data-tema="escuro"] .autocomplete-list { 
-            background: var(--fundo-card); border-color: #1e2c42; 
+
+        .autocomplete-item:hover {
+            background: var(--azul-claro);
+            color: var(--azul-principal);
+            padding-left: 20px;
+            /* Pequeno efeito de movimento ao passar o rato */
         }
-        html[data-tema="escuro"] .autocomplete-item { border-bottom-color: #2a3b52; }
-        html[data-tema="escuro"] .autocomplete-item:hover { 
-            background: #1e2c42; color: #6cc0f5; 
+
+        html[data-tema="escuro"] .autocomplete-list {
+            background: var(--fundo-card);
+            border-color: #1e2c42;
+        }
+
+        html[data-tema="escuro"] .autocomplete-item {
+            border-bottom-color: #2a3b52;
+        }
+
+        html[data-tema="escuro"] .autocomplete-item:hover {
+            background: #1e2c42;
+            color: #6cc0f5;
         }
 
         /* --- PREVIEW DA FOTO --- */
         .preview-container {
-            width: 100%; height: 250px; border: 2px dashed var(--azul-claro);
-            border-radius: 12px; margin-top: 10px; display: none; 
-            align-items: center; justify-content: center; overflow: hidden;
-            background: #f8fafc; position: relative;
+            width: 100%;
+            height: 250px;
+            border: 2px dashed var(--azul-claro);
+            border-radius: 12px;
+            margin-top: 10px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #f8fafc;
+            position: relative;
         }
-        .preview-container img { width: 100%; height: 100%; object-fit: contain; z-index: 1; }
+
+        .preview-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            z-index: 1;
+        }
+
         .btn-remover-foto {
-            position: absolute; top: 10px; right: 10px; background: rgba(233, 22, 107, 0.9);
-            color: white; border: none; width: 30px; height: 30px; border-radius: 50%;
-            cursor: pointer; z-index: 2; font-weight: bold; display: flex;
-            align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(233, 22, 107, 0.9);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 2;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-        html[data-tema="escuro"] .preview-container { background: #1e2c42; border-color: #475569; }
+
+        html[data-tema="escuro"] .preview-container {
+            background: #1e2c42;
+            border-color: #475569;
+        }
     </style>
 </head>
 
@@ -169,29 +240,33 @@
     <main class="login-main" style="align-items: flex-start; padding-top: 40px;">
         <section class="cadastro-section container">
             <div class="cadastro-container" style="padding: 40px; margin-top: 0;">
-                
+
                 <div class="cadastro-title" style="text-align: center; margin-bottom: 30px;">
                     <h1 style="color: var(--azul-escuro); margin-bottom: 10px;">Cadastrar Animal</h1>
                     <p style="color: var(--cinza-texto);">Preencha as informações para publicar no mural.</p>
                 </div>
 
                 <form id="animalForm" class="auth-form" onsubmit="event.preventDefault(); salvarAnimal();">
-                    
+
                     <!-- 1. DEFINIÇÃO DO STATUS -->
                     <div class="form-group">
                         <label>O que aconteceu?</label>
                         <div class="status-selector">
-                            <input type="radio" name="status_pet" id="status_perdido" class="status-radio" value="perdido" checked>
+                            <input type="radio" name="status_pet" id="status_perdido" class="status-radio"
+                                value="perdido" checked>
                             <label for="status_perdido" class="status-label">🐾 Perdi o meu pet</label>
-                            
-                            <input type="radio" name="status_pet" id="status_encontrado" class="status-radio" value="achado_na_rua">
+
+                            <input type="radio" name="status_pet" id="status_encontrado" class="status-radio"
+                                value="achado_na_rua">
                             <label for="status_encontrado" class="status-label">👀 Achei um pet na rua</label>
                         </div>
-                        
+
                         <div class="ux-dica-box" id="dicaStatus">
                             <span class="ux-dica-icon">💡</span>
                             <div>
-                                Antes de cadastrar, acesse o <a href="mural.html" style="color: var(--azul-principal);">Mural</a>. Alguém já pode ter achado o seu pet! 
+                                Antes de cadastrar, acesse o <a href="mural.html"
+                                    style="color: var(--azul-principal);">Mural</a>. Alguém já pode ter achado o seu
+                                pet!
                             </div>
                         </div>
                     </div>
@@ -202,12 +277,14 @@
                             <label for="nome_pet">Nome do Animal</label>
                             <input type="text" id="nome_pet" placeholder="Ex: Isac (ou 'Desconhecido')" required>
                         </div>
-                        
+
                         <!-- NOVA ESPÉCIE CUSTOMIZADA COM DROPDOWN -->
                         <div class="form-group custom-autocomplete">
                             <label for="especie_pet">Espécie</label>
-                            <input type="text" id="especie_pet" placeholder="Selecione ou digite a espécie..." required autocomplete="off" style="width: 100%; height: 46px; border: 2px solid var(--azul-claro); border-radius: 12px; padding: 0 16px; outline: none; font-family: var(--fonte-open-sans); position: relative; z-index: 1001;">
-                            
+                            <input type="text" id="especie_pet" placeholder="Selecione ou digite a espécie..." required
+                                autocomplete="off"
+                                style="width: 100%; height: 46px; border: 2px solid var(--azul-claro); border-radius: 12px; padding: 0 16px; outline: none; font-family: var(--fonte-open-sans); position: relative; z-index: 1001;">
+
                             <!-- Lista Suspensa gerada via JavaScript -->
                             <div id="lista_especies_custom" class="autocomplete-list"></div>
                         </div>
@@ -228,21 +305,26 @@
                     <!-- 4. DESCRIÇÃO E FOTO -->
                     <div class="form-group">
                         <label for="descricao_pet">Descrição / Detalhes</label>
-                        <textarea id="descricao_pet" placeholder="Descreva a cor, tamanho, coleira ou características marcantes..." required></textarea>
+                        <textarea id="descricao_pet"
+                            placeholder="Descreva a cor, tamanho, coleira ou características marcantes..."
+                            required></textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="foto_pet">Fotografia (Obrigatório)</label>
-                        <input type="file" id="foto_pet" accept="image/*" style="padding-top: 10px; border: none; background: transparent;">
-                        
+                        <input type="file" id="foto_pet" accept="image/*"
+                            style="padding-top: 10px; border: none; background: transparent;">
+
                         <!-- Contentor do Preview -->
                         <div class="preview-container" id="previewBox">
-                            <button type="button" class="btn-remover-foto" id="btnRemoverFoto" title="Remover foto">X</button>
+                            <button type="button" class="btn-remover-foto" id="btnRemoverFoto"
+                                title="Remover foto">X</button>
                             <img id="imagemPreview" src="" alt="Preview da foto">
                         </div>
                     </div>
-                    
-                    <button type="submit" class="btn-auth" id="btnSalvarAnimal" style="margin-top: 20px;">PUBLICAR NO MURAL</button>
+
+                    <button type="submit" class="btn-auth" id="btnSalvarAnimal" style="margin-top: 20px;">PUBLICAR NO
+                        MURAL</button>
                 </form>
 
             </div>
@@ -251,7 +333,7 @@
 
     <div id="footer-placeholder"></div>
     <script src="script.js"></script>
-    
+
     <script>
         // --- LÓGICA DE UX PARA A CAIXA DE DICAS ---
         const radioPerdido = document.getElementById('status_perdido');
@@ -272,14 +354,14 @@
         `;
 
         radioPerdido.addEventListener('change', () => {
-            if(radioPerdido.checked) {
+            if (radioPerdido.checked) {
                 dicaBox.innerHTML = textoPerdido;
                 dicaBox.style.borderLeftColor = 'var(--rosa-principal)';
             }
         });
 
         radioEncontrado.addEventListener('change', () => {
-            if(radioEncontrado.checked) {
+            if (radioEncontrado.checked) {
                 dicaBox.innerHTML = textoEncontrado;
                 dicaBox.style.borderLeftColor = 'var(--azul-principal)';
             }
@@ -289,10 +371,10 @@
 
         // --- LÓGICA DA LISTA SUSPENSA DE ESPÉCIES (DROPDOWN INTELIGENTE) ---
         const especiesSugeridas = [
-            "Cachorro", "Gato", "Coelho", "Calopsita", "Papagaio", 
+            "Cachorro", "Gato", "Coelho", "Calopsita", "Papagaio",
             "Pássaro (Outro)", "Tartaruga", "Hamster", "Porquinho-da-índia", "Cavalo"
         ];
-        
+
         const inputEspecie = document.getElementById('especie_pet');
         const listaEspeciesCustom = document.getElementById('lista_especies_custom');
 
@@ -300,10 +382,10 @@
         function renderizarListaEspecies(filtro = '') {
             listaEspeciesCustom.innerHTML = ''; // Limpa a lista anterior
             const termo = filtro.toLowerCase().trim();
-            
+
             // Filtra as sugestões que contenham o que foi digitado
             const filtradas = especiesSugeridas.filter(esp => esp.toLowerCase().includes(termo));
-            
+
             // Se não houver correspondência, esconde a lista (mas deixa a pessoa escrever à vontade)
             if (filtradas.length === 0) {
                 listaEspeciesCustom.style.display = 'none';
@@ -315,16 +397,16 @@
                 const div = document.createElement('div');
                 div.className = 'autocomplete-item';
                 div.textContent = esp;
-                
+
                 // Ao clicar numa sugestão, preenche o input e fecha a lista
-                div.onmousedown = function() { // onmousedown previne conflito com o onblur do input
+                div.onmousedown = function () { // onmousedown previne conflito com o onblur do input
                     inputEspecie.value = esp;
                     listaEspeciesCustom.style.display = 'none';
                 };
-                
+
                 listaEspeciesCustom.appendChild(div);
             });
-            
+
             listaEspeciesCustom.style.display = 'block';
         }
 
@@ -343,13 +425,13 @@
         const imagemPreview = document.getElementById('imagemPreview');
         const btnRemoverFoto = document.getElementById('btnRemoverFoto');
 
-        inputFoto.addEventListener('change', function(event) {
+        inputFoto.addEventListener('change', function (event) {
             const ficheiro = event.target.files[0];
             if (ficheiro) {
                 const leitor = new FileReader();
-                leitor.onload = function(e) {
+                leitor.onload = function (e) {
                     imagemPreview.src = e.target.result;
-                    previewBox.style.display = 'flex'; 
+                    previewBox.style.display = 'flex';
                 }
                 leitor.readAsDataURL(ficheiro);
             } else {
@@ -360,9 +442,9 @@
         btnRemoverFoto.addEventListener('click', limparPreview);
 
         function limparPreview() {
-            inputFoto.value = ''; 
+            inputFoto.value = '';
             imagemPreview.src = '';
-            previewBox.style.display = 'none'; 
+            previewBox.style.display = 'none';
         }
 
 
@@ -406,7 +488,7 @@
 
                 // 3. UPLOAD DA FOTO PARA O STORAGE
                 const { data: uploadData, error: uploadError } = await clienteSupabase.storage
-                    .from('fotos_pets') 
+                    .from('fotos_pets')
                     .upload(caminhoStorage, arquivoFoto);
 
                 if (uploadError) {
@@ -435,7 +517,7 @@
                     foto_url: urlDaFoto,
                     ativo: true
                 };
-                
+
                 const { error: insertError } = await clienteSupabase
                     .from('animais')
                     .insert([novoAnimal]);
@@ -448,7 +530,7 @@
                 btnSalvar.innerText = "PUBLICAR NO MURAL";
                 btnSalvar.disabled = false;
                 alert(`✅ Animal cadastrado com sucesso!`);
-                
+
                 window.location.href = "mural.html";
 
             } catch (error) {
@@ -461,4 +543,5 @@
     </script>
 
 </body>
+
 </html>

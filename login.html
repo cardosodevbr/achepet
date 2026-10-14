@@ -8,7 +8,11 @@
     <!-- FONTES OTIMIZADAS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="icon" type="image/png" href="media/logo.png">
 
     <title>LOGIN | AchePet 🐾</title>
     <link rel="stylesheet" href="style.css">
@@ -28,29 +32,31 @@
     <main class="login-main">
         <section class="cadastro-section">
             <div class="cadastro-container login-container">
-                
+
                 <div class="login-grid">
-                    
+
                     <!-- LADO ESQUERDO: Formulário -->
                     <div class="login-form-area">
                         <h1>Bem-vindo de volta! 🐾</h1>
                         <p>Aceda à sua conta para ajudar a encontrar e cadastrar pets.</p>
-                        
+
                         <!-- UX: Formulário semântico -->
                         <form id="loginForm" class="auth-form" onsubmit="event.preventDefault(); fazerLogin();">
                             <div class="form-group">
                                 <label for="loginEmail">E-mail</label>
-                                <input type="email" id="loginEmail" placeholder="Digite o seu e-mail" autocomplete="email" required>
+                                <input type="email" id="loginEmail" placeholder="Digite o seu e-mail"
+                                    autocomplete="email" required>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="loginSenha">Senha</label>
-                                <input type="password" id="loginSenha" placeholder="Digite a sua senha" autocomplete="current-password" required>
+                                <input type="password" id="loginSenha" placeholder="Digite a sua senha"
+                                    autocomplete="current-password" required>
                             </div>
-                            
+
                             <button type="submit" class="btn-auth">ENTRAR</button>
                         </form>
-                        
+
                         <!-- Links de apoio organizados -->
                         <div class="auth-links">
                             <a href="esqueceu-senha.html">Esqueci a minha senha</a>
@@ -109,4 +115,5 @@
     </script>
 
 </body>
+
 </html>

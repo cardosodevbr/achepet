@@ -8,10 +8,14 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="icon" type="image/png" href="media/logo.png">
+
     <link rel="stylesheet" href="style.css">
-    
+
     <!-- CONEXÃO COM O SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
@@ -24,6 +28,7 @@
             gap: 15px;
             margin-bottom: 30px;
         }
+
         .foto-preview {
             width: 120px;
             height: 120px;
@@ -39,12 +44,14 @@
             font-family: var(--fonte-poppins);
             font-weight: 700;
         }
+
         .btn-inativar {
             background: transparent;
             color: #d90429;
             border: 2px solid #d90429;
             margin-top: 15px;
         }
+
         .btn-inativar:hover {
             background: #d90429;
             color: white;
@@ -55,20 +62,22 @@
 <body data-page="perfil">
     <div id="header-placeholder"></div>
 
-    <main class="login-main" style="align-items: center; justify-content: center; min-height: calc(100vh - 150px); padding-top: 20px; padding-bottom: 40px;">
+    <main class="login-main"
+        style="align-items: center; justify-content: center; min-height: calc(100vh - 150px); padding-top: 20px; padding-bottom: 40px;">
         <section class="cadastro-section" style="width: 100%; display: flex; justify-content: center;">
             <div class="cadastro-container" style="padding: 40px; margin-top: 0; max-width: 500px; width: 100%;">
-                
+
                 <div class="cadastro-title" style="text-align: center; margin-bottom: 30px;">
                     <h1 style="color: var(--azul-escuro);">Meu Perfil</h1>
                     <p style="color: var(--cinza-texto);">Atualize as suas informações de contato.</p>
                 </div>
 
                 <form id="perfilForm" class="auth-form" onsubmit="event.preventDefault(); salvarPerfil();">
-                    
+
                     <div class="perfil-foto-wrapper">
                         <div id="fotoPreviewBox" class="foto-preview">U</div>
-                        <input type="file" id="foto_perfil" accept="image/*" style="font-size: 12px; width: 220px; margin: 0 auto; display: block;">
+                        <input type="file" id="foto_perfil" accept="image/*"
+                            style="font-size: 12px; width: 220px; margin: 0 auto; display: block;">
                     </div>
 
                     <div class="form-group">
@@ -85,7 +94,7 @@
                         <label for="whatsapp_perfil">WhatsApp de Contato</label>
                         <input type="text" id="whatsapp_perfil" placeholder="Ex: (11) 99999-9999">
                     </div>
-                    
+
                     <button type="submit" class="btn-auth" id="btnSalvarPerfil">SALVAR ALTERAÇÕES</button>
                     <!--
                      <button type="button" class="btn-auth btn-inativar" onclick="inativarConta()">INATIVAR CONTA</button>
@@ -99,7 +108,7 @@
     <div id="footer-placeholder"></div>
 
     <script src="script.js"></script>
-    
+
     <script>
         let usuarioAtual = null;
 
@@ -146,7 +155,7 @@
 
                 // VALIDAÇÃO DO WHATSAPP (Apenas números)
                 const whatsappNumeros = whatsapp.replace(/\D/g, '');
-                
+
                 // Verifica se o campo foi preenchido e se tem o tamanho correto (DDD 2 dígitos + 8 ou 9 dígitos)
                 if (whatsappNumeros !== '' && (whatsappNumeros.length < 10 || whatsappNumeros.length > 11)) {
                     throw new Error("Formato de WhatsApp inválido. Inclua o DDD (Ex: 11999999999).");
@@ -172,7 +181,7 @@
                     const { data: publicUrlData } = clienteSupabase.storage
                         .from('avatares')
                         .getPublicUrl(caminhoStorage);
-                    
+
                     fotoUrlFinal = publicUrlData.publicUrl;
                 }
 
@@ -226,4 +235,5 @@
         }
     </script>
 </body>
+
 </html>

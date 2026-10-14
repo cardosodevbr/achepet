@@ -8,11 +8,15 @@
     <!-- FONTES OTIMIZADAS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- CONEXÃO COM O BANCO DE DADOS (SUPABASE) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
+
+    <link rel="icon" type="image/png" href="media/logo.png">
 
     <title>Cadastro | AchePet 🐾</title>
     <link rel="stylesheet" href="style.css">
@@ -27,17 +31,17 @@
     <main class="login-main">
         <section class="cadastro-section">
             <div class="cadastro-container login-container">
-                
+
                 <div class="login-grid">
-                    
+
                     <!-- LADO ESQUERDO: Formulário -->
                     <div class="login-form-area">
                         <h1>Crie a sua conta</h1>
                         <p>Encontre, ajude e faça parte do AchePet.</p>
-                        
+
                         <!-- UX: Formulário semântico previne recarregamento da página ao disparar o JS -->
                         <form id="cadastroForm" class="auth-form" onsubmit="event.preventDefault(); registrar();">
-                            
+
                             <div class="form-group">
                                 <label for="nome">Nome completo</label>
                                 <input type="text" id="nome" placeholder="Digite o seu nome completo" required>
@@ -45,7 +49,8 @@
 
                             <div class="form-group">
                                 <label for="email">E-mail</label>
-                                <input type="email" id="email" placeholder="Digite o seu e-mail" autocomplete="email" required>
+                                <input type="email" id="email" placeholder="Digite o seu e-mail" autocomplete="email"
+                                    required>
                             </div>
 
                             <!-- Campos comentados preservados -->
@@ -62,17 +67,19 @@
 
                             <div class="form-group">
                                 <label for="senha">Senha</label>
-                                <input type="password" id="senha" placeholder="Mínimo de 8 caracteres" autocomplete="new-password" minlength="8" required>
+                                <input type="password" id="senha" placeholder="Mínimo de 8 caracteres"
+                                    autocomplete="new-password" minlength="8" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="confirmar-senha">Confirmar senha</label>
-                                <input type="password" id="confirmar-senha" placeholder="Digite a sua senha novamente" autocomplete="new-password" minlength="8" required>
+                                <input type="password" id="confirmar-senha" placeholder="Digite a sua senha novamente"
+                                    autocomplete="new-password" minlength="8" required>
                             </div>
-                            
+
                             <button type="submit" class="btn-auth" id="btnRegistrar">REGISTRAR-SE</button>
                         </form>
-                        
+
                         <div class="auth-links">
                             <a href="login.html">Já tem uma conta? Entrar</a>
                         </div>
@@ -95,7 +102,7 @@
 
     <!-- SCRIPTS -->
     <script src="script.js"></script>
-    
+
     <!-- LÓGICA DE CADASTRO DO SUPABASE PRESERVADA -->
     <script>
         async function registrar() {
@@ -122,7 +129,7 @@
                 options: {
                     data: {
                         display_name: nome,
-                        full_name: nome 
+                        full_name: nome
                     }
                 }
             });
@@ -136,10 +143,11 @@
                 alert("❌ Erro ao cadastrar: " + error.message);
             } else {
                 alert("✅ Conta criada com sucesso! Bem-vindo(a) ao AchePet.");
-                window.location.replace('index.html'); 
+                window.location.replace('index.html');
             }
         }
     </script>
 
 </body>
+
 </html>

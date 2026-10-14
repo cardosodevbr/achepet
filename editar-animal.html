@@ -7,36 +7,99 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- CONEXÃO COM O SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
 
+    <link rel="icon" type="image/png" href="media/logo.png">
+
     <title>Editar Animal | AchePet 🐾</title>
     <link rel="stylesheet" href="style.css">
 
     <style>
-        .form-grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        @media (max-width: 600px) { .form-grid-2-col { grid-template-columns: 1fr; } }
-
-        .status-selector { display: flex; gap: 15px; margin-bottom: 20px; }
-        .status-radio { display: none; }
-        .status-label {
-            flex: 1; text-align: center; padding: 15px; border: 2px solid var(--cinza);
-            border-radius: 12px; cursor: pointer; font-family: var(--fonte-poppins);
-            font-weight: 600; color: var(--cinza-texto); transition: all 0.3s ease;
+        .form-grid-2-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
-        #status_perdido:checked + .status-label { border-color: var(--rosa-principal); background: var(--rosa-claro); color: var(--rosa-principal); }
-        #status_encontrado:checked + .status-label { border-color: var(--azul-principal); background: var(--azul-claro); color: var(--azul-principal); }
-        #status_final_feliz:checked + .status-label { border-color: #10B981; background: #D1FAE5; color: #059669; }
+        @media (max-width: 600px) {
+            .form-grid-2-col {
+                grid-template-columns: 1fr;
+            }
+        }
 
-        textarea { width: 100%; min-height: 100px; padding: 12px 16px; border: 2px solid var(--azul-claro); border-radius: 12px; font-family: var(--fonte-open-sans); resize: vertical; }
-        html[data-tema="escuro"] textarea { background: var(--fundo-card); color: var(--preto); border-color: #1e2c42; }
-        
-        .foto-atual-container { margin-bottom: 15px; text-align: center; }
-        .foto-atual-container img { max-width: 200px; border-radius: 12px; border: 2px solid var(--azul-claro); }
+        .status-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .status-radio {
+            display: none;
+        }
+
+        .status-label {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            border: 2px solid var(--cinza);
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: var(--fonte-poppins);
+            font-weight: 600;
+            color: var(--cinza-texto);
+            transition: all 0.3s ease;
+        }
+
+        #status_perdido:checked+.status-label {
+            border-color: var(--rosa-principal);
+            background: var(--rosa-claro);
+            color: var(--rosa-principal);
+        }
+
+        #status_encontrado:checked+.status-label {
+            border-color: var(--azul-principal);
+            background: var(--azul-claro);
+            color: var(--azul-principal);
+        }
+
+        #status_final_feliz:checked+.status-label {
+            border-color: #10B981;
+            background: #D1FAE5;
+            color: #059669;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px 16px;
+            border: 2px solid var(--azul-claro);
+            border-radius: 12px;
+            font-family: var(--fonte-open-sans);
+            resize: vertical;
+        }
+
+        html[data-tema="escuro"] textarea {
+            background: var(--fundo-card);
+            color: var(--preto);
+            border-color: #1e2c42;
+        }
+
+        .foto-atual-container {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .foto-atual-container img {
+            max-width: 200px;
+            border-radius: 12px;
+            border: 2px solid var(--azul-claro);
+        }
     </style>
 </head>
 
@@ -44,10 +107,11 @@
 
     <div id="header-placeholder"></div>
 
-    <main class="login-main" style="align-items: center; justify-content: center; min-height: calc(100vh - 150px); padding-top: 40px; padding-bottom: 40px;">
+    <main class="login-main"
+        style="align-items: center; justify-content: center; min-height: calc(100vh - 150px); padding-top: 40px; padding-bottom: 40px;">
         <section class="cadastro-section" style="width: 100%; display: flex; justify-content: center;">
             <div class="cadastro-container" style="padding: 40px; margin-top: 0; max-width: 850px; width: 100%;">
-                
+
                 <div class="cadastro-title" style="text-align: center; margin-bottom: 30px;">
                     <h1 style="color: var(--azul-escuro); margin-bottom: 10px;">Editar Animal</h1>
                     <p style="color: var(--cinza-texto);">Atualize as informações do seu anúncio.</p>
@@ -59,13 +123,13 @@
 
                 <!-- Formulário -->
                 <form id="editarForm" class="auth-form" onsubmit="event.preventDefault(); atualizarAnimal();">
-                    
+
                     <div class="form-group">
                         <label>Status Atual</label>
                         <div class="status-selector">
                             <input type="radio" name="status_pet" id="status_perdido" value="perdido">
                             <label for="status_perdido" class="status-label">🐾 Perdido</label>
-                            
+
                             <input type="radio" name="status_pet" id="status_encontrado" value="achado_na_rua">
                             <label for="status_encontrado" class="status-label">👀 Encontrado</label>
 
@@ -81,7 +145,8 @@
                         </div>
                         <div class="form-group">
                             <label for="especie_pet">Espécie</label>
-                            <select id="especie_pet" required style="height: 46px; border: 2px solid var(--azul-claro); border-radius: 12px; padding: 0 16px; outline: none;">
+                            <select id="especie_pet" required
+                                style="height: 46px; border: 2px solid var(--azul-claro); border-radius: 12px; padding: 0 16px; outline: none;">
                                 <option value="Cachorro">Cachorro</option>
                                 <option value="Gato">Gato</option>
                                 <option value="Outro">Outro</option>
@@ -109,13 +174,17 @@
                         <label>Fotografia</label>
                         <div class="foto-atual-container" id="fotoAtualContainer">
                             <img id="imgAtual" src="" alt="Foto atual do pet">
-                            <p style="font-size: 12px; color: var(--cinza-texto); margin-top: 5px;">Foto atual gravada.</p>
+                            <p style="font-size: 12px; color: var(--cinza-texto); margin-top: 5px;">Foto atual gravada.
+                            </p>
                         </div>
-                        <input type="file" id="foto_pet" accept="image/*" style="padding-top: 10px; border: none; background: transparent;">
+                        <input type="file" id="foto_pet" accept="image/*"
+                            style="padding-top: 10px; border: none; background: transparent;">
                     </div>
-                    
+
                     <div style="display: flex; gap: 15px; margin-top: 20px;">
-                        <button type="button" class="btn-auth" style="background: transparent; color: var(--cinza-texto); border: 2px solid var(--cinza);" onclick="window.location.href='meus-animais.html'">CANCELAR</button>
+                        <button type="button" class="btn-auth"
+                            style="background: transparent; color: var(--cinza-texto); border: 2px solid var(--cinza);"
+                            onclick="window.location.href='meus-animais.html'">CANCELAR</button>
                         <button type="submit" class="btn-auth" id="btnSalvarEdicao">SALVAR ALTERAÇÕES</button>
                     </div>
                 </form>
@@ -126,7 +195,7 @@
 
     <div id="footer-placeholder"></div>
     <script src="script.js"></script>
-    
+
     <script>
         let animalIdUrl = null;
         let fotoUrlAntiga = null;
@@ -168,7 +237,7 @@
                 document.getElementById('cidade_pet').value = animal.cidade || '';
                 document.getElementById('data_pet').value = animal.data_evento || '';
                 document.getElementById('descricao_pet').value = animal.descricao || '';
-                
+
                 if (animal.status === 'perdido') document.getElementById('status_perdido').checked = true;
                 if (animal.status === 'achado_na_rua') document.getElementById('status_encontrado').checked = true;
                 if (animal.status === 'final_feliz') document.getElementById('status_final_feliz').checked = true;
@@ -198,7 +267,7 @@
 
             try {
                 const { data: { session } } = await clienteSupabase.auth.getSession();
-                
+
                 const status = document.querySelector('input[name="status_pet"]:checked').value;
                 const nome = document.getElementById('nome_pet').value.trim();
                 const especie = document.getElementById('especie_pet').value;
@@ -255,4 +324,5 @@
         }
     </script>
 </body>
+
 </html>
