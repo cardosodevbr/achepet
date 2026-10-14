@@ -1,7 +1,4 @@
-/* =========================================================
-   ACHEPET | STYLE.CSS v1.2
-   ========================================================= */
-/* ===== 01. VARIÁVEIS E RESET ===== */
+/* ================================= 01. VARIÁVEIS E RESET ===================================== */
 :root {
     --azul-principal: #1489D8;
     --azul-escuro: #0873BE;
@@ -64,7 +61,7 @@ h6 {
     font-family: var(--fonte-poppins);
 }
 
-/* ===== 02. HEADER E NAVEGAÇÃO ===== */
+/* ================================= 02. HEADER E NAVEGAÇÃO ===================================== */
 .site-header {
     width: 100%;
     height: 75px;
@@ -241,7 +238,7 @@ h6 {
     pointer-events: none;
 }
 
-/* ===== 03. SWITCH MODO ESCURO ===== */
+/* ================================= 03. SWITCH MODO ESCURO ===================================== */
 .theme-toggle-wrapper {
     display: flex;
     align-items: center;
@@ -295,7 +292,7 @@ h6 {
     display: none;
 }
 
-/* ===== 04. ESTADO DE AUTENTICAÇÃO (PERFIS E FUNCIONALIDADES) ===== */
+/* ================================= 04. ESTADO DE AUTENTICAÇÃO (PERFIS E FUNCIONALIDADES) ===================================== */
 /* Padrão (Visitante): Esconde os perfis e logouts */
 .mobile-profile-header,
 .user-profile-dropdown,
@@ -390,7 +387,7 @@ h6 {
     color: #ff4d6d;
 }
 
-/* ===== 05. HERO ===== */
+/* ================================= 05. HERO ===================================== */
 .hero {
     min-height: 550px;
     padding-top: 60px;
@@ -526,7 +523,7 @@ h6 {
     font-family: var(--fonte-poppins);
 }
 
-/* ===== 06. MURAIS ===== */
+/* ================================= 06. MURAIS ===================================== */
 .pets-section {
     padding: 70px 0;
 }
@@ -661,7 +658,7 @@ h6 {
     color: #FFFFFF;
 }
 
-/* ===== 07. OBJETIVOS ===== */
+/* ================================= 07. OBJETIVOS ============================= */
 .objectives-section {
     padding: 70px 0;
     background: var(--fundo-card);
@@ -711,7 +708,7 @@ h6 {
     line-height: 1.5;
 }
 
-/* ===== 08. TELA DE LOGIN E AUTENTICAÇÃO ===== */
+/* ================================= 08. TELA DE LOGIN E AUTENTICAÇÃO ===================================== */
 .login-main {
     display: flex;
     align-items: center;
@@ -861,7 +858,7 @@ h6 {
     object-fit: cover;
 }
 
-/* ===== 09. FOOTER ===== */
+/* ================================= 09. FOOTER ===================================== */
 .site-footer {
     background: var(--fundo-azul);
     padding-top: 40px;
@@ -914,7 +911,7 @@ h6 {
     font-size: 14px;
 }
 
-/* ===== 10. RESPONSIVIDADE E MENU MOBILE ===== */
+/* ================================= 10. RESPONSIVIDADE E MENU MOBILE ===================================== */
 .mobile-menu-btn {
     display: none;
     flex-direction: column;
@@ -1197,9 +1194,7 @@ html[data-tema="escuro"] .form-group input {
     border-color: #1e2c42;
 }
 
-/* =========================================================
-   12. ABAS DO MURAL UNIFICADO E STATUS FINAL FELIZ
-   ========================================================= */
+/* ============================ 12. ABAS DO MURAL UNIFICADO E STATUS FINAL FELIZ ====================================== */
 
 /* Contentor das abas */
 .mural-tabs {
@@ -1652,9 +1647,7 @@ html[data-tema="escuro"] .btn-happy-outline:hover {
 }
 
 
-/* ========================================
-   NOSSA MISSÃO
-======================================== */
+/* ======================================== NOSSA MISSÃO ======================================== */
 
 .missao-section {
     position: relative;
@@ -1954,9 +1947,7 @@ html[data-tema="escuro"] .btn-happy-outline:hover {
 }
 
 
-/* ========================================
-   POR QUE CRIAMOS
-======================================== */
+/* ======================================== POR QUE CRIAMOS ======================================== */
 
 .porque-section {
     padding: 88px 0;
@@ -2104,9 +2095,7 @@ html[data-tema="escuro"] .btn-happy-outline:hover {
 }
 
 
-/* ========================================
-   COMO FUNCIONA
-======================================== */
+/* ======================================== COMO FUNCIONA ======================================== */
 
 .como-funciona {
     padding: 65px 0;
@@ -2205,9 +2194,7 @@ html[data-tema="escuro"] .btn-happy-outline:hover {
 }
 
 
-/* ========================================
-   CHAMADA FINAL
-======================================== */
+/* ======================================== CHAMADA FINAL ======================================= */
 
 .quem-somos-final {
     padding: 65px 20px;
@@ -2294,9 +2281,7 @@ html[data-tema="escuro"] .btn-happy-outline:hover {
 }
 
 
-/* ========================================
-   LISTA DE ANIMAIS ENCONTRADOS
-======================================== */
+/* ======================================== LISTA DE ANIMAIS ENCONTRADOS ======================================== */
 
 .lista-animais {
     display: grid;
@@ -2329,9 +2314,7 @@ html[data-tema="escuro"] .btn-happy-outline:hover {
 }
 
 
-/* ========================================
-   RESPONSIVIDADE: TABLETS
-======================================== */
+/* ======================================== RESPONSIVIDADE: TABLETS ======================================== */
 
 @media (max-width: 900px) {
 
@@ -2390,9 +2373,7 @@ html[data-tema="escuro"] .btn-happy-outline:hover {
 }
 
 
-/* ========================================
-   RESPONSIVIDADE: CELULARES
-======================================== */
+/* ======================================== RESPONSIVIDADE: CELULARES ======================================== */
 
 @media (max-width: 600px) {
 
@@ -2680,9 +2661,7 @@ html[data-tema="escuro"] .btn-happy-outline:hover {
 }
 
 
-/* ========================================
-   ACESSIBILIDADE: MOVIMENTO REDUZIDO
-======================================== */
+/* ======================================== ACESSIBILIDADE: MOVIMENTO REDUZIDO ======================================== */
 
 @media (prefers-reduced-motion: reduce) {
 
@@ -2698,5 +2677,84 @@ html[data-tema="escuro"] .btn-happy-outline:hover {
     .quem-somos-card:hover,
     .quem-somos-final .botao:hover {
         transform: none;
+    }
+}
+
+
+
+/* ========================================
+   CARROSSEL PROMOCIONAL ACHEPET
+======================================== */
+
+.carrossel-promocional {
+    width: 180%;
+    height: 200px;
+    margin: 15px 0 25px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.10);
+}
+
+.carrossel-slides {
+    display: flex;
+    width: 500%;
+    height: 100%;
+    animation: passarBanners 25s infinite;
+}
+
+.carrossel-slide {
+    flex: 0 0 20%;
+    width: 20%;
+    height: 100%;
+    min-width: 0;
+}
+
+.carrossel-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Troca automática dos cinco banners */
+@keyframes passarBanners {
+    0%, 16% {
+        transform: translateX(0);
+    }
+
+    20%, 36% {
+        transform: translateX(-20%);
+    }
+
+    40%, 56% {
+        transform: translateX(-40%);
+    }
+
+    60%, 76% {
+        transform: translateX(-60%);
+    }
+
+    80%, 99.9% {
+        transform: translateX(-80%);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+    .carrossel-promocional {
+        height: 110px;
+    }
+}
+
+/* Celulares */
+@media (max-width: 480px) {
+    .carrossel-promocional {
+        height: 80px;
     }
 }
