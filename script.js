@@ -24,6 +24,7 @@ async function verificarSessao() {
     if (typeof clienteSupabase === 'undefined') return;
 
     const { data: { session } } = await clienteSupabase.auth.getSession();
+    window.sessaoAtual = session;
 
     const cadastrarBtn = document.getElementById('navCadastrarBtn');
     const desktopAvatar = document.getElementById('desktopAvatar');
