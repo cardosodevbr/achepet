@@ -176,7 +176,7 @@ window.toggleDetalhes = function(id, btnElement) {
     }
 }
 
-// O NOVO GERADOR DE CARTÕES COM TRAVA E BOTÃO HÍBRIDO
+// O NOVO GERADOR DE CARTÕES (CTA DISCRETO PARA WHATSAPP E PRIVACIDADE TOTAL)
 window.gerarCardAnimal = function(animal) {
     const fotoUrl = animal.foto_url || 'media/placeholder-pet.png';
     let badgeClass = '';
@@ -195,40 +195,53 @@ window.gerarCardAnimal = function(animal) {
 
     let areaDetalhesHTML = '';
 
+    // SÓ GERA A ÁREA DE DETALHES SE NÃO FOR UM FINAL FELIZ
     if (animal.status !== 'final_feliz') {
         const idDetalhe = `detalhe-${animal.id_animal}`;
         let areaContatoHTML = '';
         
         const descricaoPet = animal.descricao ? animal.descricao : 'Nenhuma descrição detalhada fornecida.';
 
-        // SE O UTILIZADOR NÃO ESTIVER LOGADO
+        // SE O UTILIZADOR NÃO ESTIVER LOGADO (Bloqueia contatos e foto de quem cadastrou)
         if (!window.sessaoAtual) {
             areaContatoHTML = `
-                <div style="margin-top: 15px; padding: 10px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; text-align: center;">
-                    <p style="color: #991b1b; font-size: 13px; margin: 0; font-weight: 500;">🔒 Faça login para ver quem cadastrou e entrar em contato.</p>
+                <div style="margin-top: 15px; padding: 15px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; text-align: center;">
+                    <p style="color: #991b1b; font-size: 13px; margin: 0; font-weight: 600;">🔒 Faça login para ver quem cadastrou e entrar em contato.</p>
                 </div>
             `;
         } 
-        // SE ESTIVER LOGADO
+        // SE O UTILIZADOR ESTIVER LOGADO (Mostra o usuário e o CTA discreto do WhatsApp)
         else {
             const fotoTutor = animal.tutor_foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(animal.tutor_nome || 'U')}&background=random`;
             const nomeTutor = animal.tutor_nome || 'Usuário não identificado';
             const telefoneTutor = animal.tutor_telefone || ''; 
             const numeroWhatsLimpo = telefoneTutor.replace(/\D/g, '');
             
-            let botaoContatoHTML = '';
+            let botaoCTA = '';
             
+            // Se houver número de WhatsApp, gera o CTA
             if(numeroWhatsLimpo) {
-                // Em vez de um link direto, chamamos a função Híbrida que notifica e abre o WhatsApp
-                botaoContatoHTML = `
-                    <button onclick="dispararContato('${animal.id_animal}', '${animal.user_id}', '${animal.nome}', '${numeroWhatsLimpo}', '${animal.status}')" style="background: #f8fafc; color: var(--azul-principal); border: 1px solid var(--azul-claro); padding: 10px; text-align: center; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; font-family: var(--fonte-poppins); width: 100%; margin-top: 15px; transition: all 0.3s ease;">
-                        🐾 Encontrei ou tenho informações sobre esse pet
-                    </button>
+                let textoMensagem = animal.status === 'perdido' 
+                    ? `Olá! Tenho informações ou encontrei o animal (${animal.nome}) divulgado no AchePet!`
+                    : `Olá! Acredito que o animal (${animal.nome}) que você encontrou no AchePet seja meu!`;
+                    
+                let textoBotao = animal.status === 'perdido'
+                    ? '🐾 Encontrei ou tenho informações sobre esse pet'
+                    : '🐾 Acredito que este animal seja meu';
+
+                const linkWhatsApp = `https://wa.me/55${numeroWhatsLimpo}?text=${encodeURIComponent(textoMensagem)}`;
+                 
+                // Botão CTA Discreto (Fundo transparente, texto e borda na cor principal)
+                botaoCTA = `
+                    <a href="${linkWhatsApp}" target="_blank" style="display: block; width: 100%; text-align: center; background: transparent; color: var(--azul-principal); border: 1px solid var(--azul-principal); padding: 10px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px; font-family: var(--fonte-poppins); margin-top: 15px; transition: 0.3s;">
+                        ${textoBotao}
+                    </a>
                 `;
             } else {
-                botaoContatoHTML = '<p style="font-size: 12px; color: #dc2626; margin-top:10px; text-align: center;">Contato não fornecido</p>';
+                botaoCTA = '<p style="font-size: 12px; color: #dc2626; margin-top:10px; text-align: center;">Contato não fornecido</p>';
             }
 
+            // Monta os dados de quem cadastrou + o botão do WhatsApp
             areaContatoHTML = `
                 <div style="display: flex; align-items: center; gap: 10px; margin-top: 15px; background: #f3f4f6; padding: 10px; border-radius: 8px;">
                     <div style="width: 45px; height: 45px; border-radius: 50%; overflow: hidden; background: var(--cinza); border: 2px solid var(--azul-claro); flex-shrink: 0;">
@@ -239,23 +252,31 @@ window.gerarCardAnimal = function(animal) {
                         <p style="font-size: 11px; color: var(--cinza-texto); margin: 0;">📌 ${animal.cidade}</p>
                     </div>
                 </div>
-                ${botaoContatoHTML}
+                ${botaoCTA}
             `;
         }
 
+        // Constrói a área de "Ver Mais Detalhes"
         areaDetalhesHTML = `
             <button onclick="toggleDetalhes('${idDetalhe}', this)" style="background: transparent; color: var(--azul-principal); border: 1px solid var(--azul-principal); padding: 8px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: var(--fonte-poppins); width: 100%; margin-top: 10px; transition: 0.3s;">
                 + Ver Mais Detalhes
             </button>
+
             <div id="${idDetalhe}" style="display: none; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+                
+                <!-- Descrição Pública -->
                 <div style="font-size: 13px; color: var(--cinza-texto); background: #f8fafc; padding: 10px; border-radius: 8px;">
-                    <strong>Descrição:</strong><br>${descricaoPet}
+                    <strong>Descrição:</strong><br>
+                    ${descricaoPet}
                 </div>
+
+                <!-- Aqui entram os dados de contato (apenas se logado) -->
                 ${areaContatoHTML}
             </div>
         `;
     }
 
+    // Retorna a estrutura visual final
     return `
         <article class="pet-card">
             <img src="${fotoUrl}" alt="Foto de ${animal.nome}">
@@ -264,6 +285,7 @@ window.gerarCardAnimal = function(animal) {
                 <h3>${animal.nome}</h3>
                 <p>📌 ${animal.cidade}</p>
                 <p>📅 ${formatarDataSimples(animal.data_evento)}</p>
+                
                 ${areaDetalhesHTML}
             </div>
         </article>
@@ -422,3 +444,48 @@ window.dispararContato = async function(idAnimal, idTutor, nomeAnimal, numeroWha
     const linkWhatsApp = `https://wa.me/55${numeroWhatsTutor}?text=${encodeURIComponent(textoMensagem)}`;
     window.open(linkWhatsApp, '_blank');
 };
+// ==========================================
+// SISTEMA DE LOGOUT AUTOMÁTICO (5 MINUTOS)
+// ==========================================
+
+const TEMPO_INATIVIDADE = 5 * 60 * 1000; // 5 minutos em milissegundos
+let timerInatividade;
+
+// Função que reinicia a contagem sempre que o utilizador mexe no site
+function resetarTimerInatividade() {
+    // Só inicia a contagem se o utilizador estiver logado
+    if (!window.sessaoAtual) return;
+
+    // Limpa o timer anterior
+    clearTimeout(timerInatividade);
+    
+    // Começa uma nova contagem de 5 minutos
+    timerInatividade = setTimeout(logoutPorInatividade, TEMPO_INATIVIDADE);
+}
+
+// Função que faz o logout efetivo
+async function logoutPorInatividade() {
+    if (typeof clienteSupabase !== 'undefined') {
+        await clienteSupabase.auth.signOut(); // Desloga do Supabase
+    }
+    
+    window.sessaoAtual = null; // Limpa a variável global
+    
+    // Avisa o utilizador e manda para o login
+    alert("🔒 A sua sessão expirou devido a 5 minutos de inatividade. Por favor, faça login novamente para sua segurança.");
+    window.location.replace('login.html');
+}
+
+// Lista de eventos que indicam que o utilizador está ativo
+const eventosAtividade = ['mousemove', 'keydown', 'scroll', 'click', 'touchstart'];
+
+// Adiciona os "escutadores" ao documento
+eventosAtividade.forEach(evento => {
+    document.addEventListener(evento, resetarTimerInatividade, true);
+});
+
+// Dá o arranque inicial ao timer quando a página carrega
+// Um pequeno atraso garante que a verificação de sessão do Supabase já terminou
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(resetarTimerInatividade, 2000); 
+});
